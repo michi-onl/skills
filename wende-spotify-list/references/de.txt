@@ -1,0 +1,769 @@
+[[Datei:Taylor Swift at the 2023 MTV Video Music Awards (3).png|mini|hochkant|Die US-amerikanische Singer-Songwriterin [[Taylor Swift]] ist die meistgestreamte Künstlerin in der Geschichte von Spotify.]]
+[[Datei:Bad Bunny 2019 by Glenn Francis (cropped).jpg|mini|hochkant|Der puerto-ricanische Rapper [[Bad Bunny]] ist der meistgestreamte männliche Künstler in der Geschichte von Spotify.]]
+[[Datei:‘LG Q7 BTS 에디션’ 예약 판매 시작 (42773472410) (cropped).jpg|mini|hochkant|Die südkoreanische Boyband [[BTS (Band)|BTS]] ist die meistgestreamte Gruppe in der Geschichte von Spotify.<ref>{{Internetquelle|url=https://www.guinnessworldrecords.com/world-records/643081-most-streamed-act-on-spotify-group|titel=Most streamed male group on Spotify|hrsg=Guinness World Records|abruf=2023-05-09|sprache=en}}</ref>]]
+
+Diese '''Liste''' enthält die '''meistgestreamten Künstler''' auf der [[Audio-Streaming]]-Plattform '''[[Spotify]]'''.
+
+Stand April 2026 ist die US-amerikanische Singer-Songwriterin [[Taylor Swift]] die meistgestreamte Künstlerin,<ref name="SpotifyMostStreamed">{{Internetquelle|url=https://billboard.com.br/taylor-swift-ultrapassa-drake-e-se-torna-a-cantora-mais-tocada-na-historia-do-spotify/|titel=Taylor Swift ultrapassa Drake e se torna a cantora mais tocada na história do Spotify|hrsg=Billboard Brasil|abruf=2024-08-22|sprache=en}}</ref> und der puerto-ricanische Rapper [[Bad Bunny]] ist der meistgestreamte männliche Künstler in der Geschichte von Spotify. (Es werden nur Lead-Streams gezählt; Features sind ausgeschlossen.)<ref>{{Internetquelle|url=https://chartmasters.org/most-streamed-artists-ever-on-spotify/|titel=Most-Streamed Artists on Spotify (daily update)|hrsg=ChartMasters|abruf=2025-12-12|sprache=en}}</ref><ref>{{Internetquelle|url=https://routenote.com/blog/most-streamed-artists-all-time-spotify/|titel=Top 10 most-streamed artists of all-time on Spotify in 2025|hrsg=RouteNote Blog|abruf=2025-12-12|sprache=en}}</ref> Seit 2013 veröffentlicht Spotify jährlich eine Liste seiner meistgestreamten Künstler, die Bad Bunny mit einem Rekord von viermal anführte (2020–2022; 2025) – als einziger Künstler gelang ihm dies in drei aufeinanderfolgenden Jahren. Der kanadische Rapper [[Drake (Rapper)|Drake]] führte die Liste dreimal an (2015–2016; 2018), während Swift die einzige weibliche Künstlerin ist, die die Liste anführte (2023–2024).
+
+== Meistgestreamte Künstler ==
+=== Gesamt ===
+{{Tabellenstile}}
+{| class="wikitable sortable tabelle-zaehler" style="text-align:center;"
+|+Liste der 25 am häufigsten gestreamten Künstler <small>(als Interpreten)</small><ref>{{Internetquelle |url=https://chartmasters.org/most-streamed-artists-ever-on-spotify/ |titel=Top 1000 most streamed artists ever on Spotify - updated live |werk=ChartMasters |sprache=en-US |abruf=2026-01-02}}</ref>
+|- class="tabelle-zaehler-kein" data-zaehler-spalte="#"
+!Künstler
+!Land
+!Streams
+(in Mrd.)
+!Anzahl Lieder
+!<span class="explain" title="Anzahl der Lieder mit über 1 Milliarden Streams">1 Mrd.</span>
+!<span class="explain" title="Anzahl der Lieder mit über 100 Millionen Streams">100 Mio.</span>
+!<span class="explain" title="Anzahl der Lieder mit über 10 Millionen Streams">10 Mio.</span>
+!<span class="explain" title="Anzahl der Lieder mit über 1 Millionen Streams">1 Mio.</span>
+|-
+| style="text-align:left;" | [[Taylor Swift]]
+| style="text-align:left;" | {{USA}}
+| 116,8
+| 523
+| 22
+| 262
+| 410
+| 466
+|-
+| style="text-align:left;" | [[Bad Bunny]]
+| style="text-align:left;" | {{US-PR}}
+| 101,2
+| 216
+| 28
+| 175
+| 209
+| 210
+|-
+| style="text-align:left;" | [[Drake (Rapper)|Drake]]
+| style="text-align:left;" | {{CAN}}
+| 97,1
+| 361
+| 20
+| 235
+| 348
+| 351
+|-
+| style="text-align:left;" | [[The Weeknd]]
+| style="text-align:left;" | {{CAN}}
+| 76,7
+| 260
+| 26
+| 105
+| 192
+| 251
+|-
+| style="text-align:left;" | [[Ariana Grande]]
+| style="text-align:left;" | {{USA}}
+| 60,3
+| 306
+| 22
+| 106
+| 188
+| 251
+|-
+| style="text-align:left;" | [[Ed Sheeran]]
+| style="text-align:left;" | {{GBR}}
+| 57,1
+| 362
+| 14
+| 81
+| 226
+| 315
+|-
+| style="text-align:left;" | [[Justin Bieber]]
+| style="text-align:left;" | {{CAN}}
+| 54,6
+| 271
+| 14
+| 81
+| 208
+| 242
+|-
+| style="text-align:left;" | [[Eminem]]
+| style="text-align:left;" | {{USA}}
+| 54,1
+| 353
+| 12
+| 98
+| 267
+| 316
+|-
+| style="text-align:left;" | [[Billie Eilish]]
+| style="text-align:left;" | {{USA}}
+| 53,9
+| 81
+| 17
+| 69
+| 76
+| 77
+|-
+| style="text-align:left;" | [[Kanye West]]
+| style="text-align:left;" | {{USA}}
+| 51,0
+| 317
+| 11
+| 106
+| 234
+| 287
+|-
+| style="text-align:left;" | [[Post Malone]]
+| style="text-align:left;" | {{USA}}
+| 48,0
+| 151
+| 13
+| 74
+| 127
+| 134
+|-
+| style="text-align:left;" | [[BTS (Band)|BTS]]
+| style="text-align:left;" | {{KOR}}
+| 45,2
+| 295
+| 6
+| 127
+| 233
+| 295
+|-
+| style="text-align:left;" | [[Coldplay]]
+| style="text-align:left;" | {{GBR}}
+| 43,4
+| 338
+| 12
+| 53
+| 211
+| 313
+|-
+| style="text-align:left;" | [[Rihanna]]
+| style="text-align:left;" | {{Barbados}}
+| 43,0
+| 380
+| 14
+| 57
+| 124
+| 232
+|-
+| style="text-align:left;" | [[Travis Scott (Rapper)|Travis Scott]]
+| style="text-align:left;" | {{USA}}
+| 42,9
+| 178
+| 5
+| 91
+| 147
+| 170
+|-
+| style="text-align:left;" | [[Bruno Mars]]
+| style="text-align:left;" | {{USA}}
+| 41,7
+| 92
+| 16
+| 40
+| 64
+| 82
+|-
+| style="text-align:left;" | [[Kendrick Lamar]]
+| style="text-align:left;" | {{USA}}
+| 41,2
+| 142
+| 11
+| 77
+| 131
+| 139
+|-
+| style="text-align:left;" | [[J Balvin]]
+| style="text-align:left;" | {{COL}}
+| 41,0
+| 307
+| 6
+| 79
+| 189
+| 282
+|-
+| style="text-align:left;" | [[Dua Lipa]]
+| style="text-align:left;" | {{GBR}}
+| 38,9
+| 271
+| 12
+| 45
+| 107
+| 222
+|-
+| style="text-align:left;" | [[Imagine Dragons]]
+| style="text-align:left;" | {{USA}}
+| 38,1
+| 262
+| 11
+| 52
+| 150
+| 227
+|-
+| style="text-align:left;" | [[Juice Wrld]]
+| style="text-align:left;" | {{USA}}
+| 37,2
+| 152
+| 7
+| 81
+| 145
+| 149
+|-
+| style="text-align:left;" | [[David Guetta]]
+| style="text-align:left;" | {{FRA}}
+| 36,2
+| 1.041
+| 4
+| 64
+| 227
+| 602
+|-
+| style="text-align:left;" | [[Lana Del Rey]]
+| style="text-align:left;" | {{USA}}
+| 35,3
+| 203
+| 7
+| 77
+| 160
+| 192
+|-
+| style="text-align:left;" | [[XXXTentacion]]
+| style="text-align:left;" | {{USA}}
+| 34,3
+| 159
+| 10
+| 54
+| 122
+| 158
+|-
+| style="text-align:left;" | [[Lady Gaga]]
+| style="text-align:left;" | {{USA}}
+| 33,9
+| 382
+| 9
+| 46
+| 145
+| 264
+|-
+! colspan="8"|Stand: 2. Januar 2026
+|}
+
+=== Nach Jahr ===
+==== Weltweit ====
+Die Anzahl der Streams ist, soweit verfügbar, in Klammern angegeben.
+
+{| class="wikitable"
+! rowspan="2"|Jahr
+|-
+! 1
+! 2
+! 3
+! 4
+! 5
+|-
+| 2013<ref>{{Internetquelle|url=https://www.billboard.com/articles/news/5812365/macklemores-cant-hold-us-spotifys-most-streamed-song-of-2013/|titel=Macklemore's 'Can't Hold Us' Spotify's Most-Streamed Song of 2013|werk=Billboard|datum=2013-12-03|abruf=2019-12-03|sprache=en}}</ref>
+| [[Macklemore & Ryan Lewis]] || [[Avicii]] || [[Daft Punk]] || [[Eminem]] || [[Imagine Dragons]]
+|-
+| 2014<ref>{{Internetquelle|url=https://time.com/3616091/spotify-most-streamed/|titel=These Were Spotify's Most-Streamed Songs This Year|werk=Time|datum=2014-12-03|abruf=2019-12-04|sprache=en}}</ref>
+| [[Ed Sheeran]] <small>(860 Millionen)</small> || [[Eminem]] || [[Coldplay]] || [[Calvin Harris]] || [[Katy Perry]]
+|-
+| 2015<ref>{{Internetquelle|url=https://ew.com/article/2015/12/01/drake-most-streamed-artist-spotify-2015/|titel=Spotify names Drake most streamed artist in 2015|werk=Entertainment Weekly|datum=2015-12-01|abruf=2019-12-04|sprache=en}}</ref>
+| [[Drake (Rapper)|Drake]] <small>(1,8 Milliarden)</small> || [[Ed Sheeran]] || [[The Weeknd]] || [[Maroon 5]] || [[Kanye West]]
+|-
+| 2016<ref>{{Internetquelle|url=https://www.billboard.com/articles/news/7596024/drake-rihanna-top-spotify-year-end-lists|titel=Drake & Rihanna Top Spotify's Year-End Lists|werk=Billboard|datum=2016-12-01|abruf=2018-03-28|sprache=en}}</ref>
+| [[Drake (Rapper)|Drake]] <small>(4,7 Milliarden)</small> || [[Justin Bieber]] || [[Rihanna]] || [[Twenty One Pilots]] || [[Kanye West]]
+|-
+| 2017<ref>{{Internetquelle|url=https://www.billboard.com/articles/news/8055138/ed-sheeran-tops-spotify-2017-most-streamed-list|titel=Ed Sheeran Tops Spotify's 2017 Most-Streamed List|datum=2017-12-12|abruf=2018-03-28|sprache=en}}</ref>
+| [[Ed Sheeran]] <small>(6,3 Milliarden)</small> || [[Drake (Rapper)|Drake]] || [[The Weeknd]] || [[Kendrick Lamar]] || [[The Chainsmokers]]
+|-
+| 2018<ref>{{Internetquelle|url=https://variety.com/2018/digital/news/drake-ariana-grande-top-spotifys-year-end-wrapped-charts-1203078820/|titel=Drake, Ariana Grande Top Spotify's Year-End 'Wrapped' Charts|hrsg=Variety|datum=2018-12-03|abruf=2019-10-28|sprache=en}}</ref>
+| [[Drake (Rapper)|Drake]] <small>(8,2 Milliarden)</small> || [[Post Malone]] || [[XXXTentacion]] || [[J Balvin]] || [[Ed Sheeran]]
+|-
+| 2019<ref>{{Internetquelle|url=https://variety.com/2019/music/news/post-malone-billie-eilish-spotify-year-end-charts-1203421524/|titel=Post Malone, Billie Eilish Top Spotify's Year-End 'Wrapped' Charts|hrsg=Variety|datum=2019-12-02|abruf=2019-12-03|sprache=en}}</ref>
+| [[Post Malone]] <small>(6,5 Milliarden)</small> || [[Billie Eilish]] || [[Ariana Grande]] || [[Ed Sheeran]] || [[Bad Bunny]]
+|-
+| 2020<ref>{{Internetquelle|url=https://variety.com/2020/music/news/spotify-wrapped-bad-bunny-the-weeknd-1234842495/|titel=Bad Bunny, The Weeknd Top Spotify's Year-End 'Wrapped' Lists|hrsg=Variety|datum=2020-11-30|abruf=2020-12-01|sprache=en}}</ref>
+| [[Bad Bunny]] <small>(8,3 Milliarden)</small> || [[Drake (Rapper)|Drake]] || [[J Balvin]] || [[Juice Wrld]] || [[The Weeknd]]
+|-
+|2021<ref>{{Internetquelle|url=https://www.bbc.com/news/entertainment-arts-59491101|titel=Apple and Spotify reveal 2021's most-streamed songs|werk=BBC|datum=2021-12-01|abruf=2021-12-01|sprache=en}}</ref>
+| [[Bad Bunny]] <small>(9,1 Milliarden)</small> || [[Taylor Swift]] || [[BTS (Band)|BTS]] || [[Drake (Rapper)|Drake]] || [[Justin Bieber]]
+|-
+|2022<ref name="heise_2022" /> || [[Bad Bunny]] <small>(18,5 Milliarden)</small> || [[Taylor Swift]] || [[Drake (Rapper)|Drake]] || [[The Weeknd]] || [[BTS (Band)|BTS]]
+|-
+|2023<ref>{{Internetquelle |autor= |url=https://newsroom.spotify.com/2023-11-29/top-songs-artists-podcasts-albums-trends-2023/ |titel=The Top Songs, Artists, Podcasts, and Listening Trends of 2023 Revealed |hrsg=[[Spotify]] |datum=2023-11-29 |sprache=en |abruf=2023-12-05}}</ref>
+| [[Taylor Swift]] <small>(26,1 Milliarden)</small>
+| [[Bad Bunny]]
+| [[The Weeknd]]
+| [[Drake (Rapper)|Drake]]
+| [[Peso Pluma]]
+|-
+|2024<ref>{{Internetquelle |autor=Adrian Covert |url=https://newsroom.spotify.com/2024-12-04/top-songs-artists-podcasts-audiobooks-albums-trends-2024/ |titel=Revealed: The Top Artists, Songs, Albums, Podcasts, and Audiobooks of 2024 |hrsg=[[Spotify]] |datum=2024-12-04 |sprache=en |abruf=2025-01-09}}</ref>
+| [[Taylor Swift]] <small>(26,6 Milliarden)</small>
+| [[The Weeknd]]
+| [[Bad Bunny]]
+| [[Drake (Rapper)|Drake]]
+| [[Billie Eilish]]
+|-
+|2025<ref>{{Internetquelle |url=https://newsroom.spotify.com/2025-12-03/wrapped-top-artists-songs-albums-podcasts-audiobooks/ |titel=The Top Artists, Songs, Albums, Podcasts, and Audiobooks of 2025 |hrsg=[[Spotify]] |datum=2025-12-03 |sprache=en |abruf=2025-12-03}}</ref>
+| [[Bad Bunny]] <small>(19,8 Milliarden)</small>
+| [[Taylor Swift]]
+| [[The Weeknd]]
+| [[Drake (Rapper)|Drake]]
+| [[Billie Eilish]]
+|}
+
+==== Deutschland ====
+[[Datei:2019 RiP Bonez MC - by 2eight - 8SC9116.jpg|mini| [[Bonez MC]] belegt seit 2016 jedes Jahr einen der Top 5 Plätze in Deutschland.]]
+{| class="wikitable"
+|-
+! Jahr !! 1 !! 2 !! 3 !! 4 !! 5
+|-
+| 2012<ref>''[https://spotify_presse.prowly.com/180151-top-listen-zu-10-jahren-spotify-deutschland Top-10 Listen zu 10 Jahren Spotify Deutschland]'' auf prowly.com, abgerufen am 1. August 2022.</ref> || [[Cro (Rapper)|Cro]] ||colspan="4" style="text-align:center"| keine Daten
+|-
+| 2013<ref>''[https://www.rap2soul.de/2013/macklemore-ryan-lewis-sind-die-top-stars-2013-bei-spotify-22579 Macklemore & Ryan Lewis sind die Top-Stars 2013 bei Spotify]'' auf rap2soul.de, abgerufen am 1. August 2022.</ref> || [[Macklemore & Ryan Lewis]] || [[Avicii]] || [[Eminem]] || [[Alligatoah]] || [[Calvin Harris]]
+|-
+| 2014<ref>''[https://www.ifun.de/spotify-jahresrueckblick-2014-kollegah-auf-platz-1-70257/ Spotify Jahresrückblick 2014: „Kollegah“ auf Platz 1]'' auf ifun.de, abgerufen am 1. August 2022.</ref> || [[Kollegah]] || [[Eminem]] || [[Ed Sheeran]] || [[Cro (Rapper)|Cro]] || [[Calvin Harris]]
+|-
+| 2015<ref>''[https://docs.dpaq.de/10036-20151201_yim_de__2_.pdf Drake ist weltweit meistgestreamter Künstler 2015 auf Spotify]'' auf dpaq.de, abgerufen am 1. August 2022.</ref> || [[Ed Sheeran]] || [[K.I.Z]] || [[Robin Schulz]] || [[David Guetta]] || [[Eminem]]
+|-
+| 2016<ref name="stream2016">{{Internetquelle |autor=Daniel Krüger |url=https://www.musikexpress.de/spotify-charts-2016-bonez-mc-ist-erfolgreichster-deutscher-kuenstler-drake-regiert-die-ganze-welt-720621/ |titel=Spotify-Charts 2016: Bonez MC ist erfolgreichster deutscher Künstler, Drake regiert die ganze Welt |werk=musikexpress.de |datum=2016-12-01 |abruf=2022-08-01}}</ref> || [[Drake (Rapper)|Drake]] || [[Justin Bieber]] || [[Major Lazer]] || [[Bonez MC]] || [[Twenty One Pilots]]
+|-
+| 2017<ref>''[https://www.musikexpress.de/raf-camora-bonezmc-und-kollegah-dominierten-2017-spotify-ed-sheeran-ist-weltweit-die-nummer-eins-978649/ RAF Camora, BonezMC und Kollegah dominierten 2017 Spotify, Ed Sheeran ist weltweit die Nummer eins]'' auf musikexpress.de, abgerufen am 1. August 2022.</ref> || [[Ed Sheeran]] || [[RAF Camora]] || [[Bonez MC]] || [[Kollegah]] || [[The Chainsmokers]]
+|-
+| 2018<ref name="stream2018">''[https://www.bild.de/digital/multimedia/multimedia/spotify-jahresrueckblick-der-interpret-oder-song-des-jahres-2018-58861770.bild.html Spotify-Jahresrückblick: Welche Musik haben Sie 2018 gehört?]'' auf bild.de, abgerufen am 1. August 2022.</ref> || [[RAF Camora]] || [[Capital Bra]] || [[Bonez MC]] || [[Gzuz]] || [[Drake (Rapper)|Drake]]
+|-
+| 2019<ref>''[https://www.musikexpress.de/jahresrueckblick-2019-das-sind-die-meistgestreamten-songs-bei-spotify-1445187/ Jahresrückblick 2019: Das sind die meistgestreamten Songs bei Spotify]'' auf musikexpress.de, abgerufen am 1. August 2022.</ref> || [[Capital Bra]] || [[Samra]] || [[RAF Camora]] || [[Kontra K]] || [[Bonez MC]]
+|-
+| 2020<ref>''[https://www.musikexpress.de/jahresrueckblick-2020-das-sind-die-meistgestreamten-songs-bei-spotify-1692495/ Jahresrückblick 2020: Das sind die meistgestreamten Songs bei Spotify]'' auf musikexpress.de, abgerufen am 1. August 2022.</ref> || [[Capital Bra]] || [[Apache 207]] || [[Samra]] || [[Bonez MC]] || [[Ufo361]]
+|-
+| 2021<ref>''[https://www.musikexpress.de/spotify-jahresrueckblick-das-sind-die-meistgestreamten-acts-songs-podcasts-playlists-2021-2088811/ Spotify-Jahresrückblick: Das sind die meistgestreamten Acts, Songs, Podcasts & Playlists 2021]'' auf musikexpress.de, abgerufen am 1. August 2022.</ref> || [[Bonez MC]] || [[Luciano (Rapper)|Luciano]] || [[Capital Bra]] || [[RAF Camora]] || [[Samra]]
+|-
+| 2022<ref name="heise_2022">''[https://www.heise.de/news/Spotify-Wrapped-Das-sind-die-meistgehoerten-Kuenstler-2022-7362674.html Spotify zeigt die meistgestreamten Künstler 2022]'' auf heise.de, abgerufen am 12. Dezember 2022.</ref> || [[Luciano (Rapper)|Luciano]] || [[RAF Camora]] || [[Bonez MC]] || [[Cro (Rapper)|Cro]] || [[Ed Sheeran]]
+|-
+|2023<ref>{{Internetquelle |url=https://www.bild.de/ratgeber/2023/ratgeber/spotify-jahresrueckblick-diese-musik-hoerten-die-deutschen-2023-86279566.bild.html |titel=Spotify Jahresrückblick: Diese Musik hörten die Deutschen 2023 |werk=[[Bild (Zeitung)|Bild]] |datum=2023-11-30 |sprache=de |abruf=2023-12-05}}</ref>
+| [[Apache 207]]
+| [[Bonez MC]]
+| [[Taylor Swift]]
+| [[RAF Camora]]
+| [[Luciano (Rapper)|Luciano]]
+|-
+|2024<ref>{{Internetquelle |url=https://spotify_presse.prowly.com/369213-spotify-wrapped-2024-ist-da |titel=Spotify „Wrapped 2024” ist da! |werk=[[Spotify]] |sprache=de |abruf=2025-01-09}}</ref>
+| [[Taylor Swift]]
+| [[Luciano (Rapper)|Luciano]]
+| [[Ayliva|AYLIVA]]
+| [[Bonez MC]]
+| [[Apache 207]]
+|-
+|2025<ref>{{Internetquelle |url=https://spotify_presse.prowly.com/437960-spotify-2025-wrapped-das-sind-die-top-kunstlerinnen-songs-alben-podcasts-und-horbucher-des-jahres-in-deutschland-und-der-welt |titel=Spotify 2025 Wrapped: Das sind die Top-Künstler und Künstlerinnen, Songs, Alben, Podcasts und Hörbücher des Jahres in Deutschland und der Welt |werk=[[Spotify]] |sprache=de |abruf=2025-01-05}}</ref>
+| [[Taylor Swift]]
+| [[Pashanim]]
+| [[Linkin Park]]
+| [[Jazeek]]
+| [[Bonez MC]]
+|}
+
+=== Nach Jahrzehnt ===
+Die Anzahl der Streams ist, soweit verfügbar, in Klammern angegeben.
+
+{| class="wikitable"
+! rowspan="2"| Jahrzehnt
+! colspan="5"| Künstler-Ranking (weltweit)
+|-
+! 1
+! 2
+! 3
+! 4
+! 5
+|-
+| 2010er<ref>{{cite web |last=Eggertsen |first=Chris |title=Drake, Ed Sheeran Are Spotify's Most-Streamed Artists of the Decade |date=2019-12-03 |publisher=Billboard |url=https://www.billboard.com/articles/business/streaming/8545219/drake-ed-sheeran-spotifys-most-streamed-decade-wrapped |access-date=2019-12-03 |language=en|offline=dead |archive-url=https://web.archive.org/web/20191203173744/https://www.billboard.com/articles/business/streaming/8545219/drake-ed-sheeran-spotifys-most-streamed-decade-wrapped |archive-date=2019-12-03}}</ref>
+| [[Drake (Rapper)|Drake]] <small>(28 Milliarden)</small> || [[Ed Sheeran]] || [[Post Malone]] || [[Ariana Grande]] || [[Eminem]]
+|}
+
+== Meiste monatliche Hörer ==
+=== Übersicht ===
+[[Datei:BrunoMars24KMagicWorldTourLive (cropped).jpg|mini|hochkant|Der US-amerikanische Singer-Songwriter [[Bruno Mars]] ist derzeit der Künstler mit den meisten monatlichen Hörern auf Spotify]]
+
+Stand April 2026 ist der US-amerikanische Singer-Songwriter [[Bruno Mars]] der Künstler mit den meisten monatlichen Hörern. Der kanadische Singer-Songwriter [[The Weeknd]] war der erste Künstler, der 100 Millionen monatliche Hörer überschritt, während die US-amerikanische Singer-Songwriterin [[Taylor Swift]] die erste weibliche Künstlerin und insgesamt die zweite war.<ref>{{Internetquelle|url=https://variety.com/2023/music/news/taylor-swift-spotify-record-monthly-listeners-1235707101/|titel=Taylor Swift Becomes First Female Artist to Hit 100 Million Monthly Spotify Listeners|hrsg=[[Variety]] |abruf=2023-08-30|sprache=en}}</ref> Die US-amerikanische Singer-Songwriterin [[Billie Eilish]] war die dritte und jüngste Künstlerin, die diese Marke erreichte.<ref>{{Internetquelle|url=https://www.hollywoodreporter.com/news/music-news/billie-eilish-100-million-monthly-spotify-listeners-record-1235923816/|titel=Billie Eilish Becomes the 3rd and Youngest Artist to Reach 100M Monthly Spotify Listeners|hrsg=The Hollywood Reporter|abruf=2024-06-16|sprache=en}}</ref> Der US-amerikanische Rapper [[Kendrick Lamar]] war der erste Rapper, der sowohl diese Marke erreichte als auch die 110-Millionen-Marke überschritt. Der puerto-ricanische Rapper [[Bad Bunny]] ist der jüngste Künstler, der die Marke von 100 Millionen monatlichen Hörern überschritten hat.<ref>{{Internetquelle|url=https://inmusicblog.com/news/bad-bunny-100-million-monthly-listeners-spotify/|titel=Bad Bunny Becomes First Latin Artist to Hit 100 Million Monthly Spotify Listeners|werk=InMusic|datum=2026-02-11|abruf=2026-02-11|sprache=en}}</ref> Die britische Band [[Coldplay]] ist die erste Gruppe, die jeden Meilenstein von 60 Millionen bis 100 Millionen erreicht hat.<ref>{{Internetquelle|url=https://www.music-news.com/news/UK/177532/Coldplay-Moon-Music-album-lands-at-no-1-on-Billboard-200|titel=Coldplay Moon Music Album Lands at No. 1 on Billboard 200|hrsg=Music News|abruf=2024-10-14|sprache=en}}</ref><ref>{{Internetquelle|url=https://inmusicblog.com/news/coldplay-100-million-monthly-listeners-spotify/|titel=Coldplay Becomes First Group to Reach 100 Million Spotify Monthly Listeners|werk=InMusic|datum=2025-12-26|abruf=2026-02-11|sprache=en}}</ref>
+
+{| class="wikitable sortable tabelle-zaehler" style="text-align:center"
+! Künstler
+! Monatliche Hörer<br />(in Millionen)
+! class="unsortable"| Veränderung
+! class="unsortable"| Quellen
+|-
+| style="text-align: left;" | [[Bruno Mars]] || 135,02 || {{Unverändert}} ||<ref name="Bruno Mars">{{Internetquelle|url=https://open.spotify.com/artist/0du5cEVh5yTK9QJze8zA0C|titel=Bruno Mars|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[The Weeknd]]|| 115,44 || {{Unverändert}}||<ref name="The Weeknd">{{Internetquelle|url=https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ|titel=Bad Bunny|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Bad Bunny]]|| 108,60 || {{Unverändert}}||<ref name="Bad Bunny">{{Internetquelle|url=https://open.spotify.com/artist/4q3ewBCX7sLwd24euuV69X|titel=Bad Bunny|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Rihanna]] || 107,62 || {{Unverändert}} ||<ref name="Rihanna">{{Internetquelle|url=https://open.spotify.com/artist/5pKCCKE2ajJHZ9KAiaK11H|titel=Rihanna|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Taylor Swift]] || 102,23 || {{Unverändert}} ||<ref name="Taylor Swift">{{Internetquelle|url=https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02|titel=Taylor Swift|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Justin Bieber]] || 98,46 || {{Unverändert}} ||<ref name="Justin Bieber">{{Internetquelle|url=https://open.spotify.com/artist/1uNFoZAHBGtllmzznpCI3s|titel=Justin Bieber|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Lady Gaga]] || 94,70 || {{Unverändert}} ||<ref name="Lady Gaga">{{Internetquelle|url=https://open.spotify.com/artist/1HY2Jd0NmPuamShAr6KMms|titel=Lady Gaga|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Coldplay]] || 91,43 || {{Unverändert}} ||<ref name="Coldplay">{{Internetquelle|url=https://open.spotify.com/artist/4gzpq5DPGxSnKTe4SA8HAU|titel=Coldplay|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Drake (Rapper)|Drake]] || 87,88 || {{Gestiegen}} ||<ref name="Drake">{{Internetquelle|url=https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4|titel=Drake|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Billie Eilish]] || 84,80 || {{Gefallen}} ||<ref name="Billie Eilish">{{Internetquelle|url=https://open.spotify.com/artist/6qqNVTkY8uBg9cP3Jd7DAH|titel=Billie Eilish|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Ed Sheeran]] || 82,38 || {{Gestiegen}} ||<ref name="Ed Sheeran">{{Internetquelle|url=https://open.spotify.com/artist/6eUKZXaKkcviH0Ku9w2n3V|titel=Ed Sheeran|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[David Guetta]] || 82,38 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/1Cs0zKBU1kc0i8ypK3B9ai|titel=David Guetta|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Ariana Grande]] || 81,98 || {{Gefallen}} ||<ref name="Ariana Grande">{{Internetquelle|url=https://open.spotify.com/artist/66CXWjxzNUsdJxJ2JdwvnR|titel=Ariana Grande|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Shakira]] || 78,18 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/0EmeFodog0BfCgMzAIvKQp|titel=Shakira|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[J Balvin]] || 76,51 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/1vyhD5VmyZ7KMfW5gqLgo5|titel=J Balvin|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Maroon 5]] || 74,50 || {{Gestiegen}} ||<ref name="Maroon 5">{{Internetquelle|url=https://open.spotify.com/artist/04gDigrS5kc9YWfZHwBETP|titel=Maroon 5|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Kendrick Lamar]] || 73,31 || {{Gefallen}} ||<ref name="Kendrick Lamar">{{Internetquelle|url=https://open.spotify.com/artist/2YZyLoL8N0Wb9xBt1NhZWg|titel=Kendrick Lamar|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Calvin Harris]] || 73,20 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/7CajNmpbOovFoOoasH2HaY|titel=Calvin Harris|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Eminem]] || 73,15 || {{Gefallen}} ||<ref name="Eminem">{{Internetquelle|url=https://open.spotify.com/artist/7dGJo4pcD2V6oG8kP0tJRR|titel=Eminem|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Harry Styles]] || 71,77 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/6KImCVD70vtIoJWnq6nGn3|titel=Harry Styles|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Kanye West]] || 71,13 || {{Unverändert}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/5K4W6rqBFWDnAN6FQUkS6x|titel=Kanye West|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Pitbull (Rapper)|Pitbull]] || 68,92 || {{Unverändert}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg|titel=Pitbull|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[SZA (Sängerin)|SZA]] || 68,87 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/7tYKF4w9nC0nq9CsPZTHyP|titel=SZA|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Zara Larsson]]|| 68,52 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/1Xylc3o4UrD53lo9CvFvVg|titel=Zara Larsson|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Katy Perry]] || 66,19 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/6jJ0s89eD6GaHleKKya26X|titel=Katy Perry|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Dua Lipa]] || 64,84 || {{Unverändert}} ||<ref name="Dua Lipa">{{Internetquelle|url=https://open.spotify.com/artist/6M2wZ9GZgrQXHCFfjv46we|titel=Dua Lipa|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Sia (Sängerin)|Sia]] || 64,41 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/5WUlDfRSoLAfcVSX1WnrxN|titel=Sia|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Sabrina Carpenter]] || 64,40 ||{{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/74KM79TiuVKeVCqs8QtB0B|titel=Sabrina Carpenter|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Daddy Yankee]] || 63,78 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/4VMYDCV2IEDYJArk749S6m|titel=Daddy Yankee|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Lana Del Rey]] || 63,76 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/00FQb4jTyendYWaN8pK0wa|titel=Lana Del Rey|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Michael Jackson]] || 62,94 || {{Unverändert}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/3fMbdgg4jU18AjLCKBhRSm|titel=Michael Jackson|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Olivia Dean]] || 62,02 || {{Unverändert}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/00x1fYSGhdqScXBRpSj3DW|titel=Olivia Dean|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Sean Paul]] || 61,51 || {{Gestiegen}} || <ref>{{Internetquelle|url=https://open.spotify.com/artist/3Isy6kedDrgPYoTS1dazA9|titel=Sean Paul|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Post Malone]] || 61,35 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/246dkjvS1zLTtiykXe5h60|titel=Post Malone|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Travis Scott (Rapper)|Travis Scott]] || 60,59 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/0Y5tJX1MQlPlqiwlOH1tJY|titel=Travis Scott|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" |  [[Chris Brown (Sänger)|Chris Brown]]  || 59,19 || {{Gestiegen}} || <ref>{{Internetquelle|url=https://open.spotify.com/artist/7bXgB6jMjp9ATFy66eO08Z|titel=Chris Brown|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Sombr]] || 58,25 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/4G9NDjRyZFDlJKMRL8hx3S|titel=Sombr|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Black Eyed Peas]] || 58,05 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/1yxSLGMDHlW21z4YXirZDS|titel=Black Eyed Peas|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Adele (Sängerin)|Adele]] || 57,42 || {{Unverändert}} ||<ref name="Adele">{{Internetquelle|url=https://open.spotify.com/artist/4dpARuHxo51G3z768sgnrY|titel=Adele|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Doja Cat]] || 56,90 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/5cj0lLjcoR7YOSnhnX0Po5|titel=Doja Cat|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Miley Cyrus]] || 56,26 || {{Neu}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/5YGY8feqx7naU7z4HrwZM6|titel=Miley Cyrus|hrsg=Spotify|abruf=2026-04-01}}</ref>
+|-
+| style="text-align: left;" | [[Raye (Sängerin)|RAYE]] || 56,14 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/5KKpBU5eC2tJDzf0wmlRp2|titel=RAYE|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Linkin Park]] || 55,29 || {{Neu}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/6XyY86QOPPrYVGvF9ch6wz|titel=Linkin Park|hrsg=Spotify|abruf=2026-04-01}}</ref>
+|-
+| style="text-align: left;" | [[Rauw Alejandro]] || 55,15 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/1mcTU81TzQhprhouKaTkpq|titel=Rauw Alejandro|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Arctic Monkeys]] || 54,88 || {{Gestiegen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/7Ln80lUS6He07XvHI8qqHH|titel=Arctic Monkeys|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Beyoncé]] || 54,36 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/6vWDO969PvNqNYHIOW5v0m|titel=Beyoncé|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Arijit Singh]] || 54,06 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/4YRxDV8wJFPHPTeXepOstw|titel=Arijit Singh|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Imagine Dragons]] || 54,05 || {{Gefallen}} ||<ref name="Imagine Dragons">{{Internetquelle|url=https://open.spotify.com/artist/53XhwfbYqKCa1cC15pYq2q|titel=Imagine Dragons|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Future (Rapper)|Future]] || 53,72 || {{Gefallen}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/1dfeR4HaWDbWqFHLkxsg1d|titel=Queen|hrsg=Spotify|abruf=2025-02-16}}</ref>
+|-
+| style="text-align: left;" | [[Alex Warren]] || 52,77 || {{Neu}} ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/0fTSzq9jAh4c36UVb4V7CB|titel=Alex Warren|hrsg=Spotify|abruf=2026-04-01}}</ref>
+|-
+! colspan="5" style="font-size: 85%;" | Stand: 1. April 2026
+|}
+
+=== Zeitstrahl der Höchstwerte bei monatlichen Hörern ===
+[[Datei:BrunoMars24KMagicWorldTourLive (cropped).jpg|mini|hochkant|Der US-amerikanische Singer-Songwriter [[Bruno Mars]] ist der Künstler mit der höchsten jemals verzeichneten Anzahl an monatlichen Hörern.]]
+Dies ist ein Zeitstrahl der Künstler mit den meisten monatlichen Hörern auf Spotify seit September 2015, als die Funktion öffentlich gemacht wurde.<ref>{{Internetquelle|url=http://musically.com/2015/09/17/spotify-about-tab-artists-monthly-listeners/|titel=Spotify's new About tab reveals artists' monthly listeners|hrsg=Musically.com|abruf=2019-10-28|sprache=en}}</ref>
+
+{{Farblegende|#FFFF99|Kennzeichnet den meistgestreamten Künstler des Jahres (In den Jahren 2019 bis 2022 sowie 2024 bis 2025 führte der meistgestreamte Künstler des Jahres nicht die Liste der monatlichen Hörer an.)}}
+{{Farblegende|#D0F2FF|Kennzeichnet den Höchstwert der meisten monatlichen Hörer in der Geschichte von Spotify<ref>{{Internetquelle|url=https://newsroom.spotify.com/2025-01-27/bruno-mars-150-million-monthly-listeners/|titel=Bruno Mars Makes Spotify History as the First Artist To Hit 150 Million Monthly Listeners|hrsg=Spotify|abruf=2025-01-27}}</ref>}}
+
+{{Belege fehlen|1=Januar 2026}}
+
+{| class="wikitable sortable"
+|+Der meistgestreamte Künstler nach monatlichen Hörern
+! Monat !!2026 !!2025 !!2024 !!2023 !!2022 !!2021 !!2020 !!2019 !!2018 !!2017 !!2016 !!2015
+|-
+! Januar
+| rowspan="3" | [[Bruno Mars]]<ref>Januar: {{Internetquelle|url=https://routenote.com/blog/most-streamed-artists-on-spotify/|titel=Top 10 most-streamed artists on Spotify – artists with the most monthly listeners in 2026|werk=RouteNote Blog|datum=2026-01-20|abruf=2026-02-11|sprache=en}}</ref><ref>Februar: {{Internetquelle|url=https://www.azcentral.com/story/entertainment/music/2026/02/09/who-is-performing-super-bowl-halftime-show-2027/88590371007/|titel=Who is performing at Super Bowl 2027? 5 superstars we'd like to see|werk=The Arizona Republic|datum=2026-02-06|abruf=2026-02-27|sprache=en}}</ref><ref>März: {{Internetquelle|url=https://www.ibtimes.com.au/top-10-spotify-artists-monthly-listeners-march-29-2026-bruno-mars-surges-top-spot-1864845|titel=Top 10 Spotify Artists by Monthly Listeners (as of March 29, 2026) : Bruno Mars Surges to Top Spot|werk=International Business Times Australia|datum=2026-03-29|abruf=2026-03-30|sprache=en}}</ref>
+| rowspan="6" style="background-color:#D0F2FF;" | [[Bruno Mars]]<ref name=":3">Januar: {{Internetquelle |url=https://newsroom.spotify.com/2025-01-27/bruno-mars-150-million-monthly-listeners/ |titel=Bruno Mars schreibt Spotify-Geschichte als erster Künstler mit 150 Millionen monatlichen Hörern |hrsg=Spotify |sprache=de |abruf=2025-01-27}}</ref>
+| rowspan="7" | [[The Weeknd]]<ref name=":4">Januar: {{Internetquelle |url=https://www.billboard.com/music/music-news/the-weeknd-blinding-lights-4-billion-streams-spotify-1235580557/ |titel=The Weeknd Is 'Humbled' as 'Blinding Lights' Becomes First Song to Hit 4 Billion Streams on Spotify |hrsg=[[Billboard (Magazin)|Billboard]] |sprache=en |abruf=2024-01-13}}</ref><ref name=":4a">Februar: {{Internetquelle |url=https://bloggerspassion.com/spotify-stats/ |titel=Spotify Stats 2024: 40 Fascinating Spotify Statistics |hrsg=BloggersPassion |sprache=en |abruf=2024-02-22}}</ref><ref name=":4b">März: {{Internetquelle |url=https://thatgrapejuice.net/2024/03/beyonce-reaches-career-high-monthly-listeners-on-spotify/ |titel=Beyonce Reaches CAREER HIGH Monthly Listeners on Spotify |hrsg=ThatGrapeJuice |sprache=en |abruf=2024-03-16}}</ref><ref name=":4c">April: {{Internetquelle |url=https://www.qqtube.com/blog/how-many-monthly-listeners-on-spotify-is-good |titel=How Many Monthly Listeners On Spotify Is Good In 2024? |hrsg=qqtube |sprache=en |abruf=2024-11-05}}</ref><ref name=":4d">Mai: {{Internetquelle |url=https://www.hifmradio.com/oman/trending/spotify-reveals-the-artists-with-the-most-spotify-monthly-listeners/ |titel=Spotify reveals the artists with the most Spotify monthly listeners! |hrsg=HiFMradio |sprache=en |abruf=2024-11-05}}</ref><ref name=":4e">Juni: {{Internetquelle |url=https://jassbianchi.com/who-has-the-most-spotify-monthly-listeners-top-artists/ |titel=Who Has the Most Spotify Monthly Listeners? Top Artists |hrsg=jassbianchi |sprache=en |abruf=2024-11-05}}</ref><ref name=":4f">Juli: {{Internetquelle |url=https://hiphopdx.com/news/kendrick-lamar-drake-monthly-spotify-listeners |titel=Kendrick Lamar Continues To Eclipse Drake As His Monthly Spotify Listeners Soar |hrsg=hiphopDX |sprache=en |abruf=2024-11-05}}</ref>
+| rowspan="10" | [[The Weeknd]]<ref name=":5">Januar: {{Internetquelle |url=https://boardroom.tv/headline-to-go/jan-13-2023-the-weeknd-spotify-monthly-streaming-record/ |titel=The Weeknd Breaks Spotify Monthly Streaming Record |hrsg=Boardroom |sprache=en |abruf=2023-01-16}}</ref><ref name=":5a">Februar: {{Internetquelle |url=https://variety.com/2023/music/news/the-weeknd-spotify-record-monthly-listeners-1235537787/ |titel=The Weeknd Becomes First Artist to Reach 100 Million Monthly Listeners on Spotify |hrsg=[[Variety]] |sprache=en |abruf=2023-02-28}}</ref><ref name=":5b">März: {{Internetquelle |url=https://www.guinnessworldrecords.com/news/2023/3/the-weeknd-is-officially-the-worlds-most-popular-artist-741774 |titel=The Weeknd is officially the world's most popular artist |hrsg=Guinness World Records |sprache=en |abruf=2023-04-02}}</ref><ref name=":5c">April: {{Internetquelle |url=https://worldwidetune.com/most-listened-to-artists |titel=20 Most Listened To Artists On Spotify In 2023 |sprache=en |abruf=2023-05-06}}</ref><ref name=":5d">Mai: {{Internetquelle |url=https://www.prnewswire.com/news-releases/blue-bottle-coffee-and-the-weeknd-partner-to-launch-samra-origins-in-celebration-of-ethiopian-culture-301814101.html |titel=Blue Bottle Coffee and The Weeknd partner to launch "Samra Origins" in celebration of Ethiopian culture |datum=2023-05-03 |sprache=en |abruf=2023-05-08}}</ref><ref name=":5e">Juni: {{Internetquelle |url=https://soundcamps.com/blog/spotify-streams-vs-spotify-monthly-listeners/ |titel=Spotify Streams vs Spotify Monthly Listeners |sprache=en |abruf=2023-07-02}}</ref><ref name=":5f">Juli: {{Internetquelle |url=https://www.pinkvilla.com/entertainment/hollywood/the-weeknd-takes-the-throne-for-worlds-most-popular-entertainer-in-guinness-worlds-records-check-the-list-1213514 |titel=The Weeknd takes the throne for World's Most Popular Entertainer in Guinness Worlds Records, check full list |sprache=en |abruf=2023-07-29}}</ref><ref name=":5g">August: {{Internetquelle |url=https://agencymasala.com/lifestyle/music/the-15-top-artists-on-spotify-worldwide/4 |titel=The 15 Top Artists on Spotify Worldwide In 2023 |sprache=en |offline=Dezember 2024<!--|bot=InternetArchiveBot|fix-attempted=yes--> |abruf=2023-08-17}}</ref><ref name=":5h">September: {{Internetquelle |url=https://www.nme.com/news/music/the-weeknd-reacts-to-taylor-swift-becoming-only-other-artist-with-100million-spotify-listeners-3492773 |titel=The Weeknd reacts to Taylor Swift becoming only other artist with 100million Spotify listeners |hrsg=NME |sprache=en |abruf=2023-09-17}}</ref><ref name=":5i">Oktober: {{Internetquelle |url=https://dailyinfographic.com/who-is-the-most-popular-artist-on-spotify-currently |titel=Who Is The Most Popular Artist On Spotify Currently? |sprache=en |abruf=2023-10-18}}</ref>
+| rowspan="2" | [[The Weeknd]]<ref name=":6">Januar: {{Internetquelle |url=https://www.nme.com/news/music/the-weeknd-breaks-justin-biebers-record-for-most-monthly-spotify-listeners-3144313 |titel=The Weeknd Passes Justin Bieber On Spotify For Most Monthly Listeners In The World |hrsg=NME |sprache=en |abruf=2022-01-23}}</ref><ref name=":6a">Februar: {{Internetquelle |url=https://en.hespress.com/35994-singer-the-weeknd-still-tops-music-charts-worldwide.html |titel=Singer The Weeknd still tops music charts worldwide |hrsg=Hespress |sprache=en |abruf=2022-12-10}}</ref>
+| [[Justin Bieber]]<ref name=":7">{{Internetquelle |url=https://portalpopline.com.br/spotify-justin-bieber-supera-ariana-grande-retoma-reinado/ |titel=Spotify: Justin Bieber supera Ariana Grande e retoma reinado |hrsg=POPline |sprache=pt |abruf=2023-03-13}}</ref>
+| [[Ed Sheeran]]<ref name="Ed Sheeran June 2019">{{Internetquelle |url=https://www.billboard.com/articles/business/8520530/ed-sheeran-spotify-monthly-listeners-playlists-no-6-album |titel=Ed Sheeran Nears 70 Million Monthly Listeners on Spotify as 'No. 6' Lands on 800-Plus Playlists |hrsg=Billboard |sprache=en |abruf=2019-07-25}}</ref>
+| [[Ariana Grande]]<ref name=":8">{{Internetquelle |url=https://musically.com/2019/01/21/ariana-grande-takes-spotify-single-day-streams-record/ |titel=Ariana Grande takes Spotify single-day streams record |hrsg=Music Ally |sprache=en |abruf=2023-05-07}}</ref>
+| rowspan="4" | [[The Weeknd]]
+| [[The Weeknd]]<ref name="Spotify" />
+| rowspan="3" | [[Justin Bieber]]<ref>*Januar & Februar: {{Internetquelle |url=https://industriamusical.com/en-tan-solo-3-meses-purpose-de-justin-bieber-acumula-mas-de-2-446-millones-de-reproducciones-en-spotify-17-12m/ |titel=In just 3 months "Purpose" by Justin Bieber accumulates more than 2,446 million views on Spotify ($17,12m) |hrsg=industriamusical.com |sprache=en |abruf=2023-05-07}}
+* März: {{Internetquelle |url=https://www.nytimes.com/2016/03/30/arts/music/gwen-stefani-truth-spotify-chart.html |titel=Gwen Stefani Skips Spotify and Still Opens at No. 1 |sprache=en |abruf=2016-03-29}}</ref>
+| rowspan="8" | –
+|-
+! Februar
+| rowspan="2" | [[The Weeknd]]<ref name=":9">{{Internetquelle |url=https://variety.com/2021/music/news/the-weeknd-super-bowl-chart-bump-birthday-1234908586/ |titel=The Weeknd Gets a Massive Post-Super Bowl Chart Bump |hrsg=[[Variety]] |sprache=en |abruf=2021-03-07}}</ref>
+| rowspan="2" | [[Justin Bieber]]<ref name=":10">{{Internetquelle |url=https://www.usatoday.com/picture-gallery/entertainment/music/2020/03/05/spotify-artists-with-the-most-listeners/111391516/ |titel=Ahead of the Spotify Awards, which artists on the streaming service have the most listeners? |hrsg=USA Today |sprache=en |abruf=2020-04-15}}</ref>
+| [[The Weeknd]]
+| rowspan="2" style="background-color:#ffff99;" | [[Ed Sheeran]]<ref name=":11">Februar: {{Internetquelle |url=https://www.musicbusinessworldwide.com/ed-sheeran-now-biggest-artist-spotify/ |titel=Ed Sheeran is now officially the biggest artist on Spotify worldwide |hrsg=Music Business Worldwide |sprache=en |abruf=2018-03-29}}</ref><ref name=":11a">März: {{Internetquelle |url=https://www.billboard.com/music/pop/ed-sheeran-divide-spotify-records-first-day-streams-7710253/ |titel=Ed Sheeran's 'Divide' Smashes Spotify Records For First-Day Streams |hrsg=Billboard |sprache=en |abruf=2017-03-06}}</ref>
+|-
+! März
+| rowspan="8" | [[Ed Sheeran]]<ref name=":12">März: {{Internetquelle |url=https://usa.inquirer.net/97379/top-artists-on-spotify-in-2022 |titel=Top Artists on Spotify in 2022 |hrsg=Inquirer |sprache=en |abruf=2022-04-02}}</ref><ref name=":12a">April: {{Internetquelle |url=https://en.hespress.com/39920-ed-sheeran-ranks-1st-worldwide-as-spotifys-most-streamed-artist.html |titel=Ed Sheeran ranks 1st worldwide as Spotify's most-streamed artist |hrsg=Inquirer |sprache=en |abruf=2022-04-02}}</ref><ref name=":11b">Mai: {{Internetquelle |url=https://www.musicbusinessworldwide.com/who-has-the-most-monthly-listeners-on-spotify-ed-sheeran-and-justin-bieber-currently-lead-the-rankings/ |titel=Ed Sheeran and Justin Bieber currently have the most monthly listeners of all artists on Spotify |hrsg=Music Business Worldwide |sprache=en |abruf=2022-05-21}}</ref><ref name=":11c">Juni: {{Internetquelle |url=https://www.musicbusinessworldwide.com/podcast/the-major-labels-face-an-uphill-battle-for-streaming-market-share-heres-how-they-might-fight-back/ |titel=THE MAJOR LABELS FACE AN UPHILL BATTLE FOR STREAMING MARKET SHARE. HERE'S HOW THEY MIGHT FIGHT BACK. |hrsg=Music Business Worldwide |sprache=en |abruf=2022-12-10}}</ref><ref name=":11d">Juli: {{Internetquelle |url=https://www.nme.com/news/music/ed-sheeran-becomes-first-artist-to-hit-100million-followers-on-spotify-3277611 |titel=Ed Sheeran becomes first artist to hit 100million followers on Spotify |hrsg=NME |sprache=en |abruf=2022-12-10}}</ref><ref name=":11e">August: {{Internetquelle |url=https://www.nme.com/news/music/spotify-launches-new-concert-tickets-website-3288047 |titel=Spotify launches new concert tickets website |hrsg=NME |sprache=en |abruf=2022-12-10}}</ref><ref name=":11f">September: {{Internetquelle |url=https://www.digitalmusicnews.com/2022/09/17/most-streamed-spotify-artists-of-all-time/ |titel=Who are the Most Streamed Spotify Artists of All-Time? |hrsg=Digital Music News |sprache=en |abruf=2022-12-10}}</ref><ref name=":11g">Oktober: {{Internetquelle |url=https://twostorymelody.com/spotify-monthly-listeners-explained/ |titel=What Are Monthly Listeners on Spotify (and How Many Should You Have)? |hrsg=Two Story Melody |sprache=en |abruf=2022-12-18}}</ref>
+| [[Ariana Grande]]<ref name=":13">{{Internetquelle |url=https://kazimagazine.com/uncategorized/nicki-minaj-cardi-b-ariana-grande-lead-spotifys-top-20-female-artists/ |titel=Nicki Minaj, Cardi B, Ariana Grande Control Spotify's Top 20 Female Artists |hrsg=KAZI |sprache=en |abruf=2023-05-07}}</ref>
+|-
+! April
+|
+| rowspan="9" | [[Justin Bieber]]<ref name=":14">April: {{Internetquelle |url=https://moviecultists.com/on-spotify-who-has-the-most-monthly-listeners |titel=On spotify who has the most monthly listeners? |hrsg=Movie Cultists |sprache=en |abruf=2022-04-02}}</ref><ref name=":14a">Mai: {{Internetquelle |url=https://hypebeast.com/2021/5/dababy-surpasses-drake-with-most-monthly-streams-on-spotify/ |titel=DaBaby Surpasses Drake With Most Monthly Streams on Spotify |hrsg=Hypebeast |sprache=en |abruf=2021-06-02}}</ref><ref name=":14b">Juni: {{Internetquelle |url=https://associatedtelevision.com/bgjwus/who-has-the-most-monthly-listeners-on-spotify-2021 |titel=Who has the most monthly listeners on Spotify 2021 |hrsg=Associated Television |sprache=en |abruf=2021-12-07}}</ref><ref name=":14c">Juli: {{Internetquelle |url=https://www.sonymusic.ca/press_release/the-kid-laroi-and-justin-bieber-team-up-in-the-long-awaited-new-song-stay |titel=THE KID LAROI AND JUSTIN BIEBER TEAM UP IN THE LONG AWAITED NEW SONG "STAY" |hrsg=Complex |sprache=en |abruf=2023-03-13}}</ref><ref name=":14d">August: {{Internetquelle |url=https://www.complex.com/music/justin-bieber-spotify-listeners-record |titel=Justin Bieber Breaks All-Time Spotify Record for Monthly Listeners |hrsg=Complex |sprache=en |abruf=2023-03-13}}</ref><ref name=":14e">September: {{Internetquelle |url=https://www.guinnessworldrecords.com/world-records/643272-most-monthly-listeners-on-spotify |titel=Most monthly listeners on Spotify (male) |hrsg=Guinness World Records |sprache=en |abruf=2021-11-19}}</ref><ref name=":14f">Oktober: {{Internetquelle |url=https://www.hotnewhiphop.com/doja-cat-passes-drake-to-become-rapper-with-most-monthly-listeners-on-spotify-news.140971.html |titel=Doja Cat Passes Drake To Become Rapper With Most Monthly Listeners On Spotify |hrsg=Hot New Hip Hop |sprache=en |abruf=2021-11-24}}</ref><ref name=":14g">November: {{Internetquelle |url=https://www.wellsfargocenterphilly.com/news/detail/justin-bieber-announces-jaden-teo-eddie-benjamin-and-harry-hudson-as-opening-acts-for-his-2022-world-tour |titel=Justin Bieber Announces Jaden, ¿Téo?, Eddie Benjamin, And Harry Hudson As Opening Acts For His 2022 World Tour |hrsg=Wells Fargo Center Philly.com |sprache=en |abruf=2024-12-03}}</ref><ref name=":14h">Dezember: {{Internetquelle |url=https://www.nme.com/news/music/justin-bieber-becomes-first-artist-in-spotify-history-to-cross-90-million-monthly-listeners-3126153 |titel=Justin Bieber becomes first artist in Spotify history to cross 90 million monthly listeners |hrsg=NME |sprache=en |abruf=2024-12-03}}</ref>
+| rowspan="7" | [[The Weeknd]]<ref name=":15">April: {{Internetquelle |url=https://jamaica.loopnews.com/content/streaming-or-dubplate-saviour-dancehall-amid-covid-crisis |titel=Is streaming or dubplate the saviour for dancehall amid COVID crisis? |hrsg=Loop News |sprache=en |abruf=2022-12-09}}</ref><ref name=":15a">Mai: {{Internetquelle |url=https://www.sporcle.com/games/hrush28/top-100-artists-by-spotify-monthly-listeners/results |titel=Top 100 Artists by Spotify Monthly Listeners Stats |hrsg=Sporcle |sprache=en |abruf=2023-03-13}}</ref><!--<ref name=":15b"Juni:></ref>--><ref name=":15c">Juli: {{Internetquelle |url=https://variety.com/2020/digital/news/the-weeknd-tiktok-after-hours-concert-livestream-1234720674/ |titel=The Weeknd to Perform 'After Hours' Virtual Concert on TikTok |hrsg=[[Variety]] |sprache=en |abruf=2022-12-10}}</ref><ref name=":15d">August: {{Internetquelle |url=https://www.bbc.co.uk/newsround/53817170 |titel=Ariana Grande: Star breaks streaming record previously held by Rihanna |hrsg=BBC |sprache=en |abruf=2021-03-07}}</ref><ref name=":15e">September: {{Internetquelle |url=https://www.apptuts.net/en/tutorial/android/most-popular-artists-on-spotify/ |titel=Top 20 most popular artists on Spotify in 2020! |hrsg=apptuts |sprache=en |abruf=2023-03-13}}</ref><ref name=":15f">Oktober: {{Internetquelle |url=https://www.apptuts.net/es/tutorial/android/top-20-de-los-cantantes-mas-populares-en-spotify/ |titel=Top 20 of the most popular singers on Spotify |hrsg=apptuts |sprache=es |abruf=2023-03-13}}</ref>
+| rowspan="2" | [[Khalid]]<ref name=":16">April: {{Internetquelle |url=https://www.musicbusinessworldwide.com/khalid-just-became-the-biggest-artist-in-the-world-on-spotify-with-over-50m-monthly-listeners/ |titel=Khalid Just Became The Biggest Artist in the World On Spotify, With Over 50m Monthly Listeners |hrsg=Music Business worldwide |sprache=en |abruf=2019-07-25}}</ref><ref name=":16a">Mai: {{Internetquelle |url=https://www.bandwagon.asia/articles/find-out-which-artist-has-knocked-ariana-grande-off-the-number-one-spot-on-spotify |titel=Find out which artist has knocked Ariana Grande off the number one spot on Spotify |hrsg=Bandwagon Asia |sprache=en |abruf=2023-05-08}}</ref>
+| rowspan="3" | [[The Weeknd]]
+| [[Rihanna]]<ref>{{Internetquelle |url=https://www.musicbusinessworldwide.com/biggest-artist-spotify-shareholder-tidal/ |titel=THE BIGGEST ARTIST ON SPOTIFY IS A SHAREHOLDER IN TIDAL |sprache=en |abruf=2023-05-07}}</ref>
+|-
+! Mai
+|
+| style="background-color:#ffff99;" | [[Drake (Rapper)|Drake]]<ref name=":17">{{Internetquelle |url=https://weraveyou.com/2018/05/spotify-announce-top-10-biggest-artists/ |titel=Spotify announce Top 10 biggest artists |hrsg=We Rave You |sprache=en |abruf=2018-05-10}}</ref>
+| rowspan="7" style="background-color:#ffff99;" | [[Drake (Rapper)|Drake]]<ref name="Spotify">{{Internetquelle |url=https://www.musicbusinessworldwide.com/drake-finally-loses-his-crown-on-spotifys-to-record-breaking-the-weeknd/ |titel=Drake finally loses his Spotify crown to record-breaking the Weeknd |sprache=en |abruf=2018-03-29}}</ref>
+|-
+! Juni
+|
+| [[The Weeknd]]
+| [[J Balvin]]<ref name=":18">{{Internetquelle |url=https://www.billboard.com/music/latin/j-balvin-most-streamed-artist-worldwide-spotify-8462494/ |titel=J Balvin Is the Most Streamed Artist Worldwide on Spotify, Replacing Drake |hrsg=Billboard |sprache=en |abruf=2019-10-28}}</ref>
+|-
+! Juli
+|
+| [[The Weeknd]]<ref name=":19">{{Internetquelle |url=https://ca.billboard.com/music/chart-beat/the-weeknd-spotify-july-2025 |titel=The Weeknd Reclaims No. 1 Spot With Top Monthly Listeners in the World on Spotify |hrsg=Billboard Canada |sprache=en |abruf=2025-07-21}}</ref>
+| [[Ed Sheeran]]<ref name="Ed Sheeran June 2019" />
+| rowspan="4" | [[The Weeknd]]
+| [[Daddy Yankee]]<ref name=":20">{{Internetquelle |url=https://www.thefader.com/2017/07/09/daddy-yankee-number-one-artist-spotify |titel=Daddy Yankee Is Now The Number One Artist On Spotify |hrsg=The FADER |sprache=en |abruf=2023-05-07}}</ref>
+|-
+! August
+|
+| [[Bruno Mars]]<ref>{{Internetquelle |url=https://themusicuniverse.com/bruno-mars-announces-december-2025-new-years-weekend-performances/ |titel=Bruno Mars announces December 2025 New Year’s weekend performances |hrsg=The Music Universe |sprache=en |abruf=2024-11-11}}</ref>
+| [[Billie Eilish]]<ref name=":143">{{Internetquelle |url=https://www.billboard.com/music/music-news/billie-eilish-spotify-most-streamed-monthly-artist-1235756520/ |titel=Billie Eilish Is Spotify's Most Streamed Monthly Artist |hrsg=[[Billboard (Magazin)|Billboard]] |sprache=en |abruf=2024-09-14}}</ref>
+| rowspan="2" | [[The Weeknd]]
+| [[The Weeknd]]
+|-
+! September
+|
+| rowspan="3" |[[The Weeknd]]<ref name=":142">September: {{Internetquelle |url=https://www.thesun.ie/tvandshowbiz/15790417/the-weeknd-croke-park-tickets-2026-dublin/ |titel=I Feel It Coming: The Weeknd announces major Croke Park gig next summer as part of record-breaking tour – here’s how to get tickets |hrsg=The Irish Sun |sprache=en |abruf=2025-11-10}} Oktober: {{Internetquelle |url=https://music3point0.com/2025/10/16/yes-some-artists-actually-make-a-lot-of-money-from-spotify/ |titel=Yes, Some Artists Actually Make A Lot Of Money From Spotify |hrsg=Music 3,0 Blog |sprache=en |abruf=2025-11-10}} November: {{Internetquelle |url=https://ratingsgamemusic.com/2025/11/08/the-weeknd-becomes-longest-reigning-1-artist-by-monthly-listeners-in-spotify-history/ |titel=The Weeknd Becomes Longest-Reigning #1 Artist by Monthly Listeners in Spotify History |hrsg=Rating Games Music |sprache=en |abruf=2025-11-29}}</ref>
+| rowspan="2" | [[The Weeknd]]<ref name=":22">September: {{Internetquelle |url=https://thesource.com/2024/09/17/the-weeknd-regains-spotify-crown-with-over-106-million-monthly-listeners/ |titel=The Weeknd Regains Spotify Crown with Over 106 Million Monthly Listeners |hrsg=The Source |sprache=en |abruf=2024-11-05}}</ref><ref name=":22a">Oktober: {{Internetquelle |url=https://thesource.com/2024/10/10/the-weeknd-hits-record-120-5-million-monthly-spotify-listeners-breaks-his-own-record/ |titel=The Weeknd Hits Record 120,5 Million Monthly Spotify Listeners, Breaks His Own Record |hrsg=The Source |sprache=en |abruf=2024-10-11}}</ref>
+| rowspan="4" style="background-color:#ffff99;" | [[Ed Sheeran]]<ref name=":23">September: {{Internetquelle |url=https://themusicnetwork.com/ed-sheerans-shape-of-you-sets-new-spotify-record-with-138-billion-streams/ |titel=Ed Sheeran's 'Shape Of You' sets new Spotify record with 1,38 billion streams |hrsg=The Music Network |sprache=en |abruf=2017-09-25}}</ref><ref name=":23a">Oktober: {{Internetquelle |url=https://www.vogue.com/article/j-balvin-mi-gente-fashion |titel=It's J Balvin's World and We're All Just Living in It |hrsg=Vogue |sprache=en |abruf=2023-05-07}}</ref><ref name=":23b">November: {{Internetquelle |url=https://sites.williams.edu/f18-engl117-01/uncategorized/from-homelessness-to-stardom-the-ed-sheeran-phenomenon/ |titel=From Homelessness to Stardom: The Ed Sheeran Phenomenon |hrsg=Williams College |sprache=en |abruf=2023-05-07}}</ref><ref name=":23c">Dezember: {{Internetquelle |url=https://variety.com/2017/digital/news/ed-sheeran-rihanna-lead-spotifys-most-streamed-artists-of-2017-list-1202630294/ |titel=Ed Sheeran, Rihanna Lead Spotify's Most-Streamed Artists of 2017 List |hrsg=[[Variety]] |sprache=en |abruf=2024-12-03}}</ref>
+| rowspan="2" | [[The Weeknd]]<ref name=":1">September: {{Internetquelle |url=https://musically.com/2015/09/17/the-weeknd-spotify-artists-24m-monthly-listeners/ |titel=The Weeknd tops Spotify artists chart with 24m listeners |hrsg=Musically.com |sprache=en |abruf=2019-10-28}}</ref><ref name=":1a">Oktober: {{Internetquelle |url=https://time.com/4070038/ed-sheeran-spotify-record-thinking-out-loud/ |titel=Ed Sheeran Just Set a Big Spotify Record |hrsg=Time Magazine |sprache=en |abruf=2023-05-07}}</ref>
+|-
+! Oktober
+|
+| [[Ed Sheeran]]<ref name=":24">{{Internetquelle |url=https://www.bbc.co.uk/newsround/50219299 |titel=How many records has Ed Sheeran broken? |hrsg=BBC |sprache=en |abruf=2024-12-03}}</ref>
+|-
+! November
+|
+| rowspan="2" | [[Bruno Mars]]<ref name=":25">November: {{Internetquelle |url=https://www.royaltyexchange.com/blog/bruno-mars-shatters-spotify-monthly-listeners-record-with-2-mega-hits |titel=Bruno Mars Shatters Spotify Monthly Listeners Record with 2 Mega-hits |hrsg=RoyaltyExchange |sprache=en |abruf=2024-11-05}}</ref><ref name=":25a">Dezember: {{Internetquelle |url=https://musically.com/2024/12/02/bruno-mars-breaks-spotifys-record-for-most-monthly-listeners/ |titel=Bruno Mars breaks Spotify's record for most monthly listeners |hrsg=Music Ally |sprache=en |abruf=2024-12-02}}</ref>
+| rowspan="2" style="background-color:#ffff99;" | [[Taylor Swift]]<ref name=":26">November: {{Internetquelle |url=https://www.unilad.com/music/news/taylor-swift-is-the-most-listened-to-artist-in-the-world-on-spotify-163930-20231102 |titel=Taylor Swift is the most listened to artist in the world on Spotify after overtaking The Weeknd |hrsg=UNILAD |sprache=en |abruf=2023-11-24}}</ref><ref name=":26a">Dezember: {{Internetquelle |url=https://medium.com/@william.b.y.chan/an-analysis-on-taylor-swifts-spotify-data-ec5081b2a6ce |titel=An Analysis on Taylor Swift's Spotify Data |hrsg=[[Medium (Website)|Medium]] |sprache=en |abruf=2023-12-05}}</ref>
+| [[Taylor Swift]]<ref name=":27">{{Internetquelle |url=https://www.newsweek.com/spotify-wrapped-launch-has-internet-anxiously-awaiting-where-it-1762865 |titel=Spotify Wrapped Launch Has Internet Anxiously Awaiting: 'Where Is It' |hrsg=Newsweek |sprache=en |abruf=2022-12-09}}</ref>
+| rowspan="2" | [[Ariana Grande]]<ref name=":28">November: {{Internetquelle |url=https://www.uai.com.br/app/noticia/musica/2020/11/19/noticias-musica,265073/ariana-grande-passa-justin-bieber-se-torna-artista-mais-ouvida-spotify.shtml |titel=Ariana Grande passa Justin Bieber e se torna artista mais ouvida do Spotify |hrsg=uai |sprache=pt |abruf=2022-12-09}}</ref><ref name=":28a">Dezember: {{Internetquelle |url=https://www.thethings.com/a-ranking-of-the-biggest-popstars-of-2020-according-to-spotify-monthly-listeners/ |titel=A Ranking Of The Biggest Popstars Of 2020, According To Spotify Monthly Listeners |hrsg=TheThings |sprache=en |abruf=2022-12-09}}</ref>
+| rowspan="2" | [[The Weeknd]]
+| rowspan="2" | [[Ariana Grande]]<ref name=":29">November: {{Internetquelle |url=https://www.billboard.com/music/pop/ariana-grande-most-streamed-spotify-8487545/ |titel=Ariana Grande Is the Most Streamed Artist Worldwide On Spotify, Replacing Selena Gomez |hrsg=Billboard |sprache=en |abruf=2019-10-28}}</ref><ref name=":29a">Dezember: {{Internetquelle |url=https://www.musicweek.com/talent/read/ariana-grande-drops-new-single-imagine/074776 |titel=Ariana Grande drops new single Imagine |hrsg=Music Week |sprache=en |abruf=2023-05-08}}</ref>
+| rowspan="2" | [[Justin Bieber]]<ref name=":2">{{Internetquelle |url=https://industriamusical.com/en-tan-solo-3-meses-purpose-de-justin-bieber-acumula-mas-de-2-446-millones-de-reproducciones-en-spotify-17-12m/ |titel=In just 3 months "Purpose" by Justin Bieber accumulates more than 2,446 million views on Spotify ($17,12m) |hrsg=industriamusical.com |sprache=en |abruf=2023-05-07}}</ref>
+|-
+! Dezember
+|
+| [[Ariana Grande]]<ref name=":150">{{Internetquelle|url=https://tribune.com.pk/story/2584062/ariana-grande-becomes-1-artist-worldwide-on-spotify|titel=Ariana Grande becomes #1 artist worldwide on Spotify|hrsg=The Express Tribune|abruf=2025-12-31|sprache=en}}</ref>
+| [[The Weeknd]]<ref name=":30">{{Internetquelle |url=https://exclaim.ca/music/article/the_weeknd_set_to_pass_ed_sheeran_for_spotifys_most-streamed_song |titel=The Weeknd Set to Pass Ed Sheeran for Spotify's Most-Streamed Song Ever |hrsg=Exclaim |sprache=en |abruf=2022-12-21}}</ref>
+| [[The Weeknd]]<ref name="Spotify" />
+|}
+
+=== Statistik ===
+{| class="wikitable sortable"
+!Künstler !!Anzahl Monate !!Letzter Monat !!Erster Monat
+|-
+| [[The Weeknd]] || style="text-align:center;" | 57
+| November 2025
+| September 2015
+|-
+| [[Justin Bieber]] || style="text-align:center;" | 17
+| Dezember 2021
+| November 2015
+|-
+| [[Ed Sheeran]] || style="text-align:center;" | 17
+| Oktober 2022
+| Februar 2017
+|-
+| [[Bruno Mars]] || style="text-align:center;" | 12
+| März 2026
+| November 2024
+|-
+| [[Drake (Rapper)|Drake]] || style="text-align:center;" | 8
+| Mai 2018
+| Mai 2016
+|-
+| [[Ariana Grande]] || style="text-align:center;" | 7
+| Dezember 2025
+| November 2018
+|-
+| [[Taylor Swift]] || style="text-align:center;" | 3
+| Dezember 2023
+| November 2022
+|-
+| [[Khalid]] || style="text-align:center;" | 2
+| Mai 2019
+| April 2019
+|-
+| [[Rihanna]] || style="text-align:center;" | 1
+| colspan="2" style="text-align:center;" | April 2016
+|-
+| [[Daddy Yankee]] || style="text-align:center;" | 1
+| colspan="2" style="text-align:center;" | Juli 2017
+|-
+| [[J Balvin]] || style="text-align:center;" | 1
+| colspan="2" style="text-align:center;" | Juni 2018
+|-
+| [[Billie Eilish]] || style="text-align:center;" | 1
+| colspan="2" style="text-align:center;" | August 2024
+|-
+! Gesamtmonate !! 127 !!colspan="2"| Stand März 2026
+|}
+
+== Meiste Follower ==
+[[Datei:Arijit Singh performance at MMRDA ground Mumbai in 2018.jpg|mini|hochkant|Der indische Playback-Sänger [[Arijit Singh]] ist der Künstler mit den meisten Followern auf Spotify.]]
+
+Stand April 2026 ist der indische Playback-Sänger [[Arijit Singh]] der Künstler mit den meisten Followern und Taylor Swift die weibliche Künstlerin mit den meisten Followern auf Spotify.<ref>{{Internetquelle|url=https://www.nme.com/news/music/indian-singer-arijit-singh-overtakes-taylor-swift-as-most-followed-artist-on-spotify-3786331|titel=Indian singer Arijit Singh overtakes Taylor Swift as most-followed artist on Spotify|hrsg=NME|abruf=2024-08-24|sprache=en}}</ref>
+
+{| class="wikitable sortable tabelle-zaehler" style="text-align:center"
+! Künstler<ref name=":0">{{Internetquelle |url=https://volt.fm/most-followed-artists |titel=Most followed artists on Spotify |hrsg=volt.fm |sprache=en |abruf=2023-05-10}}</ref><ref>{{Internetquelle |url=https://www.artist.tools/ |titel=artist.tools — Bot Detection & Submit To Playlists |hrsg=artist.tools |sprache=en |abruf=2024-08-24}}</ref>
+!Follower<br />(in Millionen)
+! class="unsortable"| Quellen
+|-
+| style="text-align: left;" | [[Arijit Singh]] || 177,4 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/4YRxDV8wJFPHPTeXepOstw|titel=Arijit Singh|hrsg=Spotify|abruf=2026-01-06}}</ref>
+|-
+| style="text-align: left;" | [[Taylor Swift]] || 154,1 || <ref name="Taylor Swift"/>
+|-
+| style="text-align: left;" | [[Ed Sheeran]] || 125,5 || <ref name="Ed Sheeran"/>
+|-
+| style="text-align: left;" | [[Billie Eilish]] || 124,5 || <ref name="Billie Eilish"/>
+|-
+| style="text-align: left;" | [[The Weeknd]] || 120,2 || <ref name="The Weeknd"/>
+|-
+| style="text-align: left;" | [[Bad Bunny]]|| 113,0 || <ref name="Ariana Grande"/>
+|-
+| style="text-align: left;" | [[Ariana Grande]]|| 110,5 || <ref name="Bad Bunny"/>
+|-
+| style="text-align: left;" | [[Drake (Rapper)|Drake]] || 108,6 || <ref name="Drake"/>
+|-
+| style="text-align: left;" | [[Eminem]] || 108,4 || <ref name="Eminem"/>
+|-
+| style="text-align: left;" | [[Justin Bieber]] || 87,9 || <ref name="Justin Bieber"/>
+|-
+| style="text-align: left;" | [[BTS (Band)|BTS]] || 84,0 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/3Nrfpe0tUJi4K4DXYWgMUX|titel=BTS|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Bruno Mars]] || 80,6 || <ref name="Bruno Mars"/>
+|-
+| style="text-align: left;" | [[A.R. Rahman]] || 76,7 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/1mYsTxnqsietFxj1OgoGbG|titel=A.R. Rahman|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Rihanna]] || 72,4 || <ref name="Rihanna"/>
+|-
+| style="text-align: left;" | [[Adele (Sängerin)|Adele]] || 69,4 || <ref name="Adele"/>
+|-
+| style="text-align: left;" | [[Pritam Chakraborty|Pritam]] || 67,4 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/1wRPtKGflJrBx9BmLsSwlU|titel=Pritam|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Karol G]] || 63,6 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/790FomKkXshlbRYZFtlgla|titel=Karol G|hrsg=Spotify|abruf=2025-04-09}}</ref>
+|-
+| style="text-align: left;" | [[Coldplay]] || 63,2 || <ref name="Coldplay"/>
+|-
+| style="text-align: left;" | [[Imagine Dragons]] || 59,4 || <ref name="Imagine Dragons"/>
+|-
+| style="text-align: left;" | [[Blackpink]] || 58,4 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF|titel=Blackpink|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Queen (Band)|Queen]] || 56,7 || <ref name="Queen">{{Internetquelle|url=https://open.spotify.com/artist/0fTSzq9jAh4c36UVb4V7CB|titel=Alex Warren|hrsg=Spotify|abruf=2025-06-03}}</ref>
+|-
+| style="text-align: left;" | [[Lana Del Rey]] || 55,9 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/00FQb4jTyendYWaN8pK0wa|titel=Lana Del Rey|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Selena Gomez]] || 54,0 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/0C8ZW7ezQVs4URX5aX7Kqx|titel=Selena Gomez|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[XXXTentacion]] || 53,3 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/15UsOTVnJzReFVN1VCnxy4|titel=XXXTentacion|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Olivia Rodrigo]] || 52,1 ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/1McMsnEElThX1knmY4oliG|titel=Olivia Rodrigo|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Neha Kakkar]] || 49,5 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/5f4QpKfy7ptCHwTqspnSJI|titel=Neha Kakkar|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Post Malone]] || 48,4 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/246dkjvS1zLTtiykXe5h60|titel=Post Malone|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Sidhu Moose Wala]] || 48,3 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/4PULA4EFzYTrxYvOVlwpiQ|titel=Sidhu Moose Wala|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Dua Lipa]] || 47,8 || <ref name="Dua Lipa"/>
+|-
+| style="text-align: left;" | [[Anuel AA]] || 47,7 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/2R21vXR83lH98kGeO99Y66|titel=Anuel AA|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Anirudh Ravichander]] || 47,3 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/4zCH9qm4R2DADamUHMCa6O|titel=Anirudh Ravichander|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Maroon 5]] || 47,2 || <ref name="Maroon 5"/>
+|-
+| style="text-align: left;" | [[Kendrick Lamar]] || 47,1 || <ref name="Kendrick Lamar"/>
+|-
+| style="text-align: left;" | [[Shawn Mendes]] || 46,4 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/7n2wHs1TKAczGzO7Dd2rGr|titel=Shawn Mendes|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Lady Gaga]] || 45,5 || <ref name="Lady Gaga"/>
+|-
+| style="text-align: left;" | [[Juice Wrld]] || 44,7 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/4MCBfE4596Uoi2O4DtmEMz|titel=Juice Wrld|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Atif Aslam]] || 44,6 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/2oSONSC9zQ4UonDKnLqksx|titel=Atif Aslam|hrsg=Spotify|abruf=2025-05-03}}</ref>
+|-
+| style="text-align: left;" | [[Travis Scott (Rapper)|Travis Scott]] || 43,1 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/0Y5tJX1MQlPlqiwlOH1tJY|titel=Travis Scott|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Beyoncé]] || 42,4 ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/6vWDO969PvNqNYHIOW5v0m|titel=Beyoncé|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Shakira]] || 42,0 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/0EmeFodog0BfCgMzAIvKQp|titel=Shakira|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Alan Walker (Musikproduzent)|Alan Walker]] || 41,8 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/7vk5e3vY1uw9plTHJAMwjN|titel=Alan Walker|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[One Direction]] || 40,9 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/4AK6F7OLvEQ5QYCBNiQWHq|titel=One Direction|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Yo Yo Honey Singh]]|| 40,6 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/7uIbLdzzSEqnX0Pkrb56cR|titel=Yo Yo Honey Singh|hrsg=Spotify|abruf=2025-12-01}}</ref>
+|-
+| style="text-align: left;" | [[J Balvin]] || 40,4 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/1vyhD5VmyZ7KMfW5gqLgo5|titel=J Balvin|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Ozuna]] || 40,4 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/1i8SpTcr7yvPOmcqrbnVXY|titel=Ozuna|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Michael Jackson]] || 40,2 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/3fMbdgg4jU18AjLCKBhRSm|titel=Michael Jackson|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Maluma (Sänger)|Maluma]] || 40,1 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/1r4hJ1h58CWwUQe3MxPuau|titel=Maluma|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Katy Perry]] || 39,8 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/6jJ0s89eD6GaHleKKya26X|titel=Katy Perry|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Marília Mendonça]] || 39,7 || <ref>{{Internetquelle|url=https://open.spotify.com/artist/1yR65psqiazQpeM79CcGh8|titel=Marília Mendonça|hrsg=Spotify|abruf=2025-02-23}}</ref>
+|-
+| style="text-align: left;" | [[Diljit Dosanjh]] || 39,3 ||<ref>{{Internetquelle|url=https://open.spotify.com/artist/2FKWNmZWDBZR4dE5KX4plR|titel=Diljit Dosanjh|hrsg=Spotify|abruf=2026-03-01}}</ref>
+|-
+! colspan="4" style="font-size: 85%;" | Stand: 1. April 2026
+|}
+
+== Siehe auch ==
+* [[Liste der meistgestreamten Lieder auf Spotify]]
+
+== Einzelnachweise ==
+<references responsive />
+
+[[Kategorie:Liste (Medien)]]
+[[Kategorie:Rangliste (Musik)]]
+[[Kategorie:Spotify|!Meistgestreamte Kunstler]]
