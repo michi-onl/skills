@@ -1,0 +1,528 @@
+# rules.yaml – Wikipedia conversion rules (English ↔ German)
+#
+# This file is the single source of truth for all wikitext syntax conversions.
+# Claude reads this file at the start of every conversion task and applies the
+# rules manually. For de→en, swap keys and values.
+#
+# To add a new rule: find the right section, add the mapping, and optionally
+# add a comment with the date if the mapping is non-obvious.
+
+# =============================================================================
+# TEMPLATE MAPPINGS
+# =============================================================================
+
+templates:
+  # Simple 1:1 name replacements
+  simple:
+    "Steady": "Unverändert"
+    "Up": "Gestiegen"
+    "Down": "Gefallen"
+    "Increase": "Gestiegen"
+    "Decrease": "Gefallen"
+    "Main": "Hauptartikel"
+    "See also": "Siehe auch"
+    "Official website": ""  # Remove – URL belongs in infobox or Weblinks section
+
+  # Templates to remove entirely (no dewiki equivalent)
+  remove:
+    - "Short description"
+    - "Use mdy dates"
+    - "Use dmy dates"
+    - "Use American English"
+    - "Use British English"
+    - "Refimprove"
+    - "More citations needed"
+    - "Dynamic list"
+    - "pp-semi-indef"
+    - "pp-semi"
+    - "pp-move"
+    - "pp-sock"
+    - "Multiple image"
+    - "further"
+    - "Good article"
+    - "Featured article"
+
+  # Infobox name mappings
+  infoboxes:
+    "Infobox company": "Infobox Unternehmen"
+    "Infobox person": "Infobox Person"
+    "Infobox settlement": "Infobox Ort"
+    "Infobox album": "Infobox Album"
+    "Infobox single": "Infobox Single"
+    "Infobox film": "Infobox Film"
+    "Infobox television": "Infobox Fernsehsendung"
+    "Infobox software": "Infobox Software"
+    "Infobox organization": "Infobox Organisation"
+    "Infobox university": "Infobox Hochschule"
+    "Infobox book": "Infobox Buch"
+    "Infobox musical artist": "Infobox Musiker"
+    "Infobox football biography": "Infobox Fußballspieler"
+
+# =============================================================================
+# INFOBOX PARAMETER MAPPINGS
+# =============================================================================
+
+# These map English infobox parameter names to their German equivalents.
+# Not every infobox is covered – for missing ones, check dewiki Vorlagendoku.
+
+infobox_params:
+  unternehmen:  # Infobox Unternehmen
+    "name": "Name"
+    "logo": "Logo"
+    "type": "Rechtsform"
+    "founded": "Gründungsdatum"
+    "founder": "Gründer"
+    "headquarters": "Sitz"
+    "key_people": "Leitung"
+    "num_employees": "Mitarbeiterzahl"
+    "revenue": "Umsatz"
+    "operating_income": "Operatives Ergebnis"
+    "net_income": "Gewinn"
+    "industry": "Branche"
+    "products": "Produkte"
+    "services": "Dienstleistungen"
+    "website": "Homepage"
+    "area_served": "Geschäftsgebiet"
+    "parent": "Muttergesellschaft"
+    "subsidiaries": "Tochterunternehmen"
+    "isin": "ISIN"
+
+  person:  # Infobox Person
+    "name": "NAME"
+    "image": "BILD"
+    "birth_date": "GEBURTSDATUM"
+    "birth_place": "GEBURTSORT"
+    "death_date": "STERBEDATUM"
+    "death_place": "STERBEORT"
+    "nationality": "STAATSANGEHÖRIGKEIT"
+    "occupation": "BERUF"
+    "known_for": "BEKANNT_FÜR"
+
+  musiker:  # Infobox Musiker
+    "name": "Name"
+    "image": "Bild"
+    "genre": "Genre"
+    "years_active": "Aktive_Jahre"
+    "label": "Label"
+    "associated_acts": "Nebenprojekte"
+    "website": "Website"
+
+  film:  # Infobox Film
+    "name": "Deutscher Titel"
+    "image": "Bild"
+    "director": "Regie"
+    "producer": "Produktion"
+    "writer": "Drehbuch"
+    "starring": "Besetzung"
+    "music": "Musik"
+    "cinematography": "Kamera"
+    "editing": "Schnitt"
+    "studio": "Produktionsunternehmen"
+    "distributor": "Verleih"
+    "released": "Veröffentlichung"
+    "runtime": "Länge"
+    "country": "Produktionsland"
+    "language": "Originalsprache"
+    "budget": "Budget"
+    "gross": "Einspielergebnis"
+
+# =============================================================================
+# CITATION TEMPLATES
+# =============================================================================
+
+cite_templates:
+  # All these convert to Internetquelle
+  to_internetquelle:
+    - "cite web"
+    - "cite news"
+    - "cite magazine"
+    - "cite journal"
+    - "cite press release"
+    - "cite report"
+    - "Cite web"
+    - "Cite news"
+    - "Cite magazine"
+    - "Cite journal"
+
+  # Academic/book citations convert to Literatur
+  to_literatur:
+    - "cite book"
+    - "cite arXiv"
+    - "cite arxiv"
+    - "cite encyclopedia"
+    - "Cite book"
+
+cite_params:
+  internetquelle:
+    "url": "url"
+    "title": "titel"
+    "date": "datum"
+    "access-date": "abruf"
+    "accessdate": "abruf"
+    "website": "werk"
+    "work": "werk"
+    "newspaper": "werk"
+    "magazine": "werk"
+    "journal": "werk"
+    "publisher": "hrsg"
+    "author": "autor"
+    "first": "vorname"
+    "last": "nachname"
+    "language": "sprache"
+    "quote": "zitat"
+    "pages": "seiten"
+
+  # Remove these parameters entirely (no dewiki equivalent or not wanted)
+  remove_params:
+    - "archive-url"
+    - "archive-date"
+    - "url-status"
+    - "url-access"
+    - "via"
+    - "issn"
+    - "author-link"
+    - "author-link1"
+    - "name-list-style"
+    - "df"
+
+  literatur:
+    "title": "Titel"
+    "author": "Autor"
+    "first": "Vorname"
+    "last": "Nachname"
+    "date": "Datum"
+    "year": "Jahr"
+    "journal": "Sammelwerk"
+    "publisher": "Verlag"
+    "location": "Ort"
+    "isbn": "ISBN"
+    "doi": "DOI"
+    "pages": "Seiten"
+    "edition": "Auflage"
+    "eprint": "arXiv"
+    "url": "Online"
+    "access-date": "Abruf"
+    "volume": "Band"
+    "issue": "Nummer"
+
+# =============================================================================
+# WIKILINK MAPPINGS
+# =============================================================================
+
+# Known article title differences between enwiki and dewiki.
+# Only include universally useful, stable mappings here.
+# For article-specific links, add them ad hoc during conversion.
+
+link_mappings:
+  # Disambiguation patterns (company) → (Unternehmen)
+  disambiguation_patterns:
+    "(company)": "(Unternehmen)"
+    "(magazine)": "(Magazin)"
+    "(newspaper)": "(Zeitung)"
+    "(band)": "(Band)"
+    "(film)": "(Film)"
+    "(TV series)": "(Fernsehserie)"
+    "(programming language)": "(Programmiersprache)"
+
+  # Frequently used article titles
+  articles:
+    "United States": "Vereinigte Staaten"
+    "United Kingdom": "Vereinigtes Königreich"
+    "European Union": "Europäische Union"
+    "New York City": "New York City"
+    "California": "Kalifornien"
+    "Artificial intelligence": "Künstliche Intelligenz"
+    "Machine learning": "Maschinelles Lernen"
+    "World War II": "Zweiter Weltkrieg"
+    "World War I": "Erster Weltkrieg"
+    "Nobel Prize": "Nobelpreis"
+    "Academy Award": "Oscar"
+    "Grammy Award": "Grammy Award"
+    "Billboard Hot 100": "Billboard Hot 100"
+    "Fortune 500": "Fortune 500"
+    "Chief executive officer": "Chief Executive Officer"
+
+# =============================================================================
+# SECTION HEADERS
+# =============================================================================
+
+section_headers:
+  "History": "Geschichte"
+  "Early life": "Leben"
+  "Early life and education": "Leben"
+  "Career": "Karriere"
+  "Personal life": "Privatleben"
+  "Business structure": "Unternehmensstruktur"
+  "Corporate structure": "Unternehmensstruktur"
+  "Organization": "Organisation"
+  "Products": "Produkte"
+  "Products and services": "Produkte und Dienstleistungen"
+  "Services": "Dienstleistungen"
+  "Research": "Forschung"
+  "Technology": "Technik"
+  "Legal issues": "Rechtliche Auseinandersetzungen"
+  "Controversy": "Kontroversen"
+  "Controversies": "Kontroversen"
+  "Criticism": "Kritik"
+  "Reception": "Rezeption"
+  "Critical reception": "Rezeption"
+  "Discography": "Diskografie"
+  "Filmography": "Filmografie"
+  "Bibliography": "Werke"
+  "Awards": "Auszeichnungen"
+  "Awards and nominations": "Auszeichnungen"
+  "Honors": "Ehrungen"
+  "Legacy": "Nachwirkung"
+  "Impact": "Wirkung"
+  "Overview": "Übersicht"
+  "Background": "Hintergrund"
+  "Synopsis": "Handlung"
+  "Plot": "Handlung"
+  "Cast": "Besetzung"
+  "Production": "Produktion"
+  "Release": "Veröffentlichung"
+  "Marketing": "Vermarktung"
+  "Track listing": "Titelliste"
+  "Personnel": "Mitwirkende"
+  "Charts": "Charts und Chartplatzierungen"
+  "Certifications": "Zertifizierungen"
+  "See also": "Siehe auch"
+  "References": "Einzelnachweise"
+  "External links": "Weblinks"
+  "Notes": "Anmerkungen"
+  "Further reading": "Literatur"
+  "Selected works": "Werke (Auswahl)"
+  "Publications": "Veröffentlichungen"
+
+# =============================================================================
+# DATE FORMATTING
+# =============================================================================
+
+date_formatting:
+  months:
+    "January": "Januar"
+    "February": "Februar"
+    "March": "März"
+    "April": "April"
+    "May": "Mai"
+    "June": "Juni"
+    "July": "Juli"
+    "August": "August"
+    "September": "September"
+    "October": "Oktober"
+    "November": "November"
+    "December": "Dezember"
+
+  # Convert MDY to DMY: "December 3, 2019" → "3. Dezember 2019"
+  mdy_to_dmy: true
+
+  # "As of January 2026" → "Stand Januar 2026"
+  as_of_pattern:
+    en: "As of"
+    de: "Stand"
+
+  # Dates in citation parameters (access-date, date) should be converted to
+  # ISO format (YYYY-MM-DD) regardless of input format.
+  cite_dates_to_iso: true
+
+# =============================================================================
+# NUMBER FORMATTING
+# =============================================================================
+
+number_format:
+  # Decimal separator: en uses period, de uses comma
+  decimal_separator:
+    en: "."
+    de: ","
+
+  # Thousands separator: en uses comma, de uses period
+  thousands_separator:
+    en: ","
+    de: "."
+
+  # Scale words — CAREFUL, these are false friends!
+  scale_words:
+    "trillion": "Billion"       # 10^12
+    "billion": "Milliarde"      # 10^9
+    "million": "Million"        # 10^6
+    "thousand": "Tausend"       # 10^3
+
+  # Contexts to EXCLUDE from number format conversion:
+  # - URLs (anything after ://)
+  # - ISO dates (YYYY-MM-DD)
+  # - Version numbers (e.g. 3.12, 17.4)
+  # - DOIs, ISBNs, ISSNs
+  # - Template parameters: url=, abruf=, datum=, doi=, isbn=
+
+# =============================================================================
+# SPECIAL TEMPLATES
+# =============================================================================
+
+special_templates:
+  # {{abbr|L|left}} → L (extract first parameter, discard tooltip)
+  "abbr":
+    action: "extract_first"
+
+  # {{URL|https://...|text}} → [https://... text]
+  "URL":
+    action: "convert_to_extlink"
+
+  # {{Unbulleted list|item1|item2}} → item1<br>item2
+  "Unbulleted list":
+    action: "join_with_br"
+
+  # {{hlist|item1|item2}} → item1, item2
+  "hlist":
+    action: "join_with_comma"
+
+  # {{plainlist|...}} → convert to normal list
+  "plainlist":
+    action: "convert_to_list"
+
+  # {{lang|fr|Bonjour}} → extract text, optionally wrap in italic
+  "lang":
+    action: "extract_second_param"
+
+  # {{convert|5|mi|km}} → manual conversion needed
+  "convert":
+    action: "manual_conversion"
+
+# =============================================================================
+# TABLE SYNTAX
+# =============================================================================
+
+table_syntax:
+  # Add German table classes
+  class_additions:
+    'class="wikitable sortable"': 'class="wikitable sortable tabelle-zaehler"'
+
+  # Remove rank column rows (enwiki convention, not used in dewiki)
+  remove_rank_rows: true
+
+  # Status templates in tables
+  status:
+    "yes": "Ja"
+    "no": "Nein"
+    "Active": "Aktiv"
+    "Discontinued": "Eingestellt"
+    "Partial": "Teilweise"
+
+# =============================================================================
+# NAMESPACES
+# =============================================================================
+
+namespaces:
+  "Category": "Kategorie"
+  "File": "Datei"
+  "Image": "Bild"
+  "Template": "Vorlage"
+  "Wikipedia": "Wikipedia"
+  "Help": "Hilfe"
+  "Portal": "Portal"
+  "Draft": ""  # Drafts don't exist in dewiki
+
+# =============================================================================
+# MAGIC WORDS
+# =============================================================================
+
+magic_words:
+  "DEFAULTSORT": "SORTIERUNG"
+  "DISPLAYTITLE": "SEITENTITEL"
+
+# =============================================================================
+# IMAGE PARAMETERS
+# =============================================================================
+
+image_params:
+  "thumb": "mini"
+  "thumbnail": "mini"
+  "right": "rechts"
+  "left": "links"
+  "center": "zentriert"
+  "upright": "hochkant"
+  "frame": "gerahmt"
+  "frameless": "rahmenlos"
+  "alt": "alternativtext"
+  "border": "rand"
+
+# =============================================================================
+# TYPOGRAPHY
+# =============================================================================
+
+typography:
+  # Quotation marks: English → German
+  quotes:
+    en_double: '""'       # or ""
+    de_double: '„"'
+    en_single: "''"
+    de_single: '‚''
+
+  # Dashes: em dash → en dash (dewiki uses Halbgeviertstrich)
+  dashes:
+    em_dash: "—"
+    en_dash: "–"          # dewiki standard for Gedankenstrich
+
+  # Non-breaking space before units
+  # "10 km" → "10&nbsp;km"
+  nbsp_before_units: true
+
+# =============================================================================
+# HATNOTE TEMPLATES
+# =============================================================================
+
+hatnote_templates:
+  "Redirect": "Weiterleitungshinweis"
+  "About": "Begriffsklärungshinweis"
+  "See also": "Siehe auch"
+  "Main": "Hauptartikel"
+  "Further": "Weitere Informationen"
+  "For": "Dieser Artikel"
+
+# =============================================================================
+# QUOTE TEMPLATES
+# =============================================================================
+
+quote_templates:
+  # English blockquotes → German Zitat template
+  # {{quote|text=...|source=...}} → {{Zitat|...|Quelle=...|Sprache=en|Übersetzung=...}}
+  "quote":
+    de_template: "Zitat"
+    params:
+      "text": ""           # First positional parameter
+      "source": "Quelle"
+      "Sprache": "en"      # Always add for English quotes
+      "Übersetzung": ""    # Must be filled in during translation
+
+  "blockquote":
+    de_template: "Zitat"
+
+# =============================================================================
+# REFERENCE TEMPLATES
+# =============================================================================
+
+reference_templates:
+  "reflist": "<references responsive />"
+  "Reflist": "<references responsive />"
+  "notelist": "<references group=\"Anm.\" responsive />"
+
+# =============================================================================
+# SISTER PROJECT TEMPLATES
+# =============================================================================
+
+sister_projects:
+  "Commons category-inline": "Commonscat"
+  "Commons-inline": "Commonscat"
+  "Commons category": "Commonscat"
+  "Commons": "Commonscat"
+  "Authority control": "Normdaten"
+  "Wikiquote": "Wikiquote"
+  "Wiktionary": "Wiktionary"
+
+# =============================================================================
+# STYLE REPLACEMENTS
+# =============================================================================
+
+style_replacements:
+  'style="text-align: center;"': 'align="center"'
+  'style="text-align: left;"': 'align="left"'
+  'style="text-align: right;"': 'align="right"'

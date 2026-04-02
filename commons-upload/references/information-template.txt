@@ -1,0 +1,119 @@
+# Wikimedia Commons {{Information}} Template
+
+This is the exact wikitext structure to generate for each image. One block per image,
+separated by a line of `=` characters with the filename as header.
+
+## Template
+
+```wikitext
+================================================================
+FILENAME.JPG
+================================================================
+== {{int:filedesc}} ==
+{{Information
+|description={{en|1=English description of what is visible in the image. Be specific:
+name landmarks, geographic features, architectural details, weather, people's
+activities. Avoid subjective adjectives like "beautiful" or "stunning".}}
+{{de|1=German translation of the same description. Use standard High German, not
+Austrian or Swiss dialect. Match the factual content exactly.}}
+|date={{Taken on|YYYY-MM-DD|location=Location name}}
+|source={{own}}
+|author=[[User:USERNAME|USERNAME]]
+|permission=
+|other versions=
+}}
+
+== {{int:license-header}} ==
+{{self|cc-by-sa-4.0}}
+
+[[Category:Specific category 1]]
+[[Category:Specific category 2]]
+[[Category:Geographic category]]
+```
+
+## Field Notes
+
+### description
+
+- Always provide both `{{en|1=...}}` and `{{de|1=...}}` blocks.
+- Start with the main subject, then add context (location, surroundings, conditions).
+- Name identifiable landmarks, buildings, mountain ranges, bodies of water.
+- Mention visible human activity without identifying individuals.
+- Include architectural styles, vegetation types, weather if notable.
+
+**Good**: "Panoramic view of the Wilder Kaiser massif from SkiWelt ski resort, Tyrol,
+Austria. Snow-covered peaks against clear blue sky, forested slopes in the middle
+ground."
+
+**Bad**: "Beautiful mountain panorama in Austria." (too vague, subjective)
+
+### date
+
+- Extract from EXIF `DateTimeOriginal` or `ContentCreationDate`.
+- Use the `{{Taken on}}` template: `{{Taken on|YYYY-MM-DD|location=Place name}}`
+- The location parameter should match the location already determined in step 4 (e.g.,
+  `{{Taken on|2026-03-18|location=Italy}}`).
+- If no EXIF date available, use `{{unknown|date}}` and note this to the user.
+
+### source
+
+- Always `{{own}}` for user-shot photos.
+- If the user indicates a different source, adjust accordingly.
+
+### author
+
+- Format: `[[User:USERNAME|USERNAME]]`
+- The USERNAME comes from the user's Wikimedia Commons account.
+
+### license
+
+- `{{self|cc-by-sa-4.0}}` — default recommendation, requires attribution + share-alike
+- `{{self|cc-zero}}` — public domain dedication, no restrictions
+- The user chooses once; apply to all images.
+
+### Categories
+
+Place categories after the license block, one per line, each wrapped in
+`[[Category:...]]`.
+
+Priority order:
+1. Specific landmark/building category (e.g., `[[Category:Arco della Pace]]`)
+2. Location category (e.g., `[[Category:Ventimiglia]]`, `[[Category:Milan]]`)
+3. Subject type (e.g., `[[Category:Marinas in Liguria]]`, `[[Category:Ski resorts in Tyrol]]`)
+4. Broader geographic (e.g., `[[Category:Italian Riviera]]`, `[[Category:Austrian Alps]]`)
+5. Temporal/seasonal if relevant (e.g., `[[Category:Winter in Tyrol (state)]]`)
+
+Aim for 2–5 categories. More specific is better than more numerous.
+
+**Use existing categories.** Do not invent category names. Search Commons to verify a
+category exists before using it. In practice, many images will only have one or two
+matching categories on Commons. That is fine. One real category beats three guessed ones.
+
+## Example: Complete Entry
+
+```wikitext
+================================================================
+Naviglio Grande canal Milan 2026.JPG
+================================================================
+== {{int:filedesc}} ==
+{{Information
+|description={{en|1=View along the Naviglio Grande canal in Milan, Italy. Historic
+buildings with colorful facades line both sides of the canal. A pedestrian bridge
+crosses the waterway in the middle ground. Clear sky, late afternoon light.}}
+{{de|1=Blick entlang des Naviglio Grande in Mailand, Italien. Historische Gebäude mit
+bunten Fassaden säumen beide Seiten des Kanals. Eine Fußgängerbrücke überquert die
+Wasserstraße im Mittelgrund. Klarer Himmel, spätes Nachmittagslicht.}}
+|date={{Taken on|2026-03-17|location=Italy}}
+|source={{own}}
+|author=[[User:Mike is Michi|Mike is Michi]]
+|permission=
+|other versions=
+}}
+
+== {{int:license-header}} ==
+{{self|cc-by-sa-4.0}}
+
+[[Category:Naviglio Grande]]
+[[Category:Canals in Milan]]
+[[Category:Architecture in Milan]]
+```
