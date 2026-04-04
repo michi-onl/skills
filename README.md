@@ -16,6 +16,10 @@ Translates software localization files from English to German. Supports TOML, JS
 
 A meta-skill for building, testing, and iterating on new skills. Covers the full development loop from capturing intent through writing drafts, running evals, grading outputs, and optimizing skill trigger descriptions.
 
+### travel-planner
+
+Plans holidays, short trips, and travel adventures. Brainstorms destinations, builds itineraries, and checks practical details like visa requirements and best travel seasons. Tailored to the user's travel style and history.
+
 ### wende-spotify-list
 
 Automates the monthly update of the German Wikipedia article "Liste der meistgestreamten Künstler auf Spotify". Fetches current data from the English source article, converts wikitext conventions, and runs quality checks via Python scripts.
