@@ -20,6 +20,10 @@ A meta-skill for building, testing, and iterating on new skills. Covers the full
 
 Plans holidays, short trips, and travel adventures. Brainstorms destinations, builds itineraries, and checks practical details like visa requirements and best travel seasons. Tailored to the user's travel style and history.
 
+### proxmox
+
+Manages a single-node Proxmox VE server over SSH. Covers VM and LXC lifecycle, snapshots, backups, storage, monitoring, networking, and maintenance.
+
 ### wende-spotify-list
 
 Automates the monthly update of the German Wikipedia article "Liste der meistgestreamten Künstler auf Spotify". Fetches current data from the English source article, converts wikitext conventions, and runs quality checks via Python scripts.
