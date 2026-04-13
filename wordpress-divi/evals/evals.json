@@ -1,0 +1,48 @@
+{
+  "skill_name": "wordpress-divi",
+  "notes": "Credentials are placeholders. Before running evals, export WP_USER and WP_APP_PASS in the shell, or replace <WP_USER>/<WP_APP_PASS> inline. Never commit real application passwords.",
+  "evals": [
+    {
+      "id": 0,
+      "name": "audit-buttons-stuv",
+      "prompt": "Ich möchte auf meiner WordPress DIVI Seite (https://dev.stuv-heidenheim.de) alle Buttons vereinheitlichen. Zugangsdaten: Nutzer <WP_USER>, Application Password: <WP_APP_PASS>. Mach ein Audit: Welche Buttons gibt es, welche Stile weichen voneinander ab?",
+      "expected_output": "Table listing pages with buttons, current style attributes (color, radius, font, padding, hover), and summary of inconsistencies. Must use context=edit fetch. Must cover pages AND DIVI Library items if present.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "change-single-button-text",
+      "prompt": "Auf meiner WP DIVI Seite dev.stuv-heidenheim.de (User: <WP_USER>, App-Passwort: <WP_APP_PASS>) gibt es auf der Vorsitz-Seite einen Button mit dem Text 'View Courses' – das ist noch ein Demo-Placeholder. Ändere den Text auf 'Mehr erfahren'.",
+      "expected_output": "Button text changed only on targeted button. Backup written to /tmp/wp_backup/. Scope-verification check runs before save. Page status preserved (not accidentally republished from draft). No other content altered.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "find-demo-placeholder-text",
+      "prompt": "Kannst du die WordPress Seite unter dev.stuv-heidenheim.de nach Demo-Texten oder englischen Placeholder-Inhalten durchsuchen? Login: <WP_USER> / <WP_APP_PASS>",
+      "expected_output": "List of pages and specific modules containing placeholder or English demo text, with page IDs, module type, and offending text. Should check pages, posts, and DIVI Library.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "unify-all-buttons-write",
+      "prompt": "Vereinheitliche jetzt alle Buttons auf dev.stuv-heidenheim.de auf den StuV-Stil: Pill-Shape (border-radius 100px), Primärfarbe als Hintergrund, weißer Text, bold+uppercase, Letter-Spacing 2px inkl. Hover. Login: <WP_USER> / <WP_APP_PASS>.",
+      "expected_output": "Every et_pb_button across all pages updated consistently. custom_button=on set. Both base and __hover variants updated for letter_spacing. Backups exist for every modified page. Per-page write confirmation reported. Scope-verification passed on every page.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "rollback-from-backup",
+      "prompt": "Der letzte Button-Sync auf dev.stuv-heidenheim.de war ein Fehler. Roll die Kontakt-Seite (und nur die) aus dem Backup zurück. Login: <WP_USER> / <WP_APP_PASS>.",
+      "expected_output": "Only the Kontakt page is restored from /tmp/wp_backup/. Credentials not echoed to shell history. Other modified pages remain untouched. Confirmation reported.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "generalize-other-site",
+      "prompt": "Ich habe eine andere DIVI-Seite https://example-divi.test mit User demo und App-Passwort <WP_APP_PASS>. Liste alle Seiten auf, die einen et_pb_button enthalten, und zeige pro Seite die Anzahl.",
+      "expected_output": "Works on a non-StuV site without any hardcoded site-specific logic. Handles pagination if site has >100 pages. Graceful error if auth fails.",
+      "files": []
+    }
+  ]
+}

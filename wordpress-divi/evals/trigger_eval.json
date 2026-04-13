@@ -1,0 +1,82 @@
+[
+  {
+    "query": "auf meiner StuV-Seite sind die Buttons total inkonsistent – manche rund, manche eckig, Farben überall anders. kannst du die mal vereinheitlichen? login steht in memory",
+    "should_trigger": true
+  },
+  {
+    "query": "dev.stuv-heidenheim.de/vorsitz hat noch so einen 'View Courses' Button vom Demo-Template drin, bitte auf 'Mehr erfahren' ändern",
+    "should_trigger": true
+  },
+  {
+    "query": "can you do an audit of my wordpress site and tell me which pages still have english placeholder text like 'lorem ipsum' or 'click here'? its a divi site, user has app password in memory",
+    "should_trigger": true
+  },
+  {
+    "query": "I need to update the button URL on the contact page of my DIVI WP site from /old-signup to /anmeldung-neu, rest of the page should stay identical",
+    "should_trigger": true
+  },
+  {
+    "query": "my divi theme builder global header has a CTA button that uses the wrong brand color (#333 instead of the gcid primary), fix it across all the theme builder templates",
+    "should_trigger": true
+  },
+  {
+    "query": "how do I add a new divi library item via the rest api? I want to push a saved module as a template",
+    "should_trigger": true
+  },
+  {
+    "query": "der hero image auf der startseite ist 3200px breit und 1.4MB – kann ich das irgendwie automatisch runterkomprimieren und über die API ersetzen? wp+divi",
+    "should_trigger": true
+  },
+  {
+    "query": "site feels slow on mobile, its a divi site. can you check what performance settings i should enable in the theme options and run a page weight audit?",
+    "should_trigger": true
+  },
+  {
+    "query": "letter spacing on our pill buttons resets to 0 whenever you hover over them, rest of the hover state is fine. using divi btw",
+    "should_trigger": true
+  },
+  {
+    "query": "need to roll back yesterdays changes on the kontakt page – i kept a backup in /tmp/wp_backup/ before the bulk button update. wordpress divi site",
+    "should_trigger": true
+  },
+  {
+    "query": "can you write me a wordpress plugin from scratch that adds a custom post type for events? no divi needed, just vanilla wp",
+    "should_trigger": false
+  },
+  {
+    "query": "I'm setting up a new Elementor site and want to unify all the button styles across pages, how do I do that?",
+    "should_trigger": false
+  },
+  {
+    "query": "my wordpress install is throwing a white screen of death after a php update, how do I debug this over ssh?",
+    "should_trigger": false
+  },
+  {
+    "query": "how do I configure nginx to serve a wordpress site with php-fpm on ubuntu 24.04?",
+    "should_trigger": false
+  },
+  {
+    "query": "I want to convert all my classic wordpress posts to gutenberg blocks, is there a wp-cli command for that?",
+    "should_trigger": false
+  },
+  {
+    "query": "can you help me set up a divi child theme locally with vite for hot reload of custom css?",
+    "should_trigger": false
+  },
+  {
+    "query": "my woocommerce checkout button is broken on mobile – the event handler isnt firing. js debugging help?",
+    "should_trigger": false
+  },
+  {
+    "query": "I need to migrate a wordpress database from one host to another, what's the safest way to handle serialized options like siteurl?",
+    "should_trigger": false
+  },
+  {
+    "query": "how do I create an application password for a wordpress user via the cli without logging into wp-admin?",
+    "should_trigger": false
+  },
+  {
+    "query": "my divi builder wont load in the browser, it just shows a spinner forever. any idea what plugin conflict could cause that?",
+    "should_trigger": false
+  }
+]
