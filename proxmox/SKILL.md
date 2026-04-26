@@ -97,6 +97,71 @@ Use the Bash tool for all SSH commands. Quote the remote command in single quote
 - `pveversion -v` — Proxmox version info
 - `uptime` — system uptime
 - `reboot` — reboot node (DESTRUCTIVE, confirm first)
+- `unattended-upgrades --dry-run --verbose` — test auto-upgrade config
+- `journalctl -u unattended-upgrades` — auto-upgrade log
+
+### PVE Backup Jobs (built-in scheduler)
+PVE has a native backup scheduler that shows history in the UI. Manage via `pvesh`:
+
+```bash
+# List jobs
+pvesh get /cluster/backup --output-format json
+
+# Create job — note: retention uses --prune-backups, NOT --keep-last
+pvesh create /cluster/backup \
+  --schedule "00:30" \
+  --storage local \
+  --mode snapshot \
+  --compress zstd \
+  --vmid "101,102,103" \
+  --enabled 1 \
+  --prune-backups "keep-last=2" \
+  --mailnotification failure \
+  --comment "Description"
+
+# Delete job
+pvesh delete /cluster/backup/<job-id>
+```
+
+Use `pvesh usage /cluster/backup --verbose` to see all available options. The `--keep-last` flag does NOT exist — retention is always via `--prune-backups`.
+
+### SMART disk monitoring (smartd)
+`smartmontools` ships with PVE. `smartd` should be enabled and running.
+
+```bash
+# Check status and current config
+systemctl status smartmontools
+cat /etc/smartd.conf
+
+# Full SMART data for a disk
+smartctl -a /dev/sda
+
+# One-shot config validation
+smartd -C --no-fork -q onecheck
+```
+
+**Recommended `/etc/smartd.conf` for a SATA SSD:**
+```
+/dev/sda -a -I 194 -W 0,40,50 -s (S/../.././02|L/../../6/03) -m root -M exec /usr/share/smartmontools/smartd-runner
+```
+- `-a` — monitor everything (health, attrs, error log, selftest log)
+- `-I 194` — suppress temperature attribute noise (see note below)
+- `-W 0,40,50` — alert at ≥40°C warn / ≥50°C critical (actual temperature)
+- `-s (S/.../02|L/.../6/03)` — short test daily 02:00, long test Saturday 03:00
+
+**Important:** SMART attribute ID 194 reports a *normalized value* (0–100 scale), not actual °C. The raw temperature is in the `RAW_VALUE` column of `smartctl -a`. Without `-I 194`, smartd floods syslog with "temperature changed from 71 to 72" — these are normalized value jitter, not real thermal events. Use `-W` for actual temperature thresholds.
+
+Add a logfile alert runner alongside the default mail runner:
+```bash
+cat > /etc/smartmontools/run.d/20logfile << 'EOF'
+#!/bin/sh
+printf "[%s] SMART ALERT: %s\nDevice: %s\nMessage: %s\n---\n" \
+    "$(date "+%Y-%m-%d %H:%M:%S")" \
+    "${SMARTD_SUBJECT}" "${SMARTD_DEVICE}" "${SMARTD_FULLMESSAGE}" \
+    >> /var/log/smartd-alerts.log
+EOF
+chmod +x /etc/smartmontools/run.d/20logfile
+```
 
 ## Presenting output
 
@@ -117,6 +182,56 @@ For a general status check, gather node status, VM/LXC list, and storage in one 
 Show configs as key-value pairs, grouped logically (hardware, network, boot, etc.) rather than as raw output.
 
 ## Common workflows
+
+### Pre-update snapshot
+Always snapshot running VMs before applying host updates, then delete after confirming stability:
+```bash
+qm snapshot <vmid> pre-update-$(date +%Y%m%d) --description "Pre-update snapshot"
+# ... apply updates ...
+qm delsnapshot <vmid> pre-update-$(date +%Y%m%d)
+```
+LVM thin provisioning shows "Sum of all thin volume sizes exceeds pool size" warnings during snapshot creation — this is expected overcommit behaviour, not an error.
+
+### Unattended security upgrades
+Install and configure to auto-apply security patches only, keeping PVE packages manual:
+```bash
+apt install -y unattended-upgrades
+```
+
+`/etc/apt/apt.conf.d/50unattended-upgrades` — security-only, PVE packages blacklisted:
+```
+Unattended-Upgrade::Origins-Pattern {
+    "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+    "origin=Debian,codename=${distro_codename},label=Debian-Security";
+};
+Unattended-Upgrade::Package-Blacklist {
+    "proxmox-"; "pve-"; "qemu-"; "lxc-pve";
+    "corosync"; "libpve-"; "libproxmox-";
+    "linux-"; "proxmox-kernel";
+};
+Unattended-Upgrade::Automatic-Reboot "false";
+Unattended-Upgrade::SyslogEnable "true";
+```
+
+`/etc/apt/apt.conf.d/20auto-upgrades` — enable daily runs:
+```
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::AutocleanInterval "7";
+```
+
+### Container guest OS updates
+Update packages inside all running containers with a single script:
+```bash
+for ctid in $(pct list | awk "NR>1 && \$2==\"running\" {print \$1}"); do
+    if pct exec "$ctid" -- sh -c "command -v apk" &>/dev/null; then
+        pct exec "$ctid" -- apk update && pct exec "$ctid" -- apk upgrade
+    elif pct exec "$ctid" -- sh -c "command -v apt-get" &>/dev/null; then
+        pct exec "$ctid" -- sh -c "DEBIAN_FRONTEND=noninteractive apt-get update -qq && apt-get upgrade -y"
+    fi
+done
+```
+Save as `/root/update-containers.sh` and cron weekly. Logs to `/var/log/ct-updates.log`.
 
 ### Quick status check
 ```bash
