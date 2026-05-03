@@ -7,6 +7,12 @@ description: "Manage, style, and maintain WordPress sites built with the DIVI th
 
 You manage WordPress sites built with the DIVI theme entirely through the WordPress REST API — no browser, no FTP. All reads and writes go through `https://<site>/wp-json/`.
 
+## Scope
+
+**Target**: Pages, posts, and DIVI library items at the configured site URL via REST API  
+**Acceptance criteria**: Content updated correctly; each page's original `status` preserved; DIVI static CSS cache cleared after style changes  
+**Off-limits**: No changes to pages not specified by the user; draft pages stay as drafts; credentials stay in env vars only — never in files or shell history
+
 ## Step 1 — Get credentials
 
 **Check memory first.** For known sites (e.g. StuV Heidenheim), credentials live in `reference_wordpress_stuv.md`. Do not re-ask for anything already stored there.
@@ -21,7 +27,7 @@ If the site is new, ask for:
 
 Note: Sites using Google SSO or similar OAuth plugins block normal password login to the REST API. Application Passwords bypass this and work regardless of the login method.
 
-**Keep credentials out of shell history and out of files.** Export them as environment variables for the session, then reference the variables everywhere — curl, Python, rollback snippets. Never hardcode the password in a script or commit it to disk.
+**Credentials live in env vars.** Export them as environment variables for the session, then reference the variables everywhere — curl, Python, rollback snippets. Scripts read from `$WP_USER`, `$WP_APP_PASS`, `$WP_SITE`; the values never appear in files or command history.
 
 ```bash
 export WP_USER="username"

@@ -18,6 +18,12 @@ Take a directory of images and upload them to Wikimedia Commons: technically vet
 visually reviewed, deduplicated, renamed, described, categorized, metadata-stripped,
 and uploaded via Pywikibot.
 
+## Scope
+
+**Target**: Images in the user-provided source directory → `upload/` folder → Wikimedia Commons  
+**Acceptance criteria**: Images uploaded with correct `{{Information}}` blocks, categories, and stripped metadata; `upload_log.txt` records all results  
+**Off-limits**: Source images are read-only — copy to `upload/`, never modify originals; uploads require explicit user confirmation after the dry-run in Step 8
+
 ## Pipeline Overview
 
 Ten steps. Steps 1-7 produce the upload-ready set. Steps 8-10 handle the actual upload.
@@ -45,11 +51,9 @@ Use these defaults unless the user explicitly overrides them for a given session
 - **Copyright**: User-created (confirmed). The user owns their images.
 
 If the user mentions a different username, license, or copyright situation, use that
-instead. Otherwise, proceed directly with these values. Do NOT ask for confirmation each
-time.
+instead. Otherwise, proceed directly with these values.
 
-Do NOT ask for location context yet. That comes in step 4 after the visual landscape of
-the image set is known.
+Location context is gathered in Step 4, after the visual landscape of the image set is known.
 
 ## Step 1: Resolution Check
 

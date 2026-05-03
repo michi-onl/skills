@@ -69,7 +69,7 @@ German translations are typically 20–30% longer than English. Apply these stra
 2. **Tooltips/Labels**: Aim for ≤ 150% of English length. Drop articles where natural ("Datei öffnen" not "Die Datei öffnen")
 3. **Notifications/Messages**: Full sentences are fine, but avoid filler words ("bitte" only where genuinely polite, not as padding)
 4. **Hard character limits**: If the format or context specifies a max length, prioritize meaning over completeness. Use standard abbreviations (z. B., Nr., Std.) or shorter synonyms
-5. **Never truncate with "…"** unless the original English does the same
+5. **Match the source's truncation convention** — add "…" only when the English source already truncates
 
 When in doubt, check if a shorter synonym exists in the glossary before adding words.
 
@@ -212,7 +212,7 @@ When a file is already partially translated:
 1. Complete Pre-Translation Steps
 2. Identify untranslated strings (empty `msgstr`, missing `<target>`, English text in target fields)
 3. Translate only the missing strings
-4. Do **not** modify existing translations unless they contain obvious errors
+4. Leave existing translations unchanged (correct only obvious errors)
 5. Match register, terminology, and style of existing translations for consistency
 6. Run QA
 7. Output with change table listing newly translated keys

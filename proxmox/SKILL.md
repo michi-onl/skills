@@ -13,13 +13,19 @@ ssh root@<PROXMOX_IP> '<command>'
 
 Use the Bash tool for all SSH commands. Quote the remote command in single quotes to avoid local shell expansion. For commands with single quotes inside, use double quotes or escaping as needed.
 
+## Scope
+
+**Target**: Proxmox VE at `<PROXMOX_IP>` (SSH as root — IP in memory)  
+**Acceptance criteria**: Requested operation completes; server and all running VMs remain accessible  
+**Off-limits**: `qm destroy`, `pct destroy`, `qm rollback`, `pct rollback`, `rm` of backup files, `reboot`, and `apt install` each require explicit user confirmation before execution
+
 ## Core principles
 
-**Read before write.** Always show the current state before making changes. For config edits, display the current config and get user confirmation before applying.
+**Read before write.** Show the current state before making changes. For config edits, display the current config and get user confirmation before applying.
 
 **Confirm before destroying.** Any operation that deletes data, destroys a VM/LXC, overwrites a backup, or could cause downtime requires explicit user confirmation. This includes: `qm destroy`, `pct destroy`, `qm rollback`, `pct rollback`, `qm restore` (overwriting), `pct restore` (overwriting), `rm` of backup files, and `reboot`.
 
-**Summarize output.** Don't dump raw CLI output. Parse it and present it in tables or concise summaries. Show VMID and name together (e.g., `101 (debian-web)`).
+**Summarize output.** Parse CLI output and present it in tables or concise summaries. Show VMID and name together (e.g., `101 (debian-web)`).
 
 **Be efficient with SSH.** Combine related queries into a single SSH call when possible, using `&&` or `;` to chain commands. This avoids unnecessary round trips.
 
@@ -258,4 +264,4 @@ If an SSH command fails, check:
 2. Is the service running? (`systemctl status pvedaemon`)
 3. Read the error message and explain what went wrong in plain language
 
-Don't retry failed commands blindly. Diagnose first.
+Diagnose the root cause before retrying — the error message usually points directly to the fix.
