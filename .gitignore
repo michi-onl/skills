@@ -3,7 +3,4 @@ __pycache__/
 
 # local-only skills — not tracked upstream
 obsidian-*/
-skill-creator/
-
-# eval benchmarks
-wordpress-divi-workspace/
+skill-creator
