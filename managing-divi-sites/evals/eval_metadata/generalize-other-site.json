@@ -1,0 +1,6 @@
+{
+  "eval_id": 5,
+  "eval_name": "generalize-other-site",
+  "prompt": "Ich habe eine andere DIVI-Seite https://example-divi.test mit User demo und App-Passwort <WP_APP_PASS>. Liste alle Seiten auf, die einen et_pb_button enthalten, und zeige pro Seite die Anzahl.",
+  "assertions": []
+}

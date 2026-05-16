@@ -1,0 +1,6 @@
+{
+  "eval_id": 3,
+  "eval_name": "unify-all-buttons-write",
+  "prompt": "Vereinheitliche jetzt alle Buttons auf dev.stuv-heidenheim.de auf den StuV-Stil: Pill-Shape (border-radius 100px), Primärfarbe als Hintergrund, weißer Text, bold+uppercase, Letter-Spacing 2px inkl. Hover. Login: <WP_USER> / <WP_APP_PASS>.",
+  "assertions": []
+}
