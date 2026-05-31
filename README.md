@@ -4,17 +4,25 @@ A collection of custom skills for [Claude Code](https://claude.ai/code).
 
 ## Skills
 
-### uploading-to-commons
+### dhbw-study
 
-Evaluates, curates, and uploads images to Wikimedia Commons. A 10-step pipeline covering technical vetting, visual review, deduplication, metadata handling, description generation, and automated upload via Pywikibot.
+Helps prepare for DHBW Wirtschaftsinformatik coursework and exams. Covers lecture prep, practice questions, cheat sheets, summarizing slides, analyzing past exams, and study plans.
 
-### translating-localization-files
+### gutachtenstil
 
-Translates software localization files from English to German. Supports TOML, JSON, XLIFF, PO/POT, Android XML, iOS Strings, YAML, ARB, PHP arrays, and other common formats. Preserves formatting and maintains register consistency.
+Solves German legal cases and exam questions in proper Gutachtenstil format. Covers BGB, Sachenrecht, and Schuldrecht with structured claim examinations.
 
-### skill-creator
+### liquid-glass
 
-A meta-skill for building, testing, and iterating on new skills. Covers the full development loop from capturing intent through writing drafts, running evals, grading outputs, and optimizing skill trigger descriptions.
+Builds or restyles websites with a glassy, translucent, frosted, or Apple-style Liquid Glass look. Covers plain HTML/CSS/JS, Next.js, Zola, shadcn/ui, and Bootstrap.
+
+### macos-file-sorter
+
+Sorts, organizes, and cleans up files on macOS. Handles Downloads, Desktop, camera imports, design assets, and school documents with preview-before-move workflow.
+
+### managing-divi-sites
+
+Manages, styles, and audits WordPress sites built with the DIVI theme through the REST API. Fixes button styles, hover states, auth issues, and performance problems.
 
 ### planning-travel
 
@@ -24,13 +32,25 @@ Plans holidays, short trips, and travel adventures. Brainstorms destinations, bu
 
 Manages a single-node Proxmox VE server over SSH. Covers VM and LXC lifecycle, snapshots, backups, storage, monitoring, networking, and maintenance.
 
-### wende-spotify-list
+### skill-sync
 
-Automates the monthly update of the German Wikipedia article "Liste der meistgestreamten Künstler auf Spotify". Fetches current data from the English source article, converts wikitext conventions, and runs quality checks via Python scripts.
+Compares locally installed Claude skills against the canonical GitHub repo and packages updated `.skill` files for anything out of sync. Works on claude.ai, Claude Code, and OpenCode. The repo is the source of truth, so packaging pulls repo → local.
+
+### translating-localization-files
+
+Translates software localization files from English to German. Supports TOML, JSON, XLIFF, PO/POT, Android XML, iOS Strings, YAML, ARB, PHP arrays, and other common formats. Preserves formatting and maintains register consistency.
+
+### uploading-to-commons
+
+Evaluates, curates, and uploads images to Wikimedia Commons. A 10-step pipeline covering technical vetting, visual review, deduplication, metadata handling, description generation, and automated upload via Pywikibot.
 
 ### wende
 
 Converts Wikipedia wikitext syntax between English and German Wikipedia conventions. Handles templates, citations, formatting, numbers, and dates through rule-based transformations. No editorial changes, just mechanical syntax conversion.
+
+### wende-spotify-list
+
+Automates the monthly update of the German Wikipedia article "Liste der meistgestreamten Künstler auf Spotify". Fetches current data from the English source article, converts wikitext conventions, and runs quality checks via Python scripts.
 
 ### wiki-artikel
 
