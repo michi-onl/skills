@@ -4,11 +4,11 @@ A collection of custom skills for [Claude Code](https://claude.ai/code).
 
 ## Skills
 
-### commons-upload
+### uploading-to-commons
 
 Evaluates, curates, and uploads images to Wikimedia Commons. A 10-step pipeline covering technical vetting, visual review, deduplication, metadata handling, description generation, and automated upload via Pywikibot.
 
-### localization-translator
+### translating-localization-files
 
 Translates software localization files from English to German. Supports TOML, JSON, XLIFF, PO/POT, Android XML, iOS Strings, YAML, ARB, PHP arrays, and other common formats. Preserves formatting and maintains register consistency.
 
@@ -16,7 +16,7 @@ Translates software localization files from English to German. Supports TOML, JS
 
 A meta-skill for building, testing, and iterating on new skills. Covers the full development loop from capturing intent through writing drafts, running evals, grading outputs, and optimizing skill trigger descriptions.
 
-### travel-planner
+### planning-travel
 
 Plans holidays, short trips, and travel adventures. Brainstorms destinations, builds itineraries, and checks practical details like visa requirements and best travel seasons. Tailored to the user's travel style and history.
 

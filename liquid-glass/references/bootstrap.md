@@ -5,7 +5,10 @@ Bootstrap's navbar component fights glass styling. Override it surgically rather
 ## Override Bootstrap navbar
 
 ```html
-<nav class="navbar navbar-expand-md fixed-top glass-navbar-bs" role="navigation">
+<nav
+  class="navbar navbar-expand-md fixed-top glass-navbar-bs"
+  role="navigation"
+>
   <div class="container-fluid glass-navbar__inner-bs">
     <!-- Identity pill -->
     <div class="glass-pill">
@@ -13,13 +16,20 @@ Bootstrap's navbar component fights glass styling. Override it surgically rather
     </div>
 
     <!-- Mobile toggler (replaces Bootstrap's default) -->
-    <button class="glass-pill d-md-none" data-bs-toggle="collapse"
-            data-bs-target="#navContent" aria-label="Toggle navigation">
+    <button
+      class="glass-pill d-md-none"
+      data-bs-toggle="collapse"
+      data-bs-target="#navContent"
+      aria-label="Toggle navigation"
+    >
       <span class="glass-pill__item">☰</span>
     </button>
 
     <!-- Nav pills (desktop) -->
-    <div class="collapse navbar-collapse justify-content-center" id="navContent">
+    <div
+      class="collapse navbar-collapse justify-content-center"
+      id="navContent"
+    >
       <div class="glass-pill d-none d-md-flex">
         <a class="glass-pill__item" href="/about">About</a>
         <a class="glass-pill__item" href="/projects">Projects</a>
@@ -35,7 +45,11 @@ Bootstrap's navbar component fights glass styling. Override it surgically rather
 </nav>
 
 <!-- Mobile bottom bar (not Bootstrap, custom) -->
-<nav class="glass-bottombar d-md-none" role="navigation" aria-label="Mobile navigation">
+<nav
+  class="glass-bottombar d-md-none"
+  role="navigation"
+  aria-label="Mobile navigation"
+>
   <div class="glass-pill glass-bottombar__pill">
     <a href="/" class="glass-pill__item">🏠</a>
     <a href="/projects" class="glass-pill__item">📁</a>

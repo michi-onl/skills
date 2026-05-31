@@ -23,22 +23,20 @@ static/
 ```html
 <!DOCTYPE html>
 <html lang="{{ lang | default(value='en') }}">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="{{ get_url(path='style.css') }}">
-  <title>{% block title %}{{ config.title }}{% endblock %}</title>
-</head>
-<body>
-  {% include "partials/glass-navbar.html" %}
-  
-  <main class="page-content">
-    {% block content %}{% endblock %}
-  </main>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ get_url(path='style.css') }}" />
+    <title>{% block title %}{{ config.title }}{% endblock %}</title>
+  </head>
+  <body>
+    {% include "partials/glass-navbar.html" %}
 
-  {% include "partials/glass-bottombar.html" %}
-  <script src="{{ get_url(path='js/glass-scroll.js') }}" defer></script>
-</body>
+    <main class="page-content">{% block content %}{% endblock %}</main>
+
+    {% include "partials/glass-bottombar.html" %}
+    <script src="{{ get_url(path='js/glass-scroll.js') }}" defer></script>
+  </body>
 </html>
 ```
 
@@ -48,29 +46,36 @@ static/
 <nav class="glass-navbar" role="navigation" aria-label="Main">
   <div class="glass-navbar__inner">
     <div class="glass-pill">
-      <a href="{{ get_url(path='/') }}" class="glass-pill__item
-        {% if current_path == '/' %}glass-pill__item--active{% endif %}">
+      <a
+        href="{{ get_url(path='/') }}"
+        class="glass-pill__item
+        {% if current_path == '/' %}glass-pill__item--active{% endif %}"
+      >
         {{ config.title }}
       </a>
     </div>
 
     <div class="glass-pill glass-navbar__primary">
-      {% set nav_items = [
-        ["About", "/about/"],
-        ["Projects", "/projects/"],
-        ["Blog", "/blog/"]
-      ] %}
-      {% for item in nav_items %}
-        <a href="{{ get_url(path=item[1]) }}"
-           class="glass-pill__item
-           {% if current_path is starting_with(item[1]) %}glass-pill__item--active{% endif %}">
-          {{ item[0] }}
-        </a>
+      {% set nav_items = [ ["About", "/about/"], ["Projects", "/projects/"],
+      ["Blog", "/blog/"] ] %} {% for item in nav_items %}
+      <a
+        href="{{ get_url(path=item[1]) }}"
+        class="glass-pill__item
+           {% if current_path is starting_with(item[1]) %}glass-pill__item--active{% endif %}"
+      >
+        {{ item[0] }}
+      </a>
       {% endfor %}
     </div>
 
     <div class="glass-pill">
-      <button class="glass-pill__item" id="theme-toggle" aria-label="Toggle theme">🌓</button>
+      <button
+        class="glass-pill__item"
+        id="theme-toggle"
+        aria-label="Toggle theme"
+      >
+        🌓
+      </button>
     </div>
   </div>
 </nav>

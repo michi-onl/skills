@@ -2,23 +2,23 @@
 
 ## Button attributes
 
-| Attribute | Purpose | Example |
-|---|---|---|
-| `custom_button` | Enables custom styling | `"on"` |
-| `button_text_color` | Text color | `"#ffffff"` |
-| `button_bg_color` | Background | `"#e2001a"` or `"gcid-primary-color"` |
-| `button_border_radius` | Roundness | `"100px"` (pill) |
-| `button_border_width` | Border | `"0px"` |
-| `button_text_size` | Font size | `"15px"` |
-| `button_font` | Font stack + style | `"\|700\|\|on\|\|\|\|\|"` (bold+uppercase) |
-| `button_letter_spacing` | Spacing | `"2px"` |
-| `button_letter_spacing__hover` | Hover spacing | `"2px"` |
-| `button_letter_spacing__hover_enabled` | Enable hover override | `"on"` |
-| `custom_padding` | Padding (T\|R\|B\|L) | `"14px\|40px\|14px\|40px\|true\|true"` |
-| `box_shadow_style` | Shadow preset | `"preset1"` |
-| `box_shadow_vertical` | Shadow Y offset | `"6px"` |
-| `box_shadow_blur` | Shadow blur | `"20px"` |
-| `box_shadow_color` | Shadow color | `"rgba(226,0,26,0.32)"` |
+| Attribute                              | Purpose                | Example                                    |
+| -------------------------------------- | ---------------------- | ------------------------------------------ |
+| `custom_button`                        | Enables custom styling | `"on"`                                     |
+| `button_text_color`                    | Text color             | `"#ffffff"`                                |
+| `button_bg_color`                      | Background             | `"#e2001a"` or `"gcid-primary-color"`      |
+| `button_border_radius`                 | Roundness              | `"100px"` (pill)                           |
+| `button_border_width`                  | Border                 | `"0px"`                                    |
+| `button_text_size`                     | Font size              | `"15px"`                                   |
+| `button_font`                          | Font stack + style     | `"\|700\|\|on\|\|\|\|\|"` (bold+uppercase) |
+| `button_letter_spacing`                | Spacing                | `"2px"`                                    |
+| `button_letter_spacing__hover`         | Hover spacing          | `"2px"`                                    |
+| `button_letter_spacing__hover_enabled` | Enable hover override  | `"on"`                                     |
+| `custom_padding`                       | Padding (T\|R\|B\|L)   | `"14px\|40px\|14px\|40px\|true\|true"`     |
+| `box_shadow_style`                     | Shadow preset          | `"preset1"`                                |
+| `box_shadow_vertical`                  | Shadow Y offset        | `"6px"`                                    |
+| `box_shadow_blur`                      | Shadow blur            | `"20px"`                                   |
+| `box_shadow_color`                     | Shadow color           | `"rgba(226,0,26,0.32)"`                    |
 
 ## `button_font` field legend
 
@@ -36,6 +36,7 @@ DIVI stores this as an 8-field pipe-delimited string: `family|weight|style|upper
 ### Hover state uses double-underscore
 
 DIVI uses double-underscore `__hover` for hover state values:
+
 - `button_letter_spacing__hover="2px"`
 - `button_letter_spacing__hover_enabled="on"`
 

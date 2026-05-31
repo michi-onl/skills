@@ -4,13 +4,13 @@ shadcn gives you unstyled primitives. Layer glass tokens on top without fighting
 
 ## Strategy
 
-Don't wrap shadcn components in glass containers. Instead, apply glass styles directly to shadcn's underlying elements via `className`. The pill-grouping pattern sits *outside* shadcn — it's layout, not component behavior.
+Don't wrap shadcn components in glass containers. Instead, apply glass styles directly to shadcn's underlying elements via `className`. The pill-grouping pattern sits _outside_ shadcn — it's layout, not component behavior.
 
 ## Glass Navbar with shadcn Button
 
 ```tsx
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function GlassNavbar() {
   return (

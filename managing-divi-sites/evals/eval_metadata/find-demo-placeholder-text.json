@@ -1,6 +1,6 @@
 {
   "eval_id": 2,
   "eval_name": "find-demo-placeholder-text",
-  "prompt": "Kannst du die WordPress Seite unter dev.stuv-heidenheim.de nach Demo-Texten oder englischen Placeholder-Inhalten durchsuchen? Login: <WP_USER> / <WP_APP_PASS>",
+  "prompt": "Kannst du die WordPress Seite unter example-site.test nach Demo-Texten oder englischen Placeholder-Inhalten durchsuchen? Login: <WP_USER> / <WP_APP_PASS>",
   "assertions": []
 }

@@ -16,23 +16,23 @@ Paste these into your root stylesheet or Tailwind config. Every glass component 
   --glass-shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.12);
 
   /* --- Blur --- */
-  --blur-standard: 20px;       /* navbar, toolbar */
-  --blur-heavy: 40px;          /* modal backdrop, overlays */
-  --blur-subtle: 12px;         /* secondary glass, less prominent */
-  --blur-scroll-boost: 28px;   /* when content scrolls beneath */
+  --blur-standard: 20px; /* navbar, toolbar */
+  --blur-heavy: 40px; /* modal backdrop, overlays */
+  --blur-subtle: 12px; /* secondary glass, less prominent */
+  --blur-scroll-boost: 28px; /* when content scrolls beneath */
 
   /* --- Corner radii (concentric system) --- */
-  --radius-outer: 24px;        /* outermost glass container */
-  --radius-inner: 16px;        /* items inside glass container */
-  --radius-control: 12px;      /* buttons, inputs inside pills */
-  --radius-badge: 8px;         /* tags, small chips */
-  --radius-full: 9999px;       /* fully round pills */
+  --radius-outer: 24px; /* outermost glass container */
+  --radius-inner: 16px; /* items inside glass container */
+  --radius-control: 12px; /* buttons, inputs inside pills */
+  --radius-badge: 8px; /* tags, small chips */
+  --radius-full: 9999px; /* fully round pills */
 
   /* --- Spacing --- */
-  --glass-padding: 8px;        /* padding inside glass pill */
-  --glass-gap: 6px;            /* gap between items in a pill */
+  --glass-padding: 8px; /* padding inside glass pill */
+  --glass-gap: 6px; /* gap between items in a pill */
   --glass-item-padding: 8px 14px; /* padding inside each nav item */
-  --glass-float-margin: 16px;  /* margin between glass bar and viewport edge */
+  --glass-float-margin: 16px; /* margin between glass bar and viewport edge */
 
   /* --- Typography on glass --- */
   --glass-text: rgba(0, 0, 0, 0.85);
@@ -47,7 +47,7 @@ Paste these into your root stylesheet or Tailwind config. Every glass component 
   --glass-active-dark: rgba(255, 255, 255, 0.18);
 
   /* --- Accent (override per-project) --- */
-  --accent: #007AFF;
+  --accent: #007aff;
   --accent-glass: rgba(0, 122, 255, 0.15);
 
   /* --- Transitions --- */
@@ -83,11 +83,11 @@ Paste these into your root stylesheet or Tailwind config. Every glass component 
 
 ## Responsive breakpoints
 
-| Name     | Width    | Navbar behavior                              |
-|----------|----------|----------------------------------------------|
-| mobile   | < 640px  | Bottom tab bar, hamburger menu for overflow   |
-| tablet   | 640–1024px | Top floating bar, may collapse to icons     |
-| desktop  | > 1024px | Full top floating bar with text labels        |
+| Name    | Width      | Navbar behavior                             |
+| ------- | ---------- | ------------------------------------------- |
+| mobile  | < 640px    | Bottom tab bar, hamburger menu for overflow |
+| tablet  | 640–1024px | Top floating bar, may collapse to icons     |
+| desktop | > 1024px   | Full top floating bar with text labels      |
 
 ## Glass mixin (plain CSS)
 
@@ -99,12 +99,13 @@ Paste these into your root stylesheet or Tailwind config. Every glass component 
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-outer);
   box-shadow: var(--glass-shadow);
-  transition: background var(--glass-transition),
-              backdrop-filter var(--glass-transition);
+  transition:
+    background var(--glass-transition),
+    backdrop-filter var(--glass-transition);
 }
 
 .glass-pill {
-  composes: glass;  /* or just copy the properties */
+  composes: glass; /* or just copy the properties */
   border-radius: var(--radius-full);
   padding: var(--glass-padding);
   display: inline-flex;
@@ -135,21 +136,24 @@ Paste these into your root stylesheet or Tailwind config. Every glass component 
 ## Scroll-edge enhancement (JS)
 
 ```js
-const glassBar = document.querySelector('.glass-navbar');
+const glassBar = document.querySelector(".glass-navbar");
 let lastScroll = 0;
 
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  const opacity = Math.min(0.35, 0.18 + scrollY / 1000);
-  const blur = Math.min(28, 20 + scrollY / 100);
-  
-  glassBar.style.setProperty('--glass-bg',
-    `rgba(255, 255, 255, ${opacity})`);
-  glassBar.style.backdropFilter = `blur(${blur}px)`;
-  glassBar.style.webkitBackdropFilter = `blur(${blur}px)`;
-  
-  lastScroll = scrollY;
-}, { passive: true });
+window.addEventListener(
+  "scroll",
+  () => {
+    const scrollY = window.scrollY;
+    const opacity = Math.min(0.35, 0.18 + scrollY / 1000);
+    const blur = Math.min(28, 20 + scrollY / 100);
+
+    glassBar.style.setProperty("--glass-bg", `rgba(255, 255, 255, ${opacity})`);
+    glassBar.style.backdropFilter = `blur(${blur}px)`;
+    glassBar.style.webkitBackdropFilter = `blur(${blur}px)`;
+
+    lastScroll = scrollY;
+  },
+  { passive: true },
+);
 ```
 
 ## Concentric radius calculator
@@ -164,13 +168,13 @@ Example: glass navbar has `border-radius: 24px` and `padding: 8px`. Each pill in
 
 ## Z-index layers
 
-| Layer             | z-index |
-|-------------------|---------|
-| Page content      | 0       |
-| Sticky headers    | 10      |
-| Glass navbar      | 100     |
-| Glass bottom bar  | 100     |
-| Dropdown/popover  | 200     |
-| Modal backdrop    | 300     |
-| Modal content     | 310     |
-| Toast / snackbar  | 400     |
+| Layer            | z-index |
+| ---------------- | ------- |
+| Page content     | 0       |
+| Sticky headers   | 10      |
+| Glass navbar     | 100     |
+| Glass bottom bar | 100     |
+| Dropdown/popover | 200     |
+| Modal backdrop   | 300     |
+| Modal content    | 310     |
+| Toast / snackbar | 400     |

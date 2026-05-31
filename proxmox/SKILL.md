@@ -1,9 +1,17 @@
 ---
 name: proxmox
-description: "Manage a Proxmox VE server over SSH. Covers VM and LXC lifecycle (start, stop, create, destroy), configuration editing, snapshots, backups, storage, monitoring, networking, templates, and maintenance. TRIGGER when: user mentions Proxmox, PVE, pve, QEMU, KVM, LXC containers, VM management on their server, container IDs (e.g. 'container 103'), named VMs/containers (e.g. 'home assistant VM', 'metube container'), network bridges (vmbr0), server resource adjustments (memory, CPU, disk for VMs/containers), snapshots, backups, storage pools, or server status/updates. Also trigger when the user says 'check my server', 'list my VMs', or refers to their homelab. DO NOT TRIGGER when: user asks about Docker, docker-compose, VirtualBox, cloud VPS providers, Raspberry Pi, or conceptual virtualization questions with no server management intent."
+description: >
+  Use when the user wants to manage their Proxmox VE homelab — VMs or LXC containers
+  (start, stop, create, destroy, resize), snapshots, backups, storage, networking
+  (vmbr0), or server status. Triggers: Proxmox, PVE, QEMU/KVM, LXC, container IDs
+  (e.g. "container 103"), named guests ("home assistant VM"), "check my server",
+  "list my VMs", "my homelab". Do NOT use for Docker/compose, VirtualBox, cloud VPS,
+  or Raspberry Pi.
 ---
 
 # Proxmox VE Management
+
+> **Note (Claude.ai):** This skill drafts commands for your Proxmox server. The sandbox cannot SSH to a private homelab — copy the generated commands and run them on your own machine or via your existing SSH session.
 
 You manage a single-node Proxmox VE server via SSH. Every command runs through:
 
@@ -15,8 +23,8 @@ Use the Bash tool for all SSH commands. Quote the remote command in single quote
 
 ## Scope
 
-**Target**: Proxmox VE at `<PROXMOX_IP>` (SSH as root — IP in memory)  
-**Acceptance criteria**: Requested operation completes; server and all running VMs remain accessible  
+**Target**: Proxmox VE at `<PROXMOX_IP>` (SSH as root — IP in memory)
+**Acceptance criteria**: Requested operation completes; server and all running VMs remain accessible
 **Off-limits**: `qm destroy`, `pct destroy`, `qm rollback`, `pct rollback`, `rm` of backup files, `reboot`, and `apt install` each require explicit user confirmation before execution
 
 ## Core principles
@@ -32,6 +40,7 @@ Use the Bash tool for all SSH commands. Quote the remote command in single quote
 ## Tool reference
 
 ### VM management (QEMU)
+
 - `qm list` — list all VMs
 - `qm status <vmid>` — check VM status
 - `qm start/stop/reboot/suspend/resume <vmid>` — lifecycle
@@ -46,6 +55,7 @@ Use the Bash tool for all SSH commands. Quote the remote command in single quote
 - `qm delsnapshot <vmid> <snapname>` — delete snapshot
 
 ### Container management (LXC)
+
 - `pct list` — list all containers
 - `pct status <ctid>` — check container status
 - `pct start/stop/reboot/suspend/resume <ctid>` — lifecycle
@@ -62,6 +72,7 @@ Use the Bash tool for all SSH commands. Quote the remote command in single quote
 - `pct enter <ctid>` — (interactive, avoid in scripts)
 
 ### Backups
+
 - `vzdump <vmid> --storage <storage> --mode snapshot` — backup a VM/LXC
 - `vzdump <vmid> --compress zstd` — backup with compression
 - List backups: `ls -lh /var/lib/vz/dump/` or check the configured backup storage
@@ -69,6 +80,7 @@ Use the Bash tool for all SSH commands. Quote the remote command in single quote
 - Restore LXC: `pct restore <ctid> <backup-file>`
 
 ### Storage
+
 - `pvesm status` — list storage pools with usage
 - `pvesm list <storage>` — list volumes in a storage pool
 - `pvesm alloc <storage> <vmid> <filename> <size>` — allocate disk
@@ -79,6 +91,7 @@ Use the Bash tool for all SSH commands. Quote the remote command in single quote
 - `zfs list` — ZFS datasets
 
 ### Monitoring
+
 - `pvesh get /nodes/localhost/status` — node status (CPU, memory, uptime)
 - `pvesh get /cluster/resources --type vm` — all VMs/LXCs with resource usage
 - `top -bn1 | head -20` — process overview
@@ -90,6 +103,7 @@ Use the Bash tool for all SSH commands. Quote the remote command in single quote
 - `cat /var/log/syslog | tail -50` — recent syslog
 
 ### Networking
+
 - `cat /etc/network/interfaces` — network config
 - `ip addr` — current IP addresses
 - `ip link` — network interfaces
@@ -98,6 +112,7 @@ Use the Bash tool for all SSH commands. Quote the remote command in single quote
 - Firewall: `pve-firewall status`, rules in `/etc/pve/firewall/`
 
 ### Maintenance
+
 - `apt update && apt list --upgradable` — check for updates
 - `apt upgrade -y` — apply updates (confirm first)
 - `pveversion -v` — Proxmox version info
@@ -107,6 +122,7 @@ Use the Bash tool for all SSH commands. Quote the remote command in single quote
 - `journalctl -u unattended-upgrades` — auto-upgrade log
 
 ### PVE Backup Jobs (built-in scheduler)
+
 PVE has a native backup scheduler that shows history in the UI. Manage via `pvesh`:
 
 ```bash
@@ -132,6 +148,7 @@ pvesh delete /cluster/backup/<job-id>
 Use `pvesh usage /cluster/backup --verbose` to see all available options. The `--keep-last` flag does NOT exist — retention is always via `--prune-backups`.
 
 ### SMART disk monitoring (smartd)
+
 `smartmontools` ships with PVE. `smartd` should be enabled and running.
 
 ```bash
@@ -147,17 +164,20 @@ smartd -C --no-fork -q onecheck
 ```
 
 **Recommended `/etc/smartd.conf` for a SATA SSD:**
+
 ```
 /dev/sda -a -I 194 -W 0,40,50 -s (S/../.././02|L/../../6/03) -m root -M exec /usr/share/smartmontools/smartd-runner
 ```
+
 - `-a` — monitor everything (health, attrs, error log, selftest log)
 - `-I 194` — suppress temperature attribute noise (see note below)
 - `-W 0,40,50` — alert at ≥40°C warn / ≥50°C critical (actual temperature)
 - `-s (S/.../02|L/.../6/03)` — short test daily 02:00, long test Saturday 03:00
 
-**Important:** SMART attribute ID 194 reports a *normalized value* (0–100 scale), not actual °C. The raw temperature is in the `RAW_VALUE` column of `smartctl -a`. Without `-I 194`, smartd floods syslog with "temperature changed from 71 to 72" — these are normalized value jitter, not real thermal events. Use `-W` for actual temperature thresholds.
+**Important:** SMART attribute ID 194 reports a _normalized value_ (0–100 scale), not actual °C. The raw temperature is in the `RAW_VALUE` column of `smartctl -a`. Without `-I 194`, smartd floods syslog with "temperature changed from 71 to 72" — these are normalized value jitter, not real thermal events. Use `-W` for actual temperature thresholds.
 
 Add a logfile alert runner alongside the default mail runner:
+
 ```bash
 cat > /etc/smartmontools/run.d/20logfile << 'EOF'
 #!/bin/sh
@@ -172,6 +192,7 @@ chmod +x /etc/smartmontools/run.d/20logfile
 ## Presenting output
 
 ### Listing VMs/LXCs
+
 When listing, combine `qm list` and `pct list` output into a single table:
 
 ```
@@ -182,29 +203,37 @@ When listing, combine `qm list` and `pct list` output into a single table:
 ```
 
 ### Status overview
+
 For a general status check, gather node status, VM/LXC list, and storage in one pass and present a dashboard-style summary.
 
 ### Config display
+
 Show configs as key-value pairs, grouped logically (hardware, network, boot, etc.) rather than as raw output.
 
 ## Common workflows
 
 ### Pre-update snapshot
+
 Always snapshot running VMs before applying host updates, then delete after confirming stability:
+
 ```bash
 qm snapshot <vmid> pre-update-$(date +%Y%m%d) --description "Pre-update snapshot"
 # ... apply updates ...
 qm delsnapshot <vmid> pre-update-$(date +%Y%m%d)
 ```
+
 LVM thin provisioning shows "Sum of all thin volume sizes exceeds pool size" warnings during snapshot creation — this is expected overcommit behaviour, not an error.
 
 ### Unattended security upgrades
+
 Install and configure to auto-apply security patches only, keeping PVE packages manual:
+
 ```bash
 apt install -y unattended-upgrades
 ```
 
 `/etc/apt/apt.conf.d/50unattended-upgrades` — security-only, PVE packages blacklisted:
+
 ```
 Unattended-Upgrade::Origins-Pattern {
     "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
@@ -220,6 +249,7 @@ Unattended-Upgrade::SyslogEnable "true";
 ```
 
 `/etc/apt/apt.conf.d/20auto-upgrades` — enable daily runs:
+
 ```
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
@@ -227,7 +257,9 @@ APT::Periodic::AutocleanInterval "7";
 ```
 
 ### Container guest OS updates
+
 Update packages inside all running containers with a single script:
+
 ```bash
 for ctid in $(pct list | awk "NR>1 && \$2==\"running\" {print \$1}"); do
     if pct exec "$ctid" -- sh -c "command -v apk" &>/dev/null; then
@@ -237,20 +269,24 @@ for ctid in $(pct list | awk "NR>1 && \$2==\"running\" {print \$1}"); do
     fi
 done
 ```
+
 Save as `/root/update-containers.sh` and cron weekly. Logs to `/var/log/ct-updates.log`.
 
 ### Quick status check
+
 ```bash
 ssh root@<PROXMOX_IP> 'echo "=== NODE ===" && pvesh get /nodes/localhost/status --output-format json 2>/dev/null && echo "=== VMS ===" && qm list && echo "=== CTS ===" && pct list && echo "=== STORAGE ===" && pvesm status'
 ```
 
 ### Create a new LXC from template
+
 1. List available templates: `pveam list <storage>` or `pveam available`
 2. Download template if needed: `pveam download <storage> <template>`
 3. Create: `pct create <ctid> <storage>:vztmpl/<template> --hostname <name> --memory <mb> --cores <n> --net0 name=eth0,bridge=vmbr0,ip=dhcp --rootfs <storage>:<size>`
 4. Start: `pct start <ctid>`
 
 ### Create a new VM
+
 1. Create: `qm create <vmid> --name <name> --memory <mb> --cores <n> --net0 virtio,bridge=vmbr0 --scsihw virtio-scsi-single`
 2. Add disk: `qm set <vmid> --scsi0 <storage>:<size>`
 3. Add ISO: `qm set <vmid> --cdrom <storage>:iso/<filename>`
@@ -260,6 +296,7 @@ ssh root@<PROXMOX_IP> 'echo "=== NODE ===" && pvesh get /nodes/localhost/status 
 ## Error handling
 
 If an SSH command fails, check:
+
 1. Is the server reachable? (`ping <PROXMOX_IP>`)
 2. Is the service running? (`systemctl status pvedaemon`)
 3. Read the error message and explain what went wrong in plain language

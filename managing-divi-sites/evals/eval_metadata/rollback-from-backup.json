@@ -1,6 +1,6 @@
 {
   "eval_id": 4,
   "eval_name": "rollback-from-backup",
-  "prompt": "Der letzte Button-Sync auf dev.stuv-heidenheim.de war ein Fehler. Roll die Kontakt-Seite (und nur die) aus dem Backup zurück. Login: <WP_USER> / <WP_APP_PASS>.",
+  "prompt": "Der letzte Button-Sync auf example-site.test war ein Fehler. Roll die Kontakt-Seite (und nur die) aus dem Backup zurück. Login: <WP_USER> / <WP_APP_PASS>.",
   "assertions": []
 }

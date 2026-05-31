@@ -106,6 +106,7 @@ verfassen. Die englische Version dient als inhaltliche Grundlage, nicht als
 Satzvorlage.
 
 Stilregeln:
+
 - Enzyklopädischer, neutraler Ton (kein Journalismus, keine Wertungen)
 - Natürliches Deutsch, deutsche Begriffe wo sie existieren (keine Anglizismen)
 - Passive Konstruktionen und Nominalstil sind in dewiki üblich und angemessen
@@ -122,12 +123,14 @@ Stilregeln:
 Vor der Ausgabe diese Checkliste durchgehen:
 
 **Struktur:**
+
 - [ ] Einleitung vorhanden, erster Satz definierend mit fettem Lemma
 - [ ] Infobox korrekt konvertiert (alle Parameter deutsch)
 - [ ] Abschnitte in dewiki-typischer Reihenfolge
 - [ ] Einzelnachweise-Abschnitt mit `<references />`
 
 **Syntax:**
+
 - [ ] Alle Templates konvertiert oder entfernt
 - [ ] Einzelnachweise vollständig und korrekt formatiert
 - [ ] Zahlen- und Datumsformate deutsch
@@ -136,6 +139,7 @@ Vor der Ausgabe diese Checkliste durchgehen:
 - [ ] URLs unverändert (kein Zahlenformat-Tausch in URLs)
 
 **Inhalt:**
+
 - [ ] Keine englischen Reste in der Prosa
 - [ ] Kategorien vorhanden und plausibel
 - [ ] SORTIERUNG gesetzt (bei Personen: Nachname, Vorname)
@@ -149,6 +153,7 @@ Den fertigen Artikel als vollständigen Wikitext ausgeben. Der Text soll direkt
 in einen Wikipedia-Editor einfügbar sein. Als `.txt`-Datei bereitstellen.
 
 Den Nutzer auf folgendes hinweisen:
+
 - Welche Abschnitte noch Recherche benötigen (TODO-Kommentare)
 - Welche Wikilinks und Kategorien manuell geprüft werden sollten
 - Ob Informationen aus dem Quellartikel ausgelassen wurden (und warum)

@@ -24,7 +24,7 @@ def _request(method, path, data=None, retries=3):
                 headers=write_headers if data else read_headers,
                 method=method,
             )
-            with urllib.request.urlopen(req) as r:
+            with urllib.request.urlopen(req, timeout=30) as r:
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
             if e.code in (429, 500, 502, 503, 504) and attempt < retries - 1:
@@ -50,9 +50,9 @@ def backup(page_id, endpoint="pages"):
     """Fetch and backup content + status to /tmp/wp_backup/."""
     data = fetch_raw(endpoint, page_id)
     os.makedirs("/tmp/wp_backup", exist_ok=True)
-    with open(f"/tmp/wp_backup/{page_id}_original.txt", "w") as f:
-        f.write(data["content"])
-    with open(f"/tmp/wp_backup/{page_id}_status.txt", "w") as f:
+    with open(f"/tmp/wp_backup/{page_id}_original.txt", "w", encoding="utf-8") as f:
+        f.write(data["content"]["raw"])
+    with open(f"/tmp/wp_backup/{page_id}_status.txt", "w", encoding="utf-8") as f:
         f.write(data["status"])
     return data
 

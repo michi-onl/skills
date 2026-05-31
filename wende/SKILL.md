@@ -21,12 +21,12 @@ is what the wiki-artikel skill does.
 
 ## When to use Wende vs. Wiki-Artikel
 
-| Situation | Skill |
-|-----------|-------|
-| "Convert these cite templates to Internetquelle" | **Wende** |
+| Situation                                         | Skill                                          |
+| ------------------------------------------------- | ---------------------------------------------- |
+| "Convert these cite templates to Internetquelle"  | **Wende**                                      |
 | "Turn this English article into a dewiki article" | **Wiki-Artikel** (which uses Wende internally) |
-| "Fix the formatting on this German wikitext" | **Wende** |
-| "Add a conversion rule for template X" | **Wende** |
+| "Fix the formatting on this German wikitext"      | **Wende**                                      |
+| "Add a conversion rule for template X"            | **Wende**                                      |
 
 Wende is a tool. Wiki-Artikel is a workflow that calls on Wende as one of its steps.
 
@@ -100,6 +100,7 @@ Keep all wikitext syntax intact — links, templates, ref tags, HTML. Only trans
 human-readable prose, captions, and alt text.
 
 Translation guidelines:
+
 - Natural, encyclopedic German (or English for de→en)
 - Preserve inline citations exactly where they are
 - Keep proper nouns, brand names, and titles in the original language
@@ -109,6 +110,7 @@ Translation guidelines:
 ### Step 4: Validate the output
 
 Before presenting the result, check:
+
 - Balanced braces: every `{{` has a matching `}}`
 - Balanced ref tags: every `<ref>` has a `</ref>` (or is self-closing `<ref ... />`)
 - No English template names remain (search for `cite web`, `cite news`, `Infobox company` etc.)
@@ -143,6 +145,7 @@ When encountering a template or pattern not covered by `rules.yaml`:
 5. Add a comment with the date if the mapping is non-obvious
 
 Rule categories in the YAML:
+
 - `templates.simple` — 1:1 template name replacements
 - `templates.remove` — templates to delete entirely
 - `templates.infoboxes` — infobox name mappings
@@ -157,6 +160,7 @@ Rule categories in the YAML:
 
 For de→en conversion, apply all rules in reverse: swap keys and values. The same
 YAML file serves both directions. Pay attention to:
+
 - `{{Internetquelle}}` → `{{cite web}}` (reverse the parameter mappings too)
 - German number format → English number format
 - DMY dates → MDY dates

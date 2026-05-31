@@ -1,6 +1,12 @@
 ---
-name: localization-translator
-description: English to German translator for software localization files. Supports TOML, XLIFF, JSON, PO/POT (gettext), Properties, Android XML (strings.xml), iOS Strings, YAML, ARB (Flutter), PHP arrays, FTL (Fluent), and similar formats. Use when the user (1) uploads or pastes localization file content for translation, (2) asks to review existing German translations for user-friendliness, (3) requests improvements to translated UI strings, or (4) uses phrases like "übersetze", "lokalisiere", "prüfe auf Benutzerfreundlichkeit".
+name: translating-localization-files
+description: >
+  Use when the user wants to translate software localization files from English to
+  German, or to review/improve existing German UI strings for user-friendliness.
+  Supports TOML, XLIFF, JSON, PO/POT (gettext), Properties, Android XML (strings.xml),
+  iOS .strings, YAML, ARB (Flutter), PHP arrays, FTL (Fluent). Triggers: pasted or
+  uploaded localization content, "übersetze", "lokalisiere",
+  "prüfe auf Benutzerfreundlichkeit".
 ---
 
 # Localization Translator (EN → DE)
@@ -20,6 +26,7 @@ Before any translation or review work, complete these steps in order.
 ### 1. Glossar-Abgleich
 
 Check for terminology sources:
+
 1. Check whether `references/glossary.md` exists in the skill directory. If yes, load it and treat its terms as default choices.
 2. Ask the user whether a project-specific glossary exists (Crowdin, Pontoon, Weblate, Transifex, etc.). If yes, request it and treat project glossary terms as binding over the skill glossary.
 3. If no glossary is available, note this explicitly and proceed. Do not silently invent terminology without acknowledging the absence.
@@ -29,6 +36,7 @@ When a translation decision conflicts with the glossary, do not silently overrid
 ### 2. Register bestimmen (du/Sie)
 
 Determine from context:
+
 - **Informal (du)**: Browser extensions, gaming, social apps, dev tools, casual apps
 - **Professional-informal (du, aber sachlich)**: Productivity tools, SaaS platforms (Slack, Notion, Figma) — du-Anrede, aber professioneller Ton ohne Slang
 - **Formal (Sie)**: Banking, government, enterprise software, legal, healthcare
@@ -38,6 +46,7 @@ If unclear, ask the user or match existing translations in the file. Document th
 ### 3. Analyse
 
 Before generating any output:
+
 1. Scan all files for untranslated, identical-to-source, or empty strings
 2. Scan for register inconsistencies (du/Sie, including capitalized "Du" at sentence starts)
 3. Check placeholder parity between source and target
@@ -49,6 +58,7 @@ Before generating any output:
 ### Technical Terms
 
 Decide case-by-case. See `references/glossary.md` for common patterns. General rules:
+
 - Keep established loanwords: Tab, Browser, App, Link, Button, Dropdown, Slider, Toggle
 - Translate when natural German exists: Settings → Einstellungen, Download → Herunterladen, Save → Speichern
 - Keep product names, brand terms, and code identifiers unchanged
@@ -96,6 +106,7 @@ Many localization files contain isolated strings without context. Handle them as
 Some strings require judgment calls that could reasonably go either way. These must be flagged as open questions in the change table, not decided silently.
 
 Categories that require flagging:
+
 - **Taglines and marketing copy** (not UI strings — they need adaptation, not translation)
 - **Emoji additions or removals** compared to the source
 - **Labels added by translators** that don't exist in the source language
@@ -109,12 +120,14 @@ Mark these in the change table with `⚠️ Rückfrage` and present options to t
 German has two plural categories: `one` and `other`. Always verify that plural forms are correctly handled.
 
 **ICU MessageFormat** (common in JS, Flutter, React):
+
 ```
 {count, plural, one {# Element} other {# Elemente}}
 {count, plural, one {Eine Datei ausgewählt} other {# Dateien ausgewählt}}
 ```
 
 **Key rules**:
+
 - German uses `one` (exactly 1) and `other` (everything else, including 0)
 - Never add `zero`, `two`, `few`, `many` categories for German — they are not grammatically needed
 - Watch for gender: `{count, plural, one {# neuer Tab} other {# neue Tabs}}` — adjective endings change
@@ -122,16 +135,19 @@ German has two plural categories: `one` and `other`. Always verify that plural f
 - If the source has `=0` for a special zero case, keep it: `{count, plural, =0 {Keine Dateien} one {# Datei} other {# Dateien}}`
 
 **PO/POT (gettext)**:
+
 ```po
 msgid "%d file"
 msgid_plural "%d files"
 msgstr[0] "%d Datei"
 msgstr[1] "%d Dateien"
 ```
+
 - `Plural-Forms: nplurals=2; plural=(n != 1);` for German
 - `msgstr[0]` = singular (n=1), `msgstr[1]` = plural (n≠1)
 
 **Android XML**:
+
 ```xml
 <plurals name="files_count">
     <item quantity="one">%d Datei</item>
@@ -146,12 +162,14 @@ msgstr[1] "%d Dateien"
 ## Format-Specific Notes
 
 ### XLIFF (.xliff, .xlf)
+
 - Translate only `<target>` elements (or create them from `<source>` if missing)
 - Set `state="translated"` on completed `<trans-unit>` entries; use `state="needs-review"` when uncertain
 - Preserve `<note>` elements — they contain translator context
 - Keep `id`, `resname`, and structural attributes unchanged
 
 ### PO/POT (gettext)
+
 - Translate `msgstr` (leave `msgid` untouched)
 - Keep `msgctxt` — it distinguishes identical English strings with different meanings
 - Remove `#, fuzzy` flag only when the translation is verified correct
@@ -159,32 +177,38 @@ msgstr[1] "%d Dateien"
 - Set header `Content-Type: text/plain; charset=UTF-8` and `Plural-Forms: nplurals=2; plural=(n != 1);`
 
 ### Android XML (strings.xml)
+
 - Skip strings with `translatable="false"`
 - Use `<plurals>` for quantity strings (see Plurals section)
 - Escape apostrophes: `It\'s` or wrap in `"It's"`
 - Preserve `<xliff:g>` tags around untranslatable content (names, numbers)
 
 ### iOS .strings / Stringsdict
+
 - Format: `"key" = "value";` — keep keys, translate values only
 - Use `.stringsdict` files for plurals (not inline logic)
 - `%@` (string), `%d` (integer), `%f` (float) — preserve all format specifiers
 
 ### ARB (Flutter)
+
 - `@key` metadata entries contain descriptions and placeholders — preserve them, do not translate
 - Plural/gender ICU patterns go directly in the value string
 - Keep `@@locale` set to `"de"` in the translated file
 
 ### JSON (i18next, react-intl, etc.)
+
 - Preserve nesting structure and key names exactly
 - For i18next: `_plural` suffix keys or `{{count}}`-based plurals
 - For react-intl/FormatJS: ICU MessageFormat syntax in values
 
 ### YAML
+
 - Respect indentation strictly (YAML is whitespace-sensitive)
 - Quote strings containing special YAML characters (`:`, `#`, `{`, `}`)
 - For Rails i18n: top-level key should be `de:`
 
 ### FTL (Fluent)
+
 - Translate only values, not message identifiers or attribute names
 - Preserve `.label`, `.accesskey`, `.title` attribute structure
 - Preserve placeables (`{ $variable }`, `{ -brand-name }`) exactly
@@ -230,15 +254,16 @@ When a file is already partially translated:
 
 Every workflow that modifies strings must append a change table. No exceptions.
 
-| Wo (Schlüssel) | Was (vorher → nachher) | Warum |
-|----------------|------------------------|-------|
-| `welcome_msg` | Willkommen bei der App → Willkommen in der App | Natürlichere Präposition |
-| `save_btn` | Abspeichern → Speichern | Kürzer, gängiger |
-| `tagline` | ⚠️ Rückfrage: „Skizzieren. Teilen. Fertig." oder „Diagramme. Schnell. Klar." | Marketing-String, mehrere Optionen |
+| Wo (Schlüssel) | Was (vorher → nachher)                                                       | Warum                              |
+| -------------- | ---------------------------------------------------------------------------- | ---------------------------------- |
+| `welcome_msg`  | Willkommen bei der App → Willkommen in der App                               | Natürlichere Präposition           |
+| `save_btn`     | Abspeichern → Speichern                                                      | Kürzer, gängiger                   |
+| `tagline`      | ⚠️ Rückfrage: „Skizzieren. Teilen. Fertig." oder „Diagramme. Schnell. Klar." | Marketing-String, mehrere Optionen |
 
 ### Multi-File Projects
 
 When processing multiple files:
+
 - Do **not** output files with zero changes. List them as "keine Änderungen" and skip.
 - Provide a per-file change table, not one giant table.
 - Check register and terminology consistency across all files, not just within each file.
@@ -262,6 +287,7 @@ If any issues are found, fix them before output and note them in the change tabl
 ## File Writing Safety
 
 When writing output files programmatically:
+
 - Always write to a temporary file first, then rename (`os.rename`) to the target path
 - Never open the target file in `'w'` mode and then run code that might fail before writing completes
 - This prevents data loss from interrupted writes

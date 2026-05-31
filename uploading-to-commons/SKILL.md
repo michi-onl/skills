@@ -1,15 +1,11 @@
 ---
-name: commons-upload
+name: uploading-to-commons
 description: >
-  Evaluate, curate, and prepare images for upload to Wikimedia Commons. Use this skill
-  whenever the user wants to upload photos to Wikimedia Commons, contribute images to
-  Wikipedia, prepare stock photos for Commons, assess image quality for Commons, create
-  Wikimedia description boxes, generate {{Information}} templates, rename images for
-  Commons conventions, or categorize photos for Wikimedia. Also trigger when the user
-  mentions "Commons upload", "Wikimedia", "Commons-tauglich", "Bilder hochladen",
-  "Commons-Beschreibung", or has a batch of images they want to filter and prepare for
-  contribution. This skill covers the full pipeline from raw image directory to
-  upload-ready files with descriptions — not just one step.
+  Use when the user wants to upload photos to Wikimedia Commons, contribute images to
+  Wikipedia, judge whether images are Commons-suitable, write Commons {{Information}}
+  descriptions, or rename/categorize files for Commons, or has a batch of images to
+  filter and prepare. Triggers: "Commons upload", "Wikimedia", "Commons-tauglich",
+  "Bilder hochladen", "Commons-Beschreibung".
 ---
 
 # Commons Upload — Wikimedia Commons Image Pipeline
@@ -20,8 +16,8 @@ and uploaded via Pywikibot.
 
 ## Scope
 
-**Target**: Images in the user-provided source directory → `upload/` folder → Wikimedia Commons  
-**Acceptance criteria**: Images uploaded with correct `{{Information}}` blocks, categories, and stripped metadata; `upload_log.txt` records all results  
+**Target**: Images in the user-provided source directory → `upload/` folder → Wikimedia Commons
+**Acceptance criteria**: Images uploaded with correct `{{Information}}` blocks, categories, and stripped metadata; `upload_log.txt` records all results
 **Off-limits**: Source images are read-only — copy to `upload/`, never modify originals; uploads require explicit user confirmation after the dry-run in Step 8
 
 ## Pipeline Overview
@@ -71,17 +67,17 @@ Prefer `exiftool -csv` for batch extraction. It handles all fields in one pass a
 outputs structured data. Fall back to sips+mdls or Python PIL only if exiftool is
 unavailable.
 
-| Metric | How to get it |
-|---|---|
-| Resolution (already have from step 1) | — |
-| File size | stat / os.path.getsize |
-| ISO | EXIF ISOSpeedRatings / kMDItemISOSpeed |
-| Shutter speed | EXIF ExposureTime / kMDItemExposureTimeSeconds |
-| Aperture | EXIF FNumber / kMDItemFNumber |
-| Focal length | EXIF FocalLength / kMDItemFocalLength |
-| Date taken | EXIF DateTimeOriginal / kMDItemContentCreationDate |
-| Camera model | EXIF Model (used to set ISO threshold: phone vs camera) |
-| Lens ID | EXIF LensModel (used to detect front camera — see step 2b) |
+| Metric                                | How to get it                                              |
+| ------------------------------------- | ---------------------------------------------------------- |
+| Resolution (already have from step 1) | —                                                          |
+| File size                             | stat / os.path.getsize                                     |
+| ISO                                   | EXIF ISOSpeedRatings / kMDItemISOSpeed                     |
+| Shutter speed                         | EXIF ExposureTime / kMDItemExposureTimeSeconds             |
+| Aperture                              | EXIF FNumber / kMDItemFNumber                              |
+| Focal length                          | EXIF FocalLength / kMDItemFocalLength                      |
+| Date taken                            | EXIF DateTimeOriginal / kMDItemContentCreationDate         |
+| Camera model                          | EXIF Model (used to set ISO threshold: phone vs camera)    |
+| Lens ID                               | EXIF LensModel (used to detect front camera — see step 2b) |
 
 ### Step 2b: Front-camera / selfie pre-filter
 
@@ -100,11 +96,11 @@ This saves enormous context on batches where 20-40% of images are personal portr
 
 These are flags shown to the user, not automatic rejections.
 
-| Flag | Condition | Why |
-|---|---|---|
-| High ISO | > 1250 (phone sensor) / > 3200 (dedicated camera) | Noise |
-| Slow shutter | > 1/30s handheld | Motion blur risk |
-| Small file | < 500 KB for a multi-MP image | Over-compressed |
+| Flag         | Condition                                         | Why              |
+| ------------ | ------------------------------------------------- | ---------------- |
+| High ISO     | > 1250 (phone sensor) / > 3200 (dedicated camera) | Noise            |
+| Slow shutter | > 1/30s handheld                                  | Motion blur risk |
+| Small file   | < 500 KB for a multi-MP image                     | Over-compressed  |
 
 Determine phone vs camera from the EXIF camera model field. If unavailable, assume
 phone thresholds (more conservative).
@@ -112,6 +108,7 @@ phone thresholds (more conservative).
 ### Output of step 2
 
 Present a summary:
+
 - Survivors from step 1, flag count by category
 - Flagged images listed with filenames
 - Top N candidates ranked by combined technical quality (high res + low ISO + fast
@@ -154,7 +151,7 @@ for label, lat, lon in clusters:
     url = (f"https://nominatim.openstreetmap.org/reverse?"
            f"lat={lat}&lon={lon}&format=json&zoom=16&addressdetails=1")
     req = urllib.request.Request(url,
-        headers={"User-Agent": "commons-upload-pipeline/1.0"})
+        headers={"User-Agent": "uploading-to-commons-pipeline/1.0"})
     resp = urllib.request.urlopen(req)
     data = json.loads(resp.read())
     addr = data.get("address", {})
@@ -194,15 +191,15 @@ cognitive act.
   rather than viewing all of them. Report the skip count to the user.
 - For each image, assess and classify in one go:
 
-| Criterion | What to look for |
-|---|---|
-| Subject matter | Is it identifiable? Would a Wikipedia article use it? |
-| Composition | Clean framing, no distracting elements |
-| Focus / sharpness | Is the subject in focus? |
-| Lighting | Blown highlights, crushed shadows, harsh midday light |
-| Obstructions | Cables, poles, fingers, watermarks, logos |
-| People | Recognizable faces → model release concern. Flag for user. |
-| Redundancy | Near-duplicate of another image in the batch — mark the group |
+| Criterion         | What to look for                                              |
+| ----------------- | ------------------------------------------------------------- |
+| Subject matter    | Is it identifiable? Would a Wikipedia article use it?         |
+| Composition       | Clean framing, no distracting elements                        |
+| Focus / sharpness | Is the subject in focus?                                      |
+| Lighting          | Blown highlights, crushed shadows, harsh midday light         |
+| Obstructions      | Cables, poles, fingers, watermarks, logos                     |
+| People            | Recognizable faces → model release concern. Flag for user.    |
+| Redundancy        | Near-duplicate of another image in the batch — mark the group |
 
 ### Tier classification (assigned during review, not after)
 
@@ -247,6 +244,7 @@ The MOOD: STOCK app embeds junk in several EXIF/XMP fields: title set to
 with app labels.
 
 **Step A — macOS extended attributes:**
+
 ```bash
 for f in upload/*.JPG upload/*.jpg; do
   xattr -d com.apple.metadata:kMDItemComment "$f" 2>/dev/null
@@ -255,6 +253,7 @@ done
 ```
 
 **Step B — EXIF/XMP fields via exiftool:**
+
 ```bash
 exiftool -overwrite_original \
   -UserComment= \
@@ -375,6 +374,7 @@ Check for `user-config.py` and `user-password.py` in the `upload/` directory. If
 don't exist, generate them there:
 
 **user-config.py:**
+
 ```python
 family = 'commons'
 mylang = 'commons'
@@ -383,8 +383,9 @@ password_file = 'user-password.py'
 ```
 
 **user-password.py:**
+
 ```python
-('Mike is Michi', BotPassword('commons-upload', 'PASTE_BOT_PASSWORD_HERE'))
+('Mike is Michi', BotPassword('uploading-to-commons', 'PASTE_BOT_PASSWORD_HERE'))
 ```
 
 For the bot password, check the memory file `reference_commons_credentials.md`. Never
@@ -398,10 +399,11 @@ cd upload/
 ```
 
 The upload script is located at
-`~/.claude/skills/commons-upload/scripts/upload_to_commons.py`. Copy it to the
+`~/.claude/skills/uploading-to-commons/scripts/upload_to_commons.py`. Copy it to the
 `upload/` directory before running, or invoke it with its full path.
 
 **Flags:**
+
 - `--dry-run` — preview without uploading
 - `--file "pattern1" "pattern2"` — upload only matching filenames
 - `--delay N` — seconds between uploads (default 5)

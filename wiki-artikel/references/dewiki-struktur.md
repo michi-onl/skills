@@ -99,7 +99,7 @@ ist/war ein/eine NATIONALITÄT BERUF.
 Format: `'''Vorname Nachname''' (* Datum in Ort) ist ein deutscher Beruf.`
 
 - Nur der Name fett
-- Lebensdaten in Klammern mit Stern (*) und ggf. Kreuz (†)
+- Lebensdaten in Klammern mit Stern (\*) und ggf. Kreuz (†)
 - Nationalität + Beruf/Tätigkeit
 - Geburts-/Sterbedaten nicht verlinken (dewiki-Konvention seit 2016)
 - Orte verlinken: `[[Berlin]]`
@@ -474,6 +474,7 @@ Für abstrakte Konzepte, wissenschaftliche Themen, Ereignisse, Bewegungen etc.
 ### Einleitung
 
 Format variiert je nach Gegenstand:
+
 - Konzept: `'''Lemma''' bezeichnet DEFINITION.`
 - Ereignis: `Der/Die/Das '''Ereignis''' war ein KATEGORIE, das am DATUM in ORT stattfand.`
 - Bewegung: `'''Lemma''' ist eine KATEGORIE, die MERKMAL.`
@@ -481,6 +482,7 @@ Format variiert je nach Gegenstand:
 ### Typische Kategorien
 
 Stark themenabhängig. Allgemeine Muster:
+
 ```
 [[Kategorie:FACHGEBIET]]                   z.B. [[Kategorie:Künstliche Intelligenz]]
 [[Kategorie:Wissenschaftliche Methode]]
@@ -502,16 +504,16 @@ Die Einleitung ist der wichtigste Teil des Artikels.
 
 ### Einleitungsmuster nach Typ
 
-| Typ | Muster |
-|-----|--------|
-| Person | `'''Name''' (* Datum in Ort) ist ein/e NATIONALITÄT BERUF.` |
-| Unternehmen | `Die '''Firma''' ist ein BRANCHE-Unternehmen mit Sitz in ORT.` |
-| Ort | `'''Ortsname''' ist eine Stadt/Gemeinde im LANDKREIS in BUNDESLAND.` |
-| Film | `'''Titel''' ist ein LAND GENRE aus dem Jahr JJJJ von REGISSEUR.` |
-| Album | `'''Titel''' ist das X. Studioalbum der/des KÜNSTLER.` |
-| Software | `'''Name''' ist eine KATEGORIE, die von ENTWICKLER entwickelt wird.` |
-| Konzept | `'''Lemma''' bezeichnet DEFINITION.` |
-| Ereignis | `Das '''Ereignis''' war ein KATEGORIE, das am DATUM stattfand.` |
+| Typ         | Muster                                                               |
+| ----------- | -------------------------------------------------------------------- |
+| Person      | `'''Name''' (* Datum in Ort) ist ein/e NATIONALITÄT BERUF.`          |
+| Unternehmen | `Die '''Firma''' ist ein BRANCHE-Unternehmen mit Sitz in ORT.`       |
+| Ort         | `'''Ortsname''' ist eine Stadt/Gemeinde im LANDKREIS in BUNDESLAND.` |
+| Film        | `'''Titel''' ist ein LAND GENRE aus dem Jahr JJJJ von REGISSEUR.`    |
+| Album       | `'''Titel''' ist das X. Studioalbum der/des KÜNSTLER.`               |
+| Software    | `'''Name''' ist eine KATEGORIE, die von ENTWICKLER entwickelt wird.` |
+| Konzept     | `'''Lemma''' bezeichnet DEFINITION.`                                 |
+| Ereignis    | `Das '''Ereignis''' war ein KATEGORIE, das am DATUM stattfand.`      |
 
 ---
 
@@ -531,6 +533,7 @@ Die Einleitung ist der wichtigste Teil des Artikels.
 ```
 
 Wichtige Parameter:
+
 - `url` (Pflicht)
 - `titel` (Pflicht)
 - `werk` – Name der Publikation
@@ -543,6 +546,7 @@ Wichtige Parameter:
 ### Benannte Referenzen
 
 Wenn dieselbe Quelle mehrfach verwendet wird:
+
 ```
 <ref name="quelle1">{{Internetquelle |...}}</ref>
 
@@ -576,19 +580,20 @@ Spätere Verwendung:
 
 ### Häufige Muster nach Artikeltyp
 
-| Typ | Kategorien |
-|-----|-----------|
-| Person | Beruf, Nationalität, Geboren JJJJ, Mann/Frau |
-| Unternehmen | Branche, Unternehmen (Ort), Gegründet JJJJ |
-| Ort | Ort in Region/Land |
-| Film | Filmtitel JJJJ, Land Film, Genre |
-| Album | Album JJJJ, Album (Genre), Künstler-Album |
-| Software | Softwaretyp, Plattform, ggf. Freie Software |
-| Konzept | Fachgebiet |
+| Typ         | Kategorien                                   |
+| ----------- | -------------------------------------------- |
+| Person      | Beruf, Nationalität, Geboren JJJJ, Mann/Frau |
+| Unternehmen | Branche, Unternehmen (Ort), Gegründet JJJJ   |
+| Ort         | Ort in Region/Land                           |
+| Film        | Filmtitel JJJJ, Land Film, Genre             |
+| Album       | Album JJJJ, Album (Genre), Künstler-Album    |
+| Software    | Softwaretyp, Plattform, ggf. Freie Software  |
+| Konzept     | Fachgebiet                                   |
 
 ### Hinweise zur Kategorienwahl
 
 Auf dewiki gibt es einige Besonderheiten:
+
 - Personen-Kategorien nutzen die männliche Form für den Beruf, unabhängig vom
   Geschlecht der Person (umstritten, aber aktuell Konvention)
 - Unternehmens-Orts-Kategorien: nur Stadtname, kein Bundesstaat/Land

@@ -5,7 +5,7 @@ Batch upload images to Wikimedia Commons using Pywikibot.
 Reads image files and their descriptions from wikimedia_descriptions.txt,
 then uploads each file to Commons.
 
-Prerequisites (handled automatically by the commons-upload skill):
+Prerequisites (handled automatically by the uploading-to-commons skill):
     - .venv with pywikibot installed
     - user-config.py and user-password.py in working directory
 

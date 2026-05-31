@@ -1,6 +1,6 @@
 {
   "eval_id": 1,
   "eval_name": "change-single-button-text",
-  "prompt": "Auf meiner WP DIVI Seite dev.stuv-heidenheim.de (User: <WP_USER>, App-Passwort: <WP_APP_PASS>) gibt es auf der Vorsitz-Seite einen Button mit dem Text 'View Courses' – das ist noch ein Demo-Placeholder. Ändere den Text auf 'Mehr erfahren'.",
+  "prompt": "Auf meiner WP DIVI Seite example-site.test (User: <WP_USER>, App-Passwort: <WP_APP_PASS>) gibt es auf der Vorsitz-Seite einen Button mit dem Text 'View Courses' – das ist noch ein Demo-Placeholder. Ändere den Text auf 'Mehr erfahren'.",
   "assertions": []
 }

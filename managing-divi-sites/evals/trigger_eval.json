@@ -1,10 +1,10 @@
 [
   {
-    "query": "auf meiner StuV-Seite sind die Buttons total inkonsistent – manche rund, manche eckig, Farben überall anders. kannst du die mal vereinheitlichen? login steht in memory",
+    "query": "auf meiner Example-Seite sind die Buttons total inkonsistent – manche rund, manche eckig, Farben überall anders. kannst du die mal vereinheitlichen? login steht in memory",
     "should_trigger": true
   },
   {
-    "query": "dev.stuv-heidenheim.de/vorsitz hat noch so einen 'View Courses' Button vom Demo-Template drin, bitte auf 'Mehr erfahren' ändern",
+    "query": "example-site.test/vorsitz hat noch so einen 'View Courses' Button vom Demo-Template drin, bitte auf 'Mehr erfahren' ändern",
     "should_trigger": true
   },
   {

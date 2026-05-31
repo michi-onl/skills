@@ -6,14 +6,14 @@ Work through these in order — biggest wins first.
 
 Check and enable under `wp-admin → Divi → Theme Options → General → Performance`:
 
-| Setting | What it does | Recommended |
-|---|---|---|
-| Static CSS File Generation | Writes inline CSS to a file instead of computing per-request | On |
-| Combine JavaScript Files | Merges DIVI's many JS files into one | On |
-| Combine Third Party Plugins | Includes plugin CSS/JS in the combined files | On |
-| Defer jQuery Loading | Loads jQuery after page render | On (test first — can break sliders) |
-| Critical CSS | Inlines above-the-fold CSS, loads rest async | On |
-| Dynamic CSS | Only loads CSS for modules actually used on the page | On |
+| Setting                     | What it does                                                 | Recommended                         |
+| --------------------------- | ------------------------------------------------------------ | ----------------------------------- |
+| Static CSS File Generation  | Writes inline CSS to a file instead of computing per-request | On                                  |
+| Combine JavaScript Files    | Merges DIVI's many JS files into one                         | On                                  |
+| Combine Third Party Plugins | Includes plugin CSS/JS in the combined files                 | On                                  |
+| Defer jQuery Loading        | Loads jQuery after page render                               | On (test first — can break sliders) |
+| Critical CSS                | Inlines above-the-fold CSS, loads rest async                 | On                                  |
+| Dynamic CSS                 | Only loads CSS for modules actually used on the page         | On                                  |
 
 After toggling any of these, clear DIVI's static cache under `Divi → Theme Options → Builder → Advanced → Static CSS File Generation → Clear`.
 
@@ -22,7 +22,7 @@ After toggling any of these, clear DIVI's static cache under `Divi → Theme Opt
 ```bash
 # Check response size and TTFB for each published page
 for slug in "" campus referate vorsitz linktree bachelorball kontakt; do
-  url="https://dev.stuv-heidenheim.de/$slug"
+  url="https://example-site.test/$slug"
   result=$(curl -s -o /dev/null -w "%{size_download}B %{time_starttransfer}s" "$url")
   echo "$slug: $result"
 done
@@ -75,6 +75,7 @@ A `HIT` in `X-Cache` or `CF-Cache-Status` means caching is working. A `MISS` or 
 ## Core Web Vitals Reference
 
 Target values for a site this size:
+
 - LCP (Largest Contentful Paint): under 2.5s
 - CLS (Cumulative Layout Shift): under 0.1
 - INP (Interaction to Next Paint): under 200ms

@@ -7,7 +7,11 @@
   <div class="glass-navbar__inner">
     <!-- Group 1: Identity -->
     <div class="glass-pill">
-      <a href="/" class="glass-pill__item glass-pill__item--active" aria-current="page">
+      <a
+        href="/"
+        class="glass-pill__item glass-pill__item--active"
+        aria-current="page"
+      >
         <span class="glass-pill__icon"><!-- SVG logo --></span>
         <span class="glass-pill__label">Home</span>
       </a>
@@ -86,12 +90,18 @@
 
 /* --- Responsive switch --- */
 @media (max-width: 640px) {
-  .glass-navbar__primary { display: none; }
-  .glass-bottombar { display: block; }
+  .glass-navbar__primary {
+    display: none;
+  }
+  .glass-bottombar {
+    display: block;
+  }
 }
 
 @media (min-width: 641px) {
-  .glass-bottombar { display: none; }
+  .glass-bottombar {
+    display: none;
+  }
 }
 
 /* --- Page body offset --- */

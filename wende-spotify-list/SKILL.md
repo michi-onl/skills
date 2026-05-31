@@ -1,16 +1,12 @@
 ---
 name: wende-spotify-list
 description: >
-  Automate the monthly update of the German Wikipedia article "Liste der
-  meistgestreamten Künstler auf Spotify". Use this skill whenever the user wants
-  to update, refresh, or synchronize the German Spotify streaming artists list
-  with the English Wikipedia source. Trigger phrases include "Spotify-Liste
-  aktualisieren", "monthly Spotify update", "Spotify artists update", "Liste
-  aktualisieren", "Spotify list sync", "meistgestreamte Künstler aktualisieren",
-  or any mention of updating the Spotify streaming list article. Also trigger when
-  the user mentions it's the first of the month and they need to do their
-  Wikipedia update, or when they paste Spotify streaming data and want it
-  integrated into the German article.
+  Use when the user wants to update, refresh, or synchronize the German Wikipedia
+  article "Liste der meistgestreamten Künstler auf Spotify" with the English source.
+  Triggers: "Spotify-Liste aktualisieren", "monthly Spotify update", "Spotify artists
+  update", "Liste aktualisieren", "meistgestreamte Künstler aktualisieren", first-of-
+  month Wikipedia update, or pasted Spotify streaming data to integrate into the
+  German article.
 ---
 
 # Wende-Spotify-List — Monthly Spotify List Updater
@@ -25,15 +21,12 @@ This skill merges changes rather than regenerating from scratch.
 
 ## Before you start
 
-Read these files at the beginning of every run:
+At the beginning of every run:
 
-1. `wende/references/rules.yaml` — conversion rules for templates, citations,
-   namespaces, dates, numbers, typography
-2. `wende-spotify-list/references/en.txt` — last known English wikitext
-3. `wende-spotify-list/references/de.txt` — current German wikitext
-
-All three paths are relative to the skills directory. The skills directory
-is wherever this SKILL.md lives (its parent).
+1. Read `wende/references/rules.yaml` — conversion rules for templates, citations, namespaces, dates, numbers, typography (path relative to the skills directory).
+2. Fetch the current English wikitext live (Step 1 below) — no cached snapshot is stored.
+3. Ask the user to paste the current German article wikitext, or fetch it live from Wikipedia:
+   `https://de.wikipedia.org/w/index.php?title=Liste_der_meistgestreamten_K%C3%BCnstler_auf_Spotify&action=raw`
 
 ## Scripts
 
@@ -44,7 +37,7 @@ reliable than doing these checks by hand on a 700-line file.
 Run this in Step 2 to identify what changed in the English article.
 
 ```bash
-python3 scripts/diff_sections.py references/en.txt /tmp/en_fresh.txt
+python3 scripts/diff_sections.py /tmp/en_previous.txt /tmp/en_fresh.txt
 # Add --json for structured output
 ```
 
@@ -53,7 +46,7 @@ in Step 5 before outputting. Catches unbalanced braces, unconverted English
 templates, wrong number formats, mangled URLs, missing Stand dates.
 
 ```bash
-python3 scripts/quality_check.py references/de.txt
+python3 scripts/quality_check.py /tmp/de_updated.txt
 # Exit code 0 = clean, 1 = errors found. Add --json for structured output.
 ```
 
@@ -68,18 +61,18 @@ you're working with before touching anything.
 
 ### German sections
 
-| Section | Source | Notes |
-|---------|--------|-------|
-| Lead (images + intro paragraph) | Both | "Stand MONAT JAHR" date must be updated |
-| Meistgestreamte Künstler > Gesamt | ChartMasters | 25 artists, columns: artist, country, streams (Mrd.), song count, 1Mrd/100Mio/10Mio/1Mio thresholds. NOT in English article. |
-| Nach Jahr > Weltweit | English article | Maps to "By year" in en |
-| Nach Jahr > Deutschland | German-only | Untouched by English changes |
-| Nach Jahrzehnt | English article | Maps to "By decade" in en |
-| Meiste monatliche Hörer > Übersicht | English article | Maps to "Most monthly listeners". Top 50 in de, top 50 in en. |
-| Zeitstrahl der Höchstwerte | English article | Maps to "Timeline of peak monthly listeners" |
-| Statistik | German-only | Summary of months at #1 |
-| Meiste Follower | German-only | Follower counts from Spotify profiles |
-| Siehe auch / Einzelnachweise / Kategorien | Both | Standard footer |
+| Section                                   | Source          | Notes                                                                                                                        |
+| ----------------------------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Lead (images + intro paragraph)           | Both            | "Stand MONAT JAHR" date must be updated                                                                                      |
+| Meistgestreamte Künstler > Gesamt         | ChartMasters    | 25 artists, columns: artist, country, streams (Mrd.), song count, 1Mrd/100Mio/10Mio/1Mio thresholds. NOT in English article. |
+| Nach Jahr > Weltweit                      | English article | Maps to "By year" in en                                                                                                      |
+| Nach Jahr > Deutschland                   | German-only     | Untouched by English changes                                                                                                 |
+| Nach Jahrzehnt                            | English article | Maps to "By decade" in en                                                                                                    |
+| Meiste monatliche Hörer > Übersicht       | English article | Maps to "Most monthly listeners". Top 50 in de, top 50 in en.                                                                |
+| Zeitstrahl der Höchstwerte                | English article | Maps to "Timeline of peak monthly listeners"                                                                                 |
+| Statistik                                 | German-only     | Summary of months at #1                                                                                                      |
+| Meiste Follower                           | German-only     | Follower counts from Spotify profiles                                                                                        |
+| Siehe auch / Einzelnachweise / Kategorien | Both            | Standard footer                                                                                                              |
 
 ### English-only sections (not carried to German)
 
@@ -98,12 +91,12 @@ https://en.wikipedia.org/w/index.php?title=List_of_most-streamed_artists_on_Spot
 
 Save to a temporary variable. This is the fresh English source.
 
-### Step 2: Diff against stored English reference
+### Step 2: Diff against previous English wikitext
 
-Save the fetched wikitext to a temp file, then run the diff script:
+If the user has a previous English snapshot to compare against, save the fetched wikitext to a temp variable and run the diff script against it. Otherwise, proceed to Step 3 and apply all relevant updates from the current English source.
 
 ```bash
-python3 scripts/diff_sections.py references/en.txt /tmp/en_fresh.txt
+python3 scripts/diff_sections.py /tmp/en_previous.txt /tmp/en_fresh.txt
 ```
 
 Review the output. Focus on:
@@ -221,7 +214,7 @@ Do NOT apply number format conversion inside URLs, ISO dates, DOIs, or ISBNs.
 Run the quality check script on the updated German wikitext:
 
 ```bash
-python3 scripts/quality_check.py references/de.txt
+python3 scripts/quality_check.py /tmp/de_updated.txt
 ```
 
 Fix any errors before proceeding. Then also manually verify:
@@ -241,14 +234,14 @@ Fix any errors before proceeding. Then also manually verify:
 
 ### Step 6: Output
 
-1. Write the updated German wikitext to `wende-spotify-list/references/de.txt`
-2. Write the fetched English wikitext to `wende-spotify-list/references/en.txt`
-   (this becomes the baseline for next month's diff)
-3. Present a summary to the user:
+1. Present the complete updated German wikitext as a downloadable artifact (no file write-back on Claude.ai).
+2. Present a summary to the user:
    - Which sections were updated and what changed
    - Any TODO comments that need manual review
    - Any artists where wikilinks might need checking
    - Whether follower data was refreshed or still needs updating
+
+The user can then copy the wikitext into the Wikipedia editor or save the artifact locally.
 
 ## German formatting conventions
 

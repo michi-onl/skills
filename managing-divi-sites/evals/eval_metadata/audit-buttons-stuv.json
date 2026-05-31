@@ -1,6 +1,0 @@
-{
-  "eval_id": 0,
-  "eval_name": "audit-buttons-stuv",
-  "prompt": "Ich möchte auf meiner WordPress DIVI Seite (https://dev.stuv-heidenheim.de) alle Buttons vereinheitlichen. Zugangsdaten: Nutzer <WP_USER>, Application Password: <WP_APP_PASS>. Mach ein Audit: Welche Buttons gibt es, welche Stile weichen voneinander ab?",
-  "assertions": []
-}

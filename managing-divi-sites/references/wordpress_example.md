@@ -1,16 +1,20 @@
-# StuV Heidenheim WordPress Reference
+# Example Heidenheim WordPress Reference
 
 ## Site
-- URL: `https://dev.stuv-heidenheim.de`
+
+- URL: `https://example-site.test`
 - Auth: Google Apps Login (OAuth) — requires Application Password for REST API
 
 ## Credentials
+
 Stored in environment variables only. Do not hardcode.
+
 - `WP_USER`
 - `WP_APP_PASS`
-- `WP_SITE=https://dev.stuv-heidenheim.de`
+- `WP_SITE=https://example-site.test`
 
 ## Known Pages (slugs)
+
 - `''` (homepage)
 - `campus`
 - `referate`
@@ -20,5 +24,6 @@ Stored in environment variables only. Do not hardcode.
 - `kontakt`
 
 ## Quick Reference
+
 - Application Password created at: `wp-admin → Benutzer → Profil → Anwendungspasswörter`
 - Static CSS cache clear: `Divi → Theme Options → Builder → Advanced → Static CSS File Generation → Clear`

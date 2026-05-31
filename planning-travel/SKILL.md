@@ -1,5 +1,5 @@
 ---
-name: travel-planner
+name: planning-travel
 description: >
   Plan holidays, short trips, and travel adventures. Use this skill whenever the user mentions
   travel planning, trip ideas, holiday brainstorming, destination suggestions, itineraries,
@@ -83,12 +83,14 @@ Always use web search to provide current, accurate information:
 Adapt the format to the request:
 
 **For destination brainstorming:**
+
 - 3–5 destination suggestions with reasoning
 - Why each fits the user's style
 - Rough cost indication
 - Best time to visit
 
 **For itinerary planning:**
+
 - Day-by-day structure
 - Accommodation area suggestions (not specific hotels — let the user book)
 - Key activities and sights per day, with alternatives
@@ -97,6 +99,7 @@ Adapt the format to the request:
 - Practical tips (e.g., "buy train tickets in advance", "this area is sketchy at night")
 
 **For research questions:**
+
 - Direct, factual answers with sources
 - Actionable next steps
 
