@@ -15,9 +15,21 @@ Translate and review software localization files from English to German with foc
 
 ## Supported Formats
 
-TOML, XLIFF, JSON, PO/POT, Java Properties, Android XML, iOS .strings, YAML, ARB, PHP arrays, INI, CSV (key-value), Markdown with frontmatter, FTL (Fluent).
+TOML, XLIFF, JSON, PO/POT, Java Properties, Android XML, iOS .strings, Xcode String Catalog (.xcstrings), WebExtension messages.json (chrome.i18n), YAML, ARB, PHP arrays, INI, CSV (key-value), Markdown with frontmatter, FTL (Fluent).
 
-Preserve all syntax, keys, placeholders (`{name}`, `%s`, `%1$s`, `{{var}}`), and markup exactly.
+Preserve all syntax, keys, placeholders (`{name}`, `%s`, `%1$s`, `%0`, `{{var}}`, `$NUMBER`), and markup exactly.
+
+## Input Handling
+
+First detect which surface you are on, then pick the entry point:
+
+- **Claude.ai (chat sandbox)** — files arrive as uploads. Run `find /mnt/user-data/uploads -type f` first. If that directory exists and has files, that is the source. Large multi-file uploads (10+ files) sometimes land as an empty-looking directory or as a single archive — do not assume a file is missing until this returns nothing.
+- **Claude Code (real filesystem)** — there is no `/mnt/user-data/uploads`. Operate on the repository working tree instead: use the path the user gives, or the current working directory, and locate locale files (`_locales/`, `*.xcstrings`, `*.strings`, `locales/`, `i18n/`, `*.po`) within it. Edit files in place and surface results as a `git diff` / commit rather than chat output.
+
+Then, on either surface:
+
+1. If a `.zip`/`.tar.gz` is provided, extract it to a working directory first, then operate on the extracted tree. Bundling many locale files as one archive is the reliable path for big uploads — suggest it if individual uploads fail to appear.
+2. Match source and target files by locale (`en` ↔ `de`, `en-US` ↔ `de-DE`, `_locales/en/messages.json` ↔ `_locales/de/messages.json`). For bilingual single-file formats (`.xcstrings`, `.po`), source and target live in the same file.
 
 ## Pre-Translation Steps
 
@@ -201,6 +213,29 @@ msgstr[1] "%d Dateien"
 - For i18next: `_plural` suffix keys or `{{count}}`-based plurals
 - For react-intl/FormatJS: ICU MessageFormat syntax in values
 
+### WebExtension messages.json (chrome.i18n)
+
+Browser-extension format: each key maps to an object, not a bare string.
+
+```json
+"greeting": { "message": "Hello $USER$", "description": "...", "placeholders": { "user": { "content": "$1" } } }
+```
+
+- Translate **only** the `message` value. Never touch `description` (translator note) or `placeholders` (binding map).
+- `$USER$`-style named placeholders inside `message` are defined in `placeholders` — preserve them verbatim, including case.
+- When running QA, this file is named `messages.json` and auto-detects correctly; if you renamed it, pass `--format messages` so `description` fields are not mistaken for translatable strings.
+
+### Xcode String Catalog (.xcstrings)
+
+Modern Apple format (Xcode 15+), replacing `.strings`/`.stringsdict`. JSON structure, bilingual in one file.
+
+- The translatable text is at `strings.<key>.localizations.<lang>.stringUnit.value`. Add or edit the `de` localization; leave the source language (usually `en`) untouched.
+- Set `stringUnit.state` to `"translated"` when done, `"needs_review"` when uncertain. Do not leave it `"new"`.
+- Skip entries marked `"shouldTranslate" : false`.
+- Plurals/device variations live under `variations.plural.<one|other>.stringUnit.value` — fill both German categories.
+- The `%@`, `%lld`, `%1$@` format specifiers and `%#@var@` substitution tokens must be preserved exactly.
+- QA: pass the single `.xcstrings` file as both source and target — the QA script splits source vs. `de` internally.
+
 ### YAML
 
 - Respect indentation strictly (YAML is whitespace-sensitive)
@@ -250,6 +285,14 @@ When a file is already partially translated:
 5. Run QA
 6. Output with change table
 
+#### Machine-translated drafts
+
+The common real case is reviewing a file that was pre-filled by machine translation (e.g. Gemma, DeepL, Google), not a hand-made translation.
+
+- Treat existing target values as a **draft, not ground truth** — MT output is often literal, picks the wrong sense of ambiguous words, or breaks placeholders. Verify against the source rather than trusting the German.
+- Strip MT tool artifacts and machine-translation marker comments (e.g. `translategemma`, `# auto-translated`) from the output.
+- MT frequently mixes register (du/Sie) within one file — a full register pass is usually warranted here even if individual strings look fine.
+
 ### Change Table (mandatory for all workflows)
 
 Every workflow that modifies strings must append a change table. No exceptions.
@@ -270,19 +313,30 @@ When processing multiple files:
 
 ## QA
 
-Run the QA script at `scripts/qa_check.py` or perform equivalent checks programmatically before outputting the final result. The checks cover:
+Run the QA script at `scripts/qa_check.py` before outputting the final result. It loads and compares source/target for these formats: `json`, WebExtension `messages`, `ftl`, `properties`, iOS/macOS `strings`, `xcstrings`, Android `androidxml`, and `po`. Format auto-detects from the target extension; override with `--format`. For other formats (XLIFF, YAML, ARB, TOML) perform the equivalent checks programmatically.
 
-- Placeholder parity (all placeholders from source present in target)
+```
+python scripts/qa_check.py <source> <target> [--format FMT] [--register du|sie|none]
+```
+
+The checks cover:
+
+- Placeholder parity (all placeholders from source present in target, incl. `%0`/`%1` positional and `$NUMBER` styles)
 - Tag parity (HTML/XML tags preserved)
-- Register consistency (du/Sie scan, including capitalized "Du" edge cases)
+- Register consistency (du/Sie scan, including capitalized "Du" edge cases and informal `du/dein` leaking into Sie-mode)
 - Length ratio for short strings (buttons/labels ≤ 150% of English length, flagged if exceeded)
-- Format syntax validation (JSON parse, XML parse, FTL parse as appropriate)
-- Empty strings, double spaces, trailing whitespace
-- Plural form correctness (two forms for German: one/other)
-- Terminology consistency (same English term → same German term)
-- Key names and structural syntax unchanged
+- Empty strings, double spaces, leading/trailing whitespace
+- Untranslated strings (target identical to source)
+- Key parity (missing or extra keys between source and target)
 
 If any issues are found, fix them before output and note them in the change table. Do not print the full QA checklist unless issues are found.
+
+### Multi-locale & cross-variant QA
+
+The placeholder, tag, key-parity, and whitespace checks are **language-independent**. Even when the translation task is EN→DE only, the same script can validate any target locale — useful for catching broken placeholders (`%0` written as `0%`, dropped `%1$s`, stray backticks) across a whole `_locales/` tree.
+
+- For non-German locales, pass `--register none` to suppress the du/Sie check (which would otherwise produce noise).
+- **en-US → en-GB / en-AU** is a localization task, not a translation. When asked to populate British or Australian English from US English, apply spelling transforms only (see `references/glossary.md` → "English variants"); do not paraphrase. Preserve `Mac`, `MAC`, `Wi-Fi`, and product names.
 
 ## File Writing Safety
 
@@ -294,12 +348,19 @@ When writing output files programmatically:
 
 ## Output Format
 
+Pick the output mode from the surface (see Input Handling):
+
+**Claude Code (real filesystem):** Edit locale files in place. Do not print full file contents to chat. Surface the result as a `git diff` (or staged changes), run `qa_check.py` across the affected files, and append the change table. This is the default whenever you are operating on a working tree.
+
+**Claude.ai (chat sandbox):**
+
 - **Default (small files, <100 strings)**: Display in chat as code block with appropriate language tag (`toml`, `xml`, `json`, `yaml`, `properties`, `po`, `ftl`, etc.)
 - **Large files (≥100 strings)**: Generate a structured diff. Either:
   - A JSON object containing only the changed keys with old and new values
   - A Python patch script that applies `str_replace`-style operations
   - The choice depends on format. JSON locale files → JSON diff. FTL/PO/Properties → patch script.
 - **On request** ("als Datei", "zum Herunterladen"): Create downloadable file
-- **Always**: Append the change table after the output. No exceptions.
+
+**Always (both surfaces)**: Append the change table after the output. No exceptions.
 
 Always use appropriate code fence language: `toml`, `xml`, `json`, `yaml`, `properties`, `po`, `ftl`, etc.

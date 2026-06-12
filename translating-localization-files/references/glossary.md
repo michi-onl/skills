@@ -141,3 +141,29 @@ Watch for adjective agreement in plurals:
 
 - `one {# neuer Tab}` / `other {# neue Tabs}`
 - `one {# offene Datei}` / `other {# offene Dateien}`
+
+## English Variants (en-US → en-GB / en-AU)
+
+Populating British or Australian English from US English is a spelling/lexis transform, not a translation. Apply these substitutions; leave everything else (including the sentence) unchanged. en-GB and en-AU share the same spelling rules here.
+
+| en-US | en-GB / en-AU |
+| ----- | ------------- |
+| color / colorize | colour / colourise |
+| gray | grey |
+| center / centered | centre / centred |
+| utilization | utilisation |
+| synchronize / synchronization | synchronise / synchronisation |
+| customize / customization | customise / customisation |
+| organize | organise |
+| optimize | optimise |
+| analyze | analyse |
+| catalog | catalogue |
+| dialog (UI) | dialogue (prose); keep "dialog" for the UI-widget sense |
+| license (verb/noun) | licence (noun) / license (verb) |
+| favorite | favourite |
+| behavior | behaviour |
+| meter (unit) | metre |
+| liter | litre |
+| -ization | -isation (generally) |
+
+**Do not change:** `Mac`, `MAC`, `Wi-Fi`, product names, code identifiers, or `-ize` words that are spelled the same in OED style (rare — when unsure, prefer `-ise`). Australian English follows British spelling for all the above.

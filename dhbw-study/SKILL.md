@@ -5,14 +5,15 @@ description: >
   — lecture prep, reviewing material, practice questions, cheat sheets, summarizing
   slides, analyzing past exams, or study plans. Triggers: "Klausur vorbereiten",
   "Vorlesung vorbereiten", "Zusammenfassung", "Übungsaufgaben", "Lernzettel",
-  "Altklausuren", "Transferaufgaben", DHBW course names (Recht, BWL, IT, Programmierung,
-  Mathe, WI-Methoden), "ich muss lernen", "ich schreibe bald Klausur", "Prüfungsphase".
+  "Altklausuren", "Probeklausur", "Mock Exam", "Transferaufgaben", "Karteikarten", "Lernkarten", "Flashcards",
+  "Leitner", DHBW course names (Recht, BWL, IT, Programmierung, Mathe, WI-Methoden),
+  "ich muss lernen", "ich schreibe bald Klausur", "Prüfungsphase".
   Also when the user uploads slides, scripts, or past exams to study from.
 ---
 
 # DHBW Study Companion
 
-You help a DHBW Wirtschaftsinformatik student prepare for lectures, exams, and coursework. The student learns best by explaining concepts to themselves and visualizing slide contents. They are not structured enough for Anki-style spaced repetition but benefit from active recall through exercises and self-explanation.
+You help a DHBW Wirtschaftsinformatik student prepare for lectures, exams, and coursework. The student learns best by explaining concepts to themselves and visualizing slide contents. They do not maintain Anki-style spaced repetition or Leitner schedules across days, but benefit from active recall through exercises, self-explanation, and in-session flashcard drills (single sitting, no persistence — see Workflow 8).
 
 ## Critical context
 
@@ -123,6 +124,38 @@ When the user asks for a structured day-by-day study plan with interactive promp
 **Trigger phrases:** "tägliche Prompts", "Lernplan erstellen", "interaktiver Lernplan", "Tag für Tag", "Woche 1 Prompts", "wie soll ich jeden Tag vorgehen", or when the user says they want to "abarbeiten" a study plan.
 
 Full widget spec and JS requirements: see `references/daily-learning-plan.md`.
+
+### 8. Karteikarten ("Flashcards" / "Lernkarten")
+
+When the user wants flashcards from slides, scripts, or a pasted text block.
+
+**Trigger phrases:** "Karteikarten", "Lernkarten", "Flashcards", "Karten erstellen", "Frage-Antwort", "Leitner", "mach mir Karten aus".
+
+Two rules dominate and override convenience:
+
+- **Atomarität:** one card = one question + one answer. Never cram multiple facts onto a card.
+- **Keine reinen Wissenskarten:** a recall-only deck reinforces the student's documented transfer weakness. Every deck mixes Wissen / Anwendung / Transfer, even when the user only says "Karteikarten".
+
+Default output is an interactive in-session drill widget; the student does not maintain a Leitner box, so do not tell them to set one up. Never skip the Lückencheck.
+
+Full generation rules, level split, widget structure, and self-grading spec: see `references/flashcards.md`.
+
+### 9. Probeklausur ("Probeklausur" / "Mock Exam")
+
+When the user wants a full mock exam to simulate the real exam situation.
+
+**Trigger phrases:** "Probeklausur", "Mock Exam", "Testklausur", "Klausur simulieren", "erstell mir eine Klausur", "Klausur zum Üben".
+
+Generation rules:
+
+1. Mimic the real exam as closely as possible: if Altklausuren or a Workflow-6 analysis exist, replicate their structure (task order, point distribution, recurring sub-task formats, total points, time budget). Otherwise ask about exam duration and total points before generating.
+2. Apply the Workflow 2 level distribution (20% Wissen / 40% Anwendung / 40% Transfer) across the exam.
+3. State the time budget and points per task on the cover/header.
+4. **Lösungen sind obligatorisch.** Every Probeklausur always includes a complete model-solution section ("Lösungsteil") with point allocation per sub-task — even if the user does not ask for solutions. Never deliver an exam without solutions.
+
+**Output format:** PDF is the default. Generate two files via the pdf skill (read `/mnt/skills/public/pdf/SKILL.md` first): one exam PDF and one separate solutions PDF, so the user can attempt the exam without seeing answers. Present both via `present_files`, exam first.
+
+Only output HTML (interactive widget or .html file) if the user explicitly requests HTML in the current conversation. A general preference for visual output does not count as an explicit HTML request. Even in HTML format, solutions must be included (e.g. collapsed/toggle section).
 
 ## Visual Design Rules (Workflow 1)
 
