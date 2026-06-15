@@ -113,7 +113,7 @@ def update_block_text(content, block_type, old_text, new_text):
     return content
 
 
-def verify_only_text_changed(old, new, block_type, old_text, new_text):
+def verify_only_text_changed(old, new, block_type, old_text, new_text=None):
     """Confirm that only the targeted block instance changed."""
     old_blocks = find_blocks(old, block_type)
     new_blocks = find_blocks(new, block_type)
@@ -131,7 +131,7 @@ def verify_only_text_changed(old, new, block_type, old_text, new_text):
     if old_blocks[target_index] == new_blocks[target_index]:
         return False
 
-    if new_text not in new_blocks[target_index]:
+    if new_text is not None and new_text not in new_blocks[target_index]:
         return False
 
     sentinel = uuid.uuid4().hex
