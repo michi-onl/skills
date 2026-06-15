@@ -59,22 +59,27 @@ def list_pages():
     if not _check_auth():
         return jsonify({"code": "rest_not_logged_in"}), 401
     fields = request.args.get("_fields")
-    per_page = int(request.args.get("per_page", 10))
-    page = int(request.args.get("page", 1))
+    try:
+        per_page = int(request.args.get("per_page", 10))
+        page = int(request.args.get("page", 1))
+        if per_page <= 0 or page <= 0:
+            raise ValueError
+    except (ValueError, TypeError):
+        return jsonify({"code": "rest_invalid_param"}), 400
     items = list(PAGES.values())
     start = (page - 1) * per_page
     out = [_fields_filter(i, fields) for i in items[start:start + per_page]]
     return jsonify(out)
 
 
-@app.route("/wp-json/wp/v2/pages/<int:pid>", methods=["GET", "POST"])
+@app.route("/wp-json/wp/v2/pages/<int:pid>", methods=["GET", "POST", "PUT", "PATCH"])
 def single_page(pid):
     _log_request()
     if not _check_auth():
         return jsonify({"code": "rest_not_logged_in"}), 401
     if pid not in PAGES:
         return jsonify({"code": "rest_post_invalid_id"}), 404
-    if request.method == "POST":
+    if request.method in ("POST", "PUT", "PATCH"):
         payload = request.get_json(force=True, silent=True) or {}
         if "content" in payload:
             PAGES[pid]["content"]["raw"] = payload["content"]
