@@ -33,7 +33,7 @@ Edit WordPress sites running the default block editor through `https://<site>/wp
 | Save | `POST /wp-json/wp/v2/{endpoint}/{id}` with `{"content": ..., "status": ...}` |
 | Backup | `scripts/wp_block_api.py backup(endpoint, pid)` writes to `/tmp/wp_backup/` |
 | Update text | `scripts/wp_block_api.py update_block_text(content, block_type, old_text, new_text)` |
-| Verify scope | `scripts/wp_block_api.py verify_only_text_changed(old, new, block_type, old_text)` |
+| Verify scope | `scripts/wp_block_api.py verify_only_text_changed(old, new, block_type, old_text, new_text)` |
 | Rollback | `python3 scripts/rollback.py <id> [--endpoint pages]` |
 
 ## Authentication
@@ -79,7 +79,7 @@ new_content = wp.update_block_text(
 )
 
 # 3. Verify scope
-if not wp.verify_only_text_changed(old_content, new_content, "paragraph", "old text"):
+if not wp.verify_only_text_changed(old_content, new_content, "paragraph", "old text", "new text"):
     raise RuntimeError("Scope check failed")
 
 # 4. Save

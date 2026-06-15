@@ -106,3 +106,38 @@ def test_save_content_does_not_publish_draft(mock_server):
     api.save_content("pages", 2, updated, data["status"])
     after = api.fetch_raw("pages", 2)
     assert after["status"] == "draft"
+
+
+def test_update_block_text_refuses_non_leaf_block():
+    raw = (
+        '<!-- wp:buttons -->\n<div class="wp-block-buttons"><!-- wp:button -->\n'
+        '<a class="wp-block-button__link">Click me</a>\n'
+        '<!-- /wp:button --></div>\n<!-- /wp:buttons -->'
+    )
+    with pytest.raises(ValueError):
+        api.update_block_text(raw, "buttons", "Click me", "Press me")
+
+
+def test_rollback_restores_content_and_status(mock_server):
+    import scripts.rollback as rb
+
+    original = api.backup("pages", 2)
+    orig_raw = original["content"]["raw"]
+    orig_status = original["status"]
+
+    # Mutate both content and status away from the original.
+    api.save_content(
+        "pages",
+        2,
+        "<!-- wp:paragraph -->\n<p>Temp mutation</p>\n<!-- /wp:paragraph -->",
+        "publish",
+    )
+    mutated = api.fetch_raw("pages", 2)
+    assert "Temp mutation" in mutated["content"]["raw"]
+
+    # Roll back from /tmp/wp_backup/.
+    rb.rollback(2, "pages")
+    restored = api.fetch_raw("pages", 2)
+    assert restored["content"]["raw"] == orig_raw
+    assert restored["status"] == orig_status
+    assert "Temp mutation" not in restored["content"]["raw"]

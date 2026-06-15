@@ -27,7 +27,7 @@ def rollback(page_id, endpoint="pages"):
         sys.exit(1)
 
     with open(content_path, encoding="utf-8") as f:
-        content = f.read()
+        content = f.read().rstrip("\n")
 
     status = "publish"
     if os.path.exists(status_path):
