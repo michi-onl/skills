@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+"""
+WordPress default block editor REST API helpers.
+Reads credentials from environment: WP_USER, WP_APP_PASS, WP_SITE.
+"""
+import base64
+import json
+import os
+import re
+import time
+import urllib.parse
+import urllib.request
+
+
+def _site():
+    return os.environ["WP_SITE"].rstrip("/")
+
+
+def _headers(for_write=False):
+    auth = base64.b64encode(
+        f"{os.environ['WP_USER']}:{os.environ['WP_APP_PASS']}".encode()
+    ).decode()
+    headers = {"Authorization": f"Basic {auth}"}
+    if for_write:
+        headers["Content-Type"] = "application/json"
+    return headers
+
+
+def _request(method, path, data=None, retries=3):
+    url = f"{_site()}/wp-json/wp/v2/{path}"
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(
+                url,
+                data=data,
+                headers=_headers(for_write=data is not None),
+                method=method,
+            )
+            with urllib.request.urlopen(req, timeout=30) as response:
+                return json.loads(response.read())
+        except urllib.error.HTTPError as exc:
+            if exc.code in (429, 500, 502, 503, 504) and attempt < retries - 1:
+                time.sleep(2 ** attempt)
+                continue
+            raise
+
+
+def fetch_raw(endpoint, pid):
+    """Fetch raw block markup and status for a page/post."""
+    return _request(
+        "GET",
+        f"{endpoint}/{pid}?context=edit&_fields=id,title,content,status",
+    )
+
+
+def save_content(endpoint, pid, new_content, status):
+    """Write content back while preserving the original status."""
+    payload = json.dumps({"content": new_content, "status": status}).encode()
+    return _request("POST", f"{endpoint}/{pid}", data=payload)
+
+
+def backup(endpoint, pid):
+    """Fetch and backup content + status to /tmp/wp_backup/."""
+    data = fetch_raw(endpoint, pid)
+    os.makedirs("/tmp/wp_backup", exist_ok=True)
+    with open(f"/tmp/wp_backup/{pid}_original.txt", "w", encoding="utf-8") as f:
+        f.write(data["content"]["raw"])
+    with open(f"/tmp/wp_backup/{pid}_status.txt", "w", encoding="utf-8") as f:
+        f.write(data["status"])
+    return data
+
+
+def list_content(endpoint, search=None):
+    """Paginate through all items on an endpoint."""
+    results = []
+    page = 1
+    while True:
+        query = f"{endpoint}?per_page=100&page={page}&_fields=id,title,status,content"
+        if search:
+            query += f"&search={urllib.parse.quote(search)}"
+        chunk = _request("GET", query)
+        if not chunk:
+            break
+        results.extend(chunk)
+        if len(chunk) < 100:
+            break
+        page += 1
+    return results
+
+
+def _block_re(block_type):
+    return re.compile(
+        r"<!-- wp:" + re.escape(block_type) + r'(\s[^>]*)? -->(.*?)<!-- /wp:' + re.escape(block_type) + r" -->",
+        re.DOTALL,
+    )
+
+
+def find_blocks(content, block_type):
+    """Return all serialized block strings of the given type."""
+    return [m.group(0) for m in _block_re(block_type).finditer(content)]
+
+
+def update_block_text(content, block_type, old_text, new_text):
+    """Replace old_text with new_text inside the first matching leaf block."""
+    def replacer(match):
+        block = match.group(0)
+        inner = match.group(2)
+        if old_text in inner:
+            return block.replace(old_text, new_text, 1)
+        return block
+    return _block_re(block_type).sub(replacer, content)
+
+
+def verify_only_text_changed(old, new, block_type, old_text):
+    """Confirm that only the targeted block instance changed."""
+    def replacer(match):
+        return "CHANGED_BLOCK" if old_text in match.group(0) else match.group(0)
+    return _block_re(block_type).sub(replacer, old) == _block_re(block_type).sub(replacer, new)
