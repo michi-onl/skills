@@ -18,11 +18,12 @@ PASS = os.environ.get("WP_APP_PASS", "pass")
 LOG_FILE = "/tmp/wp_mock_server.log"
 DATA_FILE = Path(__file__).with_name("mock_data") / "pages.json"
 
-logging.basicConfig(
-    filename=LOG_FILE,
-    level=logging.INFO,
-    format="%(asctime)s %(method)s %(path)s",
-)
+logger = logging.getLogger("mock_wp_server")
+logger.setLevel(logging.INFO)
+_file_handler = logging.FileHandler(LOG_FILE)
+_file_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+logger.addHandler(_file_handler)
+logger.propagate = False
 
 with DATA_FILE.open(encoding="utf-8") as f:
     PAGES = {p["id"]: p for p in json.load(f)["pages"]}
@@ -47,10 +48,7 @@ def _fields_filter(data, fields):
 
 
 def _log_request():
-    logging.info("%s %s", request.method, request.path, extra={
-        "method": request.method,
-        "path": request.full_path,
-    })
+    logger.info("%s %s", request.method, request.full_path)
 
 
 @app.route("/wp-json/wp/v2/pages", methods=["GET"])
