@@ -38,19 +38,7 @@ Edit WordPress sites running the default block editor through `https://<site>/wp
 
 ## Authentication
 
-**Check memory and `references/auth.md` first.** For new sites, ask for:
-
-- Site URL (e.g. `https://dev.example.com`)
-- WordPress username
-- Application Password
-
-If the user only has a regular password, guide them:
-
-> Go to `wp-admin → Users → Profile`, scroll to "Application Passwords", enter a name (e.g. `claude-api`), click "Add New". Paste the generated password here.
-
-Sites using Google SSO block normal password login to the REST API. Application Passwords bypass this.
-
-Export credentials for the session:
+**Check memory and `references/auth.md` first.** For a new site, ask for the site URL, WordPress username, and an Application Password (see `references/auth.md` to create one). Google SSO blocks normal-password REST login; Application Passwords bypass it. Then export and verify:
 
 ```bash
 export WP_USER="username"
@@ -110,6 +98,17 @@ No exceptions. Mandatory for every write.
 4. **Verify scope** — confirm only the targeted block changed.
 5. **Write page by page** — don't batch all pages into a single request.
 
+## Red Flags — STOP
+
+These thoughts mean stop and follow the safety rules (restore from backup if you already wrote):
+
+- "This change is too small to need a backup"
+- "I'll verify scope after saving"
+- "Omitting `status` won't change anything"
+- "A global find/replace is faster"
+
+An unskilled baseline run skipped the backup and POSTed without `status` — leaving a write it could not undo. Don't repeat it.
+
 ## Rollback
 
 If something goes wrong, restore from the backup:
@@ -122,8 +121,6 @@ python3 scripts/rollback.py 1
 
 | Mistake | Why It Happens | Fix |
 |---------|----------------|-----|
-| Draft accidentally published | POST without `status` | Always echo fetched status |
-| Backup useless | Saved only content, not status | `backup()` writes both files |
 | Corrupted nested blocks | Regex greedily matched across group/column boundaries | Only edit leaf blocks; ask for nested changes |
 | Auth returns 401 | SSO plugin blocks normal passwords | Create an Application Password |
 | Changes not visible | Browser/CDN cache | Hard-refresh or clear cache |
