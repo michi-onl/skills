@@ -113,6 +113,31 @@ def update_block_text(content, block_type, old_text, new_text):
 
 def verify_only_text_changed(old, new, block_type, old_text):
     """Confirm that only the targeted block instance changed."""
-    def replacer(match):
-        return "CHANGED_BLOCK" if old_text in match.group(0) else match.group(0)
-    return _block_re(block_type).sub(replacer, old) == _block_re(block_type).sub(replacer, new)
+    old_blocks = find_blocks(old, block_type)
+    new_blocks = find_blocks(new, block_type)
+    if len(old_blocks) != len(new_blocks):
+        return False
+
+    target_index = None
+    for i, block in enumerate(old_blocks):
+        if old_text in block:
+            target_index = i
+            break
+    if target_index is None:
+        return False
+
+    sentinel = "CHANGED_BLOCK"
+
+    def _replace_at_index(content, index):
+        seen = [0]
+
+        def replacer(match):
+            if seen[0] == index:
+                seen[0] += 1
+                return sentinel
+            seen[0] += 1
+            return match.group(0)
+
+        return _block_re(block_type).sub(replacer, content)
+
+    return _replace_at_index(old, target_index) == _replace_at_index(new, target_index)
