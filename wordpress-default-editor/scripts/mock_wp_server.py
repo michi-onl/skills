@@ -49,7 +49,17 @@ def _fields_filter(data, fields):
 
 
 def _log_request():
-    logger.info("%s %s", request.method, request.full_path)
+    auth = request.headers.get("Authorization", "")
+    body = ""
+    if request.method in ("POST", "PUT", "PATCH"):
+        body = request.get_data(as_text=True) or ""
+    logger.info(
+        "%s %s | Authorization: %s | body: %s",
+        request.method,
+        request.full_path,
+        auth,
+        body,
+    )
 
 
 @app.route("/wp-json/wp/v2/pages", methods=["GET"])
