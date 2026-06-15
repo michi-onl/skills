@@ -8,6 +8,7 @@ import json
 import os
 import re
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
@@ -65,9 +66,9 @@ def backup(endpoint, pid):
     data = fetch_raw(endpoint, pid)
     os.makedirs("/tmp/wp_backup", exist_ok=True)
     with open(f"/tmp/wp_backup/{pid}_original.txt", "w", encoding="utf-8") as f:
-        f.write(data["content"]["raw"])
+        f.write(data["content"]["raw"] + "\n")
     with open(f"/tmp/wp_backup/{pid}_status.txt", "w", encoding="utf-8") as f:
-        f.write(data["status"])
+        f.write(data["status"] + "\n")
     return data
 
 
@@ -96,6 +97,11 @@ def _block_re(block_type):
     )
 
 
+def _is_leaf_block(inner):
+    """Return True when inner HTML contains no nested block comments."""
+    return "<!-- wp:" not in inner
+
+
 def find_blocks(content, block_type):
     """Return all serialized block strings of the given type."""
     return [m.group(0) for m in _block_re(block_type).finditer(content)]
@@ -108,24 +114,38 @@ def update_block_text(content, block_type, old_text, new_text):
     for match in _block_re(block_type).finditer(content):
         inner = match.group(2)
         if old_text in inner:
+            if not _is_leaf_block(inner):
+                raise ValueError(f"refusing to edit non-leaf {block_type} block")
             new_inner = inner.replace(old_text, new_text, 1)
             return content[: match.start(2)] + new_inner + content[match.end(2) :]
-    return content
+    raise ValueError(f"old_text not found in any {block_type} block")
 
 
 def verify_only_text_changed(old, new, block_type, old_text, new_text=None):
-    """Confirm that only the targeted block instance changed."""
+    """Confirm that only the targeted block instance changed.
+
+    Optionally checks that new_text appears in the updated block, and rejects
+    changes that only mutate the block's opening-comment attributes.
+    """
+    if not old_text:
+        raise ValueError("old_text must not be empty")
     old_blocks = find_blocks(old, block_type)
     new_blocks = find_blocks(new, block_type)
     if len(old_blocks) != len(new_blocks):
         return False
 
     target_index = None
-    for i, match in enumerate(_block_re(block_type).finditer(old)):
-        if old_text in match.group(2):
+    for i, block in enumerate(old_blocks):
+        inner = _block_re(block_type).search(block).group(2)
+        if old_text in inner:
             target_index = i
             break
     if target_index is None:
+        return False
+
+    old_attrs = _block_re(block_type).search(old_blocks[target_index]).group(1)
+    new_attrs = _block_re(block_type).search(new_blocks[target_index]).group(1)
+    if old_attrs != new_attrs:
         return False
 
     if old_blocks[target_index] == new_blocks[target_index]:
