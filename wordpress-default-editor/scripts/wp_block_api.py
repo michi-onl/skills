@@ -10,6 +10,7 @@ import re
 import time
 import urllib.parse
 import urllib.request
+import uuid
 
 
 def _site():
@@ -75,7 +76,7 @@ def list_content(endpoint, search=None):
     results = []
     page = 1
     while True:
-        query = f"{endpoint}?per_page=100&page={page}&_fields=id,title,status,content"
+        query = f"{endpoint}?per_page=100&page={page}&context=edit&_fields=id,title,status,content"
         if search:
             query += f"&search={urllib.parse.quote(search)}"
         chunk = _request("GET", query)
@@ -103,11 +104,10 @@ def find_blocks(content, block_type):
 def update_block_text(content, block_type, old_text, new_text):
     """Replace old_text with new_text inside the first matching leaf block."""
     for match in _block_re(block_type).finditer(content):
-        block = match.group(0)
         inner = match.group(2)
         if old_text in inner:
-            new_block = block.replace(old_text, new_text, 1)
-            return content[: match.start()] + new_block + content[match.end() :]
+            new_inner = inner.replace(old_text, new_text, 1)
+            return content[: match.start(2)] + new_inner + content[match.end(2) :]
     return content
 
 
@@ -126,7 +126,7 @@ def verify_only_text_changed(old, new, block_type, old_text):
     if target_index is None:
         return False
 
-    sentinel = "CHANGED_BLOCK"
+    sentinel = uuid.uuid4().hex
 
     def _replace_at_index(content, index):
         seen = [0]
