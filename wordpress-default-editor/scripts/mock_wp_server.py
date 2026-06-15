@@ -6,10 +6,11 @@ Run: WP_USER=test WP_APP_PASS=pass python3 scripts/mock_wp_server.py
 import base64
 import json
 import logging
+import math
 import os
 from pathlib import Path
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, make_response, request
 
 app = Flask(__name__)
 
@@ -65,9 +66,14 @@ def list_pages():
     except (ValueError, TypeError):
         return jsonify({"code": "rest_invalid_param"}), 400
     items = list(PAGES.values())
+    total = len(items)
+    total_pages = math.ceil(total / per_page)
     start = (page - 1) * per_page
     out = [_fields_filter(i, fields) for i in items[start:start + per_page]]
-    return jsonify(out)
+    resp = make_response(jsonify(out))
+    resp.headers["X-WP-Total"] = str(total)
+    resp.headers["X-WP-TotalPages"] = str(total_pages)
+    return resp
 
 
 @app.route("/wp-json/wp/v2/pages/<int:pid>", methods=["GET", "POST", "PUT", "PATCH"])
@@ -80,8 +86,11 @@ def single_page(pid):
     if request.method in ("POST", "PUT", "PATCH"):
         payload = request.get_json(force=True, silent=True) or {}
         if "content" in payload:
-            PAGES[pid]["content"]["raw"] = payload["content"]
-            PAGES[pid]["content"]["rendered"] = payload["content"]
+            content = payload["content"]
+            if isinstance(content, dict):
+                content = content.get("raw", "")
+            PAGES[pid]["content"]["raw"] = content
+            PAGES[pid]["content"]["rendered"] = content
         if "status" in payload:
             PAGES[pid]["status"] = payload["status"]
     fields = request.args.get("_fields")
