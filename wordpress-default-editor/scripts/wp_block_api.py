@@ -102,13 +102,13 @@ def find_blocks(content, block_type):
 
 def update_block_text(content, block_type, old_text, new_text):
     """Replace old_text with new_text inside the first matching leaf block."""
-    def replacer(match):
+    for match in _block_re(block_type).finditer(content):
         block = match.group(0)
         inner = match.group(2)
         if old_text in inner:
-            return block.replace(old_text, new_text, 1)
-        return block
-    return _block_re(block_type).sub(replacer, content)
+            new_block = block.replace(old_text, new_text, 1)
+            return content[: match.start()] + new_block + content[match.end() :]
+    return content
 
 
 def verify_only_text_changed(old, new, block_type, old_text):
