@@ -103,6 +103,8 @@ def find_blocks(content, block_type):
 
 def update_block_text(content, block_type, old_text, new_text):
     """Replace old_text with new_text inside the first matching leaf block."""
+    if old_text == "":
+        raise ValueError("old_text must not be empty")
     for match in _block_re(block_type).finditer(content):
         inner = match.group(2)
         if old_text in inner:
@@ -111,7 +113,7 @@ def update_block_text(content, block_type, old_text, new_text):
     return content
 
 
-def verify_only_text_changed(old, new, block_type, old_text):
+def verify_only_text_changed(old, new, block_type, old_text, new_text):
     """Confirm that only the targeted block instance changed."""
     old_blocks = find_blocks(old, block_type)
     new_blocks = find_blocks(new, block_type)
@@ -127,6 +129,9 @@ def verify_only_text_changed(old, new, block_type, old_text):
         return False
 
     if old_blocks[target_index] == new_blocks[target_index]:
+        return False
+
+    if new_text not in new_blocks[target_index]:
         return False
 
     sentinel = uuid.uuid4().hex
