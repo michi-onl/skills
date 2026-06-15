@@ -119,11 +119,14 @@ def verify_only_text_changed(old, new, block_type, old_text):
         return False
 
     target_index = None
-    for i, block in enumerate(old_blocks):
-        if old_text in block:
+    for i, match in enumerate(_block_re(block_type).finditer(old)):
+        if old_text in match.group(2):
             target_index = i
             break
     if target_index is None:
+        return False
+
+    if old_blocks[target_index] == new_blocks[target_index]:
         return False
 
     sentinel = uuid.uuid4().hex
