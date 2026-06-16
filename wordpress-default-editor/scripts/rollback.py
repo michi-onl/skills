@@ -12,22 +12,27 @@ import sys
 import urllib.error
 import urllib.request
 
+try:  # run as a script: scripts/ is on sys.path
+    from wp_block_api import backup_dir
+except ModuleNotFoundError:  # imported as scripts.rollback (tests)
+    from scripts.wp_block_api import backup_dir
+
 
 def rollback(page_id, endpoint="pages"):
     user = os.environ["WP_USER"]
     pw = os.environ["WP_APP_PASS"]
     site = os.environ["WP_SITE"].rstrip("/")
 
-    backup_dir = "/tmp/wp_backup"
-    content_path = os.path.join(backup_dir, f"{page_id}_original.txt")
-    status_path = os.path.join(backup_dir, f"{page_id}_status.txt")
+    out_dir = backup_dir()
+    content_path = os.path.join(out_dir, f"{page_id}_original.txt")
+    status_path = os.path.join(out_dir, f"{page_id}_status.txt")
 
     if not os.path.exists(content_path):
         print(f"No backup found for {endpoint}/{page_id}", file=sys.stderr)
         sys.exit(1)
 
     with open(content_path, encoding="utf-8") as f:
-        content = f.read().rstrip("\n")
+        content = f.read()
 
     status = "publish"
     if os.path.exists(status_path):

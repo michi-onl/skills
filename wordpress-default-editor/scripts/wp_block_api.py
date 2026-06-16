@@ -61,14 +61,25 @@ def save_content(endpoint, pid, new_content, status):
     return _request("POST", f"{endpoint}/{pid}", data=payload)
 
 
+def backup_dir():
+    """Per-site backup directory so equal page ids on different sites don't collide.
+
+    Keys on the full site URL (scheme, host, and path), so subdirectory multisite
+    installs on one host and http/https variants each get a distinct directory.
+    """
+    slug = re.sub(r"[^A-Za-z0-9._-]", "_", _site()) or "default"
+    return os.path.join("/tmp/wp_backup", slug)
+
+
 def backup(endpoint, pid):
-    """Fetch and backup content + status to /tmp/wp_backup/."""
+    """Fetch and back up content + status under backup_dir(), byte-for-byte."""
     data = fetch_raw(endpoint, pid)
-    os.makedirs("/tmp/wp_backup", exist_ok=True)
-    with open(f"/tmp/wp_backup/{pid}_original.txt", "w", encoding="utf-8") as f:
-        f.write(data["content"]["raw"] + "\n")
-    with open(f"/tmp/wp_backup/{pid}_status.txt", "w", encoding="utf-8") as f:
-        f.write(data["status"] + "\n")
+    out_dir = backup_dir()
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, f"{pid}_original.txt"), "w", encoding="utf-8") as f:
+        f.write(data["content"]["raw"])
+    with open(os.path.join(out_dir, f"{pid}_status.txt"), "w", encoding="utf-8") as f:
+        f.write(data["status"])
     return data
 
 
@@ -108,17 +119,29 @@ def find_blocks(content, block_type):
 
 
 def update_block_text(content, block_type, old_text, new_text):
-    """Replace old_text with new_text inside the first matching leaf block."""
+    """Replace old_text with new_text inside the single matching leaf block.
+
+    Refuses to act when old_text matches more than one block of the type, so an
+    ambiguous target can never silently edit the wrong block.
+    """
     if old_text == "":
         raise ValueError("old_text must not be empty")
-    for match in _block_re(block_type).finditer(content):
-        inner = match.group(2)
-        if old_text in inner:
-            if not _is_leaf_block(inner):
-                raise ValueError(f"refusing to edit non-leaf {block_type} block")
-            new_inner = inner.replace(old_text, new_text, 1)
-            return content[: match.start(2)] + new_inner + content[match.end(2) :]
-    raise ValueError(f"old_text not found in any {block_type} block")
+    matches = [
+        m for m in _block_re(block_type).finditer(content) if old_text in m.group(2)
+    ]
+    if not matches:
+        raise ValueError(f"old_text not found in any {block_type} block")
+    if len(matches) > 1:
+        raise ValueError(
+            f"old_text matches {len(matches)} {block_type} blocks; "
+            "use a more specific old_text to disambiguate"
+        )
+    match = matches[0]
+    inner = match.group(2)
+    if not _is_leaf_block(inner):
+        raise ValueError(f"refusing to edit non-leaf {block_type} block")
+    new_inner = inner.replace(old_text, new_text, 1)
+    return content[: match.start(2)] + new_inner + content[match.end(2) :]
 
 
 def verify_only_text_changed(old, new, block_type, old_text, new_text=None):

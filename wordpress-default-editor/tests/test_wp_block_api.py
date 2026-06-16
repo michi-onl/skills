@@ -43,6 +43,22 @@ def mock_server():
     proc.wait()
 
 
+@pytest.fixture(autouse=True)
+def restore_pages(request):
+    """Snapshot mock page state and restore it after each server-backed test, so
+    a test that mutates a page can't change the outcome of any other, in any order.
+    No-ops for unit tests that don't start the server."""
+    if "mock_server" not in request.fixturenames:
+        yield
+        return
+    snapshot = {
+        p["id"]: (p["content"]["raw"], p["status"]) for p in api.list_content("pages")
+    }
+    yield
+    for pid, (raw, status) in snapshot.items():
+        api.save_content("pages", pid, raw, status)
+
+
 def test_fetch_raw_returns_blocks_and_status(mock_server):
     data = api.fetch_raw("pages", 1)
     assert data["id"] == 1
@@ -52,10 +68,35 @@ def test_fetch_raw_returns_blocks_and_status(mock_server):
 
 def test_backup_writes_content_and_status(mock_server):
     api.backup("pages", 1)
-    with open("/tmp/wp_backup/1_original.txt", encoding="utf-8") as f:
+    site_dir = api.backup_dir()
+    with open(f"{site_dir}/1_original.txt", encoding="utf-8") as f:
         assert "Welcome to our site" in f.read()
-    with open("/tmp/wp_backup/1_status.txt", encoding="utf-8") as f:
+    with open(f"{site_dir}/1_status.txt", encoding="utf-8") as f:
         assert f.read().strip() == "publish"
+
+
+def test_backup_namespaces_by_site(mock_server):
+    """Two sites with the same page id must not share a backup file."""
+    import shutil
+
+    shutil.rmtree("/tmp/wp_backup", ignore_errors=True)
+    api.backup("pages", 1)
+    assert os.path.exists(f"{api.backup_dir()}/1_original.txt")
+    # The flat, site-agnostic path must not be the write target.
+    assert not os.path.exists("/tmp/wp_backup/1_original.txt")
+
+
+def test_backup_dir_distinguishes_same_host_installs(monkeypatch):
+    """Two installs sharing one host (subdir multisite, or http vs https) must
+    not share a backup directory, or the same page id collides across sites."""
+    monkeypatch.setenv("WP_SITE", "https://example.com/blog")
+    blog = api.backup_dir()
+    monkeypatch.setenv("WP_SITE", "https://example.com/shop")
+    shop = api.backup_dir()
+    monkeypatch.setenv("WP_SITE", "http://example.com")
+    insecure = api.backup_dir()
+    assert blog != shop
+    assert blog != insecure
 
 
 def test_update_block_text_changes_only_targeted_block():
@@ -67,6 +108,15 @@ def test_update_block_text_changes_only_targeted_block():
     assert "Hola" in new
     assert "Welcome" in new
     assert "Hello" not in new
+
+
+def test_update_block_text_refuses_ambiguous_match():
+    raw = (
+        '<!-- wp:paragraph -->\n<p>Save now</p>\n<!-- /wp:paragraph -->\n'
+        '<!-- wp:paragraph -->\n<p>Save now</p>\n<!-- /wp:paragraph -->'
+    )
+    with pytest.raises(ValueError, match="2 .*paragraph"):
+        api.update_block_text(raw, "paragraph", "Save now", "Buy now")
 
 
 def test_verify_only_text_changed_passes_and_fails():
@@ -141,3 +191,20 @@ def test_rollback_restores_content_and_status(mock_server):
     assert restored["content"]["raw"] == orig_raw
     assert restored["status"] == orig_status
     assert "Temp mutation" not in restored["content"]["raw"]
+
+
+def test_rollback_preserves_trailing_newline(mock_server):
+    import scripts.rollback as rb
+
+    original = "<!-- wp:paragraph -->\n<p>Keep newline</p>\n<!-- /wp:paragraph -->\n"
+    api.save_content("pages", 1, original, "publish")
+    api.backup("pages", 1)
+    api.save_content(
+        "pages",
+        1,
+        "<!-- wp:paragraph -->\n<p>changed</p>\n<!-- /wp:paragraph -->",
+        "publish",
+    )
+    rb.rollback(1, "pages")
+    restored = api.fetch_raw("pages", 1)
+    assert restored["content"]["raw"] == original

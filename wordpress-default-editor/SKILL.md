@@ -31,7 +31,7 @@ Edit WordPress sites running the default block editor through `https://<site>/wp
 | List pages | `GET /wp-json/wp/v2/pages?per_page=100&_fields=id,title,status` |
 | Fetch raw blocks | `GET /wp-json/wp/v2/{endpoint}/{id}?context=edit&_fields=id,title,content,status` |
 | Save | `POST /wp-json/wp/v2/{endpoint}/{id}` with `{"content": ..., "status": ...}` |
-| Backup | `scripts/wp_block_api.py backup(endpoint, pid)` writes to `/tmp/wp_backup/` |
+| Backup | `scripts/wp_block_api.py backup(endpoint, pid)` writes to `/tmp/wp_backup/<site>/` |
 | Update text | `scripts/wp_block_api.py update_block_text(content, block_type, old_text, new_text)` |
 | Verify scope | `scripts/wp_block_api.py verify_only_text_changed(old, new, block_type, old_text, new_text)` |
 | Rollback | `python3 scripts/rollback.py <id> [--endpoint pages]` |
@@ -86,13 +86,15 @@ if not wp.verify_only_text_changed(old_content, new_content, "paragraph", "old t
 wp.save_content("pages", 1, new_content, status)
 ```
 
-Only edit **leaf blocks** (heading, paragraph, button, image) with this helper. If a change touches nested blocks (columns, groups, query loops), stop and ask the user for confirmation before saving.
+Only edit **leaf blocks** (heading, paragraph, button, image) with this helper. Target a button as `block_type="button"`, not the `buttons` wrapper. If a change touches nested blocks (columns, groups, query loops), stop and ask the user for confirmation before saving.
+
+`update_block_text` refuses (raises) when `old_text` matches more than one block of that type. Pass a longer, unique snippet to disambiguate rather than letting it guess.
 
 ## Safety Rules
 
 No exceptions. Mandatory for every write.
 
-1. **Backup first** — save content + status to `/tmp/wp_backup/` before any modification.
+1. **Backup first** — save content + status to `/tmp/wp_backup/<site>/` before any modification. Backups are namespaced per site, so the same page id on two sites can't collide.
 2. **Preserve status** — echo back the exact `status` value fetched with `?context=edit`.
 3. **Target surgically** — match by block type and the exact old text; never global search/replace across the whole page.
 4. **Verify scope** — confirm only the targeted block changed.
@@ -122,6 +124,7 @@ python3 scripts/rollback.py 1
 | Mistake | Why It Happens | Fix |
 |---------|----------------|-----|
 | Corrupted nested blocks | Regex greedily matched across group/column boundaries | Only edit leaf blocks; ask for nested changes |
+| `old_text matches N blocks` error | Same snippet appears in several blocks | Pass a longer, unique `old_text` |
 | Auth returns 401 | SSO plugin blocks normal passwords | Create an Application Password |
 | Changes not visible | Browser/CDN cache | Hard-refresh or clear cache |
 
