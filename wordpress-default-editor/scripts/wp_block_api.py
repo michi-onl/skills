@@ -28,8 +28,14 @@ def _headers(for_write=False):
     return headers
 
 
+def _rest_base():
+    """REST namespace prefix. Default assumes pretty permalinks; set WP_REST_ROOT
+    to "index.php/wp-json" (or similar) for plain-permalink or route-restricted sites."""
+    return os.environ.get("WP_REST_ROOT", "wp-json").strip("/")
+
+
 def _request(method, path, data=None, retries=3):
-    url = f"{_site()}/wp-json/wp/v2/{path}"
+    url = f"{_site()}/{_rest_base()}/wp/v2/{path}"
     for attempt in range(retries):
         try:
             req = urllib.request.Request(
@@ -71,14 +77,22 @@ def backup_dir():
     return os.path.join("/tmp/wp_backup", slug)
 
 
+def _backup_key(endpoint, pid):
+    """Filename-safe backup key. Prefixing the endpoint disambiguates equal ids
+    across resource types (pages/10 vs posts/10) and sanitizes the slashes in
+    template-part ids like 'theme//slug'."""
+    return re.sub(r"[^A-Za-z0-9._-]", "_", f"{endpoint}__{pid}")
+
+
 def backup(endpoint, pid):
     """Fetch and back up content + status under backup_dir(), byte-for-byte."""
     data = fetch_raw(endpoint, pid)
     out_dir = backup_dir()
     os.makedirs(out_dir, exist_ok=True)
-    with open(os.path.join(out_dir, f"{pid}_original.txt"), "w", encoding="utf-8") as f:
+    key = _backup_key(endpoint, pid)
+    with open(os.path.join(out_dir, f"{key}_original.txt"), "w", encoding="utf-8") as f:
         f.write(data["content"]["raw"])
-    with open(os.path.join(out_dir, f"{pid}_status.txt"), "w", encoding="utf-8") as f:
+    with open(os.path.join(out_dir, f"{key}_status.txt"), "w", encoding="utf-8") as f:
         f.write(data["status"])
     return data
 
@@ -192,3 +206,76 @@ def verify_only_text_changed(old, new, block_type, old_text, new_text=None):
         return _block_re(block_type).sub(replacer, content)
 
     return _replace_at_index(old, target_index) == _replace_at_index(new, target_index)
+
+
+# --- Creating resources (reusable blocks / synced patterns) ---
+
+def create_resource(endpoint, fields):
+    """Create a new resource (e.g. a reusable block / synced pattern on 'blocks').
+
+    Creation has no prior state to back up; make it reversible by checking
+    find_by_slug() before creating and delete_resource() to undo.
+    """
+    return _request("POST", endpoint, data=json.dumps(fields).encode())
+
+
+def find_by_slug(endpoint, slug):
+    """Return the first item on endpoint matching slug, or None."""
+    items = _request("GET", f"{endpoint}?slug={urllib.parse.quote(slug)}&context=edit")
+    return items[0] if items else None
+
+
+def delete_resource(endpoint, pid, force=True):
+    """Delete a resource. Used to undo a create_resource()."""
+    suffix = "?force=true" if force else ""
+    return _request("DELETE", f"{endpoint}/{pid}{suffix}")
+
+
+# --- Structural writes (full template part / page rebuilds) ---
+
+_BLOCK_DELIM = re.compile(
+    r"<!--\s*(?P<close>/)?wp:(?P<type>[a-z][a-z0-9-]*(?:/[a-z][a-z0-9-]*)?)"
+    r"(?P<rest>.*?)(?P<self>/)?\s*-->",
+    re.DOTALL,
+)
+
+
+def assert_balanced_blocks(content):
+    """Raise ValueError if block-comment delimiters are unbalanced or mis-nested.
+
+    Structural writes replace a whole tree, so 'only block N changed' can't be the
+    check; instead confirm the new markup is well-formed before it is saved.
+    """
+    stack = []
+    for m in _BLOCK_DELIM.finditer(content):
+        btype = m.group("type")
+        if m.group("self"):
+            continue
+        if m.group("close"):
+            if not stack or stack[-1] != btype:
+                raise ValueError(f"unbalanced block markup: unexpected closing wp:{btype}")
+            stack.pop()
+        else:
+            stack.append(btype)
+    if stack:
+        unclosed = ", ".join("wp:" + t for t in stack)
+        raise ValueError(f"unbalanced block markup: unclosed {unclosed}")
+    return True
+
+
+def save_structural(endpoint, pid, new_content, status, *, confirm):
+    """Replace a resource's entire block tree (template part, full page rebuild).
+
+    Unlike update_block_text, this does not preserve surrounding blocks, so it is
+    gated: requires an existing backup, explicit confirm=True (human review), and a
+    balanced-markup check. Roll back with rollback.py if the result is wrong.
+    """
+    if not confirm:
+        raise ValueError("structural writes require confirm=True after human review")
+    backup_path = os.path.join(backup_dir(), f"{_backup_key(endpoint, pid)}_original.txt")
+    if not os.path.exists(backup_path):
+        raise RuntimeError(
+            f"no backup at {backup_path}; call backup({endpoint!r}, {pid!r}) first"
+        )
+    assert_balanced_blocks(new_content)
+    return save_content(endpoint, pid, new_content, status)

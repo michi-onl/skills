@@ -13,6 +13,8 @@ from pathlib import Path
 from flask import Flask, jsonify, make_response, request
 
 app = Flask(__name__)
+# Template-part ids contain a literal '//' (theme//slug); don't collapse it.
+app.url_map.merge_slashes = False
 
 USER = os.environ.get("WP_USER", "test")
 PASS = os.environ.get("WP_APP_PASS", "pass")
@@ -28,6 +30,21 @@ logger.propagate = False
 
 with DATA_FILE.open(encoding="utf-8") as f:
     PAGES = {p["id"]: p for p in json.load(f)["pages"]}
+
+TEMPLATE_PARTS = {
+    "twentytwentyfive//header": {
+        "id": "twentytwentyfive//header",
+        "title": {"raw": "Header", "rendered": "Header"},
+        "content": {
+            "raw": "<!-- wp:site-title /-->",
+            "rendered": "<!-- wp:site-title /-->",
+        },
+        "status": "publish",
+    },
+}
+
+BLOCKS = {}
+_next_block_id = [100]
 
 
 def _check_auth():
@@ -105,6 +122,84 @@ def single_page(pid):
             PAGES[pid]["status"] = payload["status"]
     fields = request.args.get("_fields")
     return jsonify(_fields_filter(PAGES[pid], fields))
+
+
+@app.route(
+    "/wp-json/wp/v2/template-parts/<path:tid>",
+    methods=["GET", "POST", "PUT", "PATCH"],
+)
+def single_template_part(tid):
+    _log_request()
+    if not _check_auth():
+        return jsonify({"code": "rest_not_logged_in"}), 401
+    if tid not in TEMPLATE_PARTS:
+        return jsonify({"code": "rest_post_invalid_id"}), 404
+    if request.method in ("POST", "PUT", "PATCH"):
+        payload = request.get_json(force=True, silent=True) or {}
+        if "content" in payload:
+            content = payload["content"]
+            if isinstance(content, dict):
+                content = content.get("raw", "")
+            TEMPLATE_PARTS[tid]["content"]["raw"] = content
+            TEMPLATE_PARTS[tid]["content"]["rendered"] = content
+        if "status" in payload:
+            TEMPLATE_PARTS[tid]["status"] = payload["status"]
+    fields = request.args.get("_fields")
+    return jsonify(_fields_filter(TEMPLATE_PARTS[tid], fields))
+
+
+@app.route("/wp-json/wp/v2/blocks", methods=["GET", "POST"])
+def blocks_collection():
+    _log_request()
+    if not _check_auth():
+        return jsonify({"code": "rest_not_logged_in"}), 401
+    if request.method == "POST":
+        payload = request.get_json(force=True, silent=True) or {}
+        bid = _next_block_id[0]
+        _next_block_id[0] += 1
+        content = payload.get("content", "")
+        if isinstance(content, dict):
+            content = content.get("raw", "")
+        title = payload.get("title", "")
+        BLOCKS[bid] = {
+            "id": bid,
+            "title": {"raw": title, "rendered": title},
+            "slug": payload.get("slug", ""),
+            "content": {"raw": content, "rendered": content},
+            "status": payload.get("status", "publish"),
+            "meta": payload.get("meta", {}),
+        }
+        return jsonify(BLOCKS[bid]), 201
+    slug = request.args.get("slug")
+    fields = request.args.get("_fields")
+    items = [b for b in BLOCKS.values() if slug is None or b["slug"] == slug]
+    return jsonify([_fields_filter(i, fields) for i in items])
+
+
+@app.route(
+    "/wp-json/wp/v2/blocks/<int:bid>",
+    methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+)
+def single_block(bid):
+    _log_request()
+    if not _check_auth():
+        return jsonify({"code": "rest_not_logged_in"}), 401
+    if bid not in BLOCKS:
+        return jsonify({"code": "rest_post_invalid_id"}), 404
+    if request.method == "DELETE":
+        return jsonify({"deleted": True, "previous": BLOCKS.pop(bid)})
+    if request.method in ("POST", "PUT", "PATCH"):
+        payload = request.get_json(force=True, silent=True) or {}
+        if "content" in payload:
+            content = payload["content"]
+            if isinstance(content, dict):
+                content = content.get("raw", "")
+            BLOCKS[bid]["content"]["raw"] = content
+            BLOCKS[bid]["content"]["rendered"] = content
+        if "status" in payload:
+            BLOCKS[bid]["status"] = payload["status"]
+    fields = request.args.get("_fields")
+    return jsonify(_fields_filter(BLOCKS[bid], fields))
 
 
 if __name__ == "__main__":

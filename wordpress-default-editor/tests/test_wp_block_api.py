@@ -69,9 +69,9 @@ def test_fetch_raw_returns_blocks_and_status(mock_server):
 def test_backup_writes_content_and_status(mock_server):
     api.backup("pages", 1)
     site_dir = api.backup_dir()
-    with open(f"{site_dir}/1_original.txt", encoding="utf-8") as f:
+    with open(f"{site_dir}/pages__1_original.txt", encoding="utf-8") as f:
         assert "Welcome to our site" in f.read()
-    with open(f"{site_dir}/1_status.txt", encoding="utf-8") as f:
+    with open(f"{site_dir}/pages__1_status.txt", encoding="utf-8") as f:
         assert f.read().strip() == "publish"
 
 
@@ -81,9 +81,23 @@ def test_backup_namespaces_by_site(mock_server):
 
     shutil.rmtree("/tmp/wp_backup", ignore_errors=True)
     api.backup("pages", 1)
-    assert os.path.exists(f"{api.backup_dir()}/1_original.txt")
+    assert os.path.exists(f"{api.backup_dir()}/pages__1_original.txt")
     # The flat, site-agnostic path must not be the write target.
-    assert not os.path.exists("/tmp/wp_backup/1_original.txt")
+    assert not os.path.exists("/tmp/wp_backup/pages__1_original.txt")
+
+
+def test_backup_key_is_slash_safe_and_endpoint_scoped():
+    key = api._backup_key("template-parts", "twentytwentyfive//header")
+    assert "/" not in key
+    assert key.startswith("template-parts__")
+    assert api._backup_key("pages", 10) != api._backup_key("posts", 10)
+
+
+def test_rest_base_honors_override(monkeypatch):
+    monkeypatch.delenv("WP_REST_ROOT", raising=False)
+    assert api._rest_base() == "wp-json"
+    monkeypatch.setenv("WP_REST_ROOT", "/index.php/wp-json/")
+    assert api._rest_base() == "index.php/wp-json"
 
 
 def test_backup_dir_distinguishes_same_host_installs(monkeypatch):
@@ -208,3 +222,95 @@ def test_rollback_preserves_trailing_newline(mock_server):
     rb.rollback(1, "pages")
     restored = api.fetch_raw("pages", 1)
     assert restored["content"]["raw"] == original
+
+
+def test_assert_balanced_blocks_accepts_nested_and_self_closing():
+    content = (
+        '<!-- wp:group {"layout":{"type":"flex"}} -->\n'
+        '<div class="wp-block-group">\n'
+        '<!-- wp:site-title /-->\n'
+        '<!-- wp:paragraph -->\n<p>hi</p>\n<!-- /wp:paragraph -->\n'
+        '</div>\n<!-- /wp:group -->'
+    )
+    assert api.assert_balanced_blocks(content)
+
+
+def test_assert_balanced_blocks_rejects_unclosed():
+    with pytest.raises(ValueError, match="unclosed"):
+        api.assert_balanced_blocks("<!-- wp:group -->\n<div></div>")
+
+
+def test_assert_balanced_blocks_rejects_mismatch():
+    content = (
+        "<!-- wp:group -->\n<!-- wp:paragraph -->\n<p>x</p>\n"
+        "<!-- /wp:group -->\n<!-- /wp:paragraph -->"
+    )
+    with pytest.raises(ValueError):
+        api.assert_balanced_blocks(content)
+
+
+def test_template_part_round_trip(mock_server):
+    tp = "twentytwentyfive//header"
+    api.backup("template-parts", tp)
+    site_dir = api.backup_dir()
+    assert os.path.exists(
+        os.path.join(site_dir, f"{api._backup_key('template-parts', tp)}_original.txt")
+    )
+    new = (
+        '<!-- wp:group -->\n<div class="wp-block-group">\n'
+        "<!-- wp:site-title /-->\n</div>\n<!-- /wp:group -->"
+    )
+    api.save_structural("template-parts", tp, new, "publish", confirm=True)
+    after = api.fetch_raw("template-parts", tp)
+    assert after["content"]["raw"] == new
+
+
+def test_save_structural_requires_confirm(mock_server):
+    api.backup("pages", 1)
+    leaf = "<!-- wp:paragraph -->\n<p>x</p>\n<!-- /wp:paragraph -->"
+    with pytest.raises(ValueError, match="confirm"):
+        api.save_structural("pages", 1, leaf, "publish", confirm=False)
+
+
+def test_save_structural_requires_backup(mock_server):
+    import shutil
+
+    shutil.rmtree(api.backup_dir(), ignore_errors=True)
+    leaf = "<!-- wp:paragraph -->\n<p>x</p>\n<!-- /wp:paragraph -->"
+    with pytest.raises(RuntimeError, match="no backup"):
+        api.save_structural("pages", 1, leaf, "publish", confirm=True)
+
+
+def test_create_find_and_delete_resource(mock_server):
+    created = api.create_resource(
+        "blocks",
+        {
+            "title": "Stuv Hero",
+            "slug": "stuv-hero",
+            "content": "<!-- wp:paragraph -->\n<p>hero</p>\n<!-- /wp:paragraph -->",
+            "status": "publish",
+        },
+    )
+    bid = created["id"]
+    found = api.find_by_slug("blocks", "stuv-hero")
+    assert found is not None and found["id"] == bid
+    api.delete_resource("blocks", bid)
+    assert api.find_by_slug("blocks", "stuv-hero") is None
+
+
+def test_rollback_template_part(mock_server):
+    import scripts.rollback as rb
+
+    tp = "twentytwentyfive//header"
+    original = api.backup("template-parts", tp)
+    orig_raw = original["content"]["raw"]
+    api.save_structural(
+        "template-parts",
+        tp,
+        "<!-- wp:paragraph -->\n<p>temp</p>\n<!-- /wp:paragraph -->",
+        "publish",
+        confirm=True,
+    )
+    rb.rollback(tp, "template-parts")
+    restored = api.fetch_raw("template-parts", tp)
+    assert restored["content"]["raw"] == orig_raw
