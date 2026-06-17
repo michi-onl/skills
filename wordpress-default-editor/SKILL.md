@@ -1,6 +1,6 @@
 ---
 name: wordpress-default-editor
-description: Use when editing WordPress sites that use the default block editor (Gutenberg) via the REST API. Symptoms include updating headings, paragraphs, buttons, or images; fixing placeholder text; auditing content; or bulk text changes. Requires a WordPress Application Password.
+description: Use when editing WordPress sites that use the default block editor (Gutenberg) via the REST API. Symptoms include updating headings, paragraphs, buttons, or images; fixing placeholder text; auditing content; bulk text changes; or full page/template-part rebuilds where sections render too narrow or backgrounds aren't full-width. Requires a WordPress Application Password.
 ---
 
 # WordPress Default Editor
@@ -37,6 +37,7 @@ Edit WordPress sites running the default block editor through `https://<site>/wp
 | Structural write | `scripts/wp_block_api.py save_structural(endpoint, id, content, status, confirm=True)` (full tree; backup + balanced-markup gated) |
 | Create resource | `scripts/wp_block_api.py create_resource("blocks", {...})`; undo with `delete_resource`; dedupe with `find_by_slug` |
 | Template part | endpoint `template-parts`, id `theme//slug` (e.g. `twentytwentyfive//header`) |
+| Global styles | `scripts/wp_block_api.py apply_global_styles(settings_patch, styles_patch, confirm=True)` (design tokens / layout widths; JSON-backup gated). See `references/block-theme-layout.md` |
 | Rollback | `python3 scripts/rollback.py <id> [--endpoint pages]` (id may be `theme//slug`) |
 
 ## Authentication
@@ -119,6 +120,8 @@ wp.save_structural("template-parts", "twentytwentyfive//header", new, "publish",
 
 `save_structural(endpoint, id, content, status, *, confirm)` raises unless `confirm=True`, a backup already exists for that resource, and `assert_balanced_blocks(content)` passes (block-comment delimiters nest correctly). Roll back with `rollback.py`.
 
+**Block themes constrain layout.** On a block theme the page's `post-content` is constrained at the theme content width (~645px in Twenty Twenty-Five), so a top-level section with no `align` is clamped to it — *even if you set a larger `contentSize`*, since `contentSize` sizes a group's children, not the group. The result is a too-narrow page with backgrounds that don't reach the edges. Before any page or section rebuild, read **`references/block-theme-layout.md`** for the full-bleed-band pattern, the Tailwind→block width mapping, theme/palette verification, and a pre-flight checklist.
+
 **Template parts & templates** use the `template-parts` (or `templates`) endpoint and a string id `theme//slug`, e.g. `twentytwentyfive//header`. `fetch_raw`, `save_content`, `save_structural`, `backup`, and `rollback.py` all accept that id form.
 
 **Create a resource** — synced patterns / reusable blocks live on `wp/v2/blocks`. There is no prior state to back up, so make it reversible: check `find_by_slug` first (idempotency), and `delete_resource` to undo.
@@ -173,6 +176,9 @@ python3 scripts/rollback.py "twentytwentyfive//header" --endpoint template-parts
 | `old_text matches N blocks` error | Same snippet appears in several blocks | Pass a longer, unique `old_text` |
 | Auth returns 401 | SSO plugin blocks normal passwords | Create an Application Password |
 | Changes not visible | Browser/CDN cache | Hard-refresh or clear cache |
+| Page too narrow / section background not full-width | Top-level section set `contentSize` but no `align` → clamped to theme content width (~645px) | `align:full` (or `wide`) on the section; set `contentSize` on a nested constrained group. See `references/block-theme-layout.md` |
+| Background/border colour silently missing | Guessed a theme palette slug (`base-2`, `contrast-2`) that doesn't exist | Verify slugs against the theme, or inline the colour via `style.color` |
+| Broken placeholder images | `via.placeholder.com` is defunct (dead DNS) | Use `placehold.co` |
 
 ## Output Format
 

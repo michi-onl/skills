@@ -314,3 +314,49 @@ def test_rollback_template_part(mock_server):
     rb.rollback(tp, "template-parts")
     restored = api.fetch_raw("template-parts", tp)
     assert restored["content"]["raw"] == orig_raw
+
+
+# --- global styles (theme.json design tokens via REST) ---
+
+def test_deep_merge_replaces_lists_not_merges():
+    merged = api._deep_merge({"a": {"x": 1}, "l": [1, 2]}, {"a": {"y": 2}, "l": [3]})
+    assert merged == {"a": {"x": 1, "y": 2}, "l": [3]}
+
+
+def test_discover_global_styles_id_from_theme_link(mock_server):
+    # Never guessed: read from the active theme's wp:user-global-styles link.
+    assert api.discover_global_styles_id() == "1"
+
+
+def test_apply_global_styles_requires_confirm(mock_server):
+    with pytest.raises(ValueError, match="confirm"):
+        api.apply_global_styles({"layout": {"contentSize": "80rem"}}, confirm=False)
+
+
+def test_apply_global_styles_merges_and_backs_up(mock_server):
+    import shutil
+
+    shutil.rmtree(api.backup_dir(), ignore_errors=True)
+    result = api.apply_global_styles(
+        {
+            "layout": {"contentSize": "80rem"},
+            "color": {"palette": [{"slug": "primary", "color": "#E2001A", "name": "StuV Red"}]},
+        },
+        {"typography": {"fontFamily": "var:preset|font-family|inter"}},
+        confirm=True,
+    )
+    assert result["settings"]["layout"]["contentSize"] == "80rem"
+    # current record backed up to JSON before the write (restore by POSTing it back)
+    assert os.path.exists(os.path.join(api.backup_dir(), "global-styles__1_original.json"))
+    # round-trips on read
+    gs = api.get_global_styles()
+    assert gs["settings"]["color"]["palette"][0]["slug"] == "primary"
+    assert gs["styles"]["typography"]["fontFamily"] == "var:preset|font-family|inter"
+
+
+def test_apply_global_styles_deep_merges_existing(mock_server):
+    api.apply_global_styles({"layout": {"contentSize": "80rem"}}, confirm=True)
+    api.apply_global_styles({"layout": {"wideSize": "90rem"}}, confirm=True)
+    layout = api.get_global_styles()["settings"]["layout"]
+    assert layout["contentSize"] == "80rem"  # preserved, not clobbered
+    assert layout["wideSize"] == "90rem"      # added alongside

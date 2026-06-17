@@ -22,7 +22,7 @@ def _headers(for_write=False):
     auth = base64.b64encode(
         f"{os.environ['WP_USER']}:{os.environ['WP_APP_PASS']}".encode()
     ).decode()
-    headers = {"Authorization": f"Basic {auth}"}
+    headers = {"Authorization": f"Basic {auth}", "User-Agent": "wp-default-editor/1.0"}
     if for_write:
         headers["Content-Type"] = "application/json"
     return headers
@@ -279,3 +279,79 @@ def save_structural(endpoint, pid, new_content, status, *, confirm):
         )
     assert_balanced_blocks(new_content)
     return save_content(endpoint, pid, new_content, status)
+
+
+# --- Global styles (theme.json design tokens via REST) ---
+#
+# Set the design system (layout widths, colour palette as real theme slugs,
+# typography, custom properties) in the active theme's *user* global-styles
+# record instead of injected CSS. This is what kills the per-section width/colour
+# guessing on block themes: contentSize/wideSize and palette slugs become global.
+# See references/block-theme-layout.md.
+
+
+def _deep_merge(base, patch):
+    """Recursively merge patch into base. Dicts merge key-by-key; every other
+    value (including lists like a colour palette) replaces wholesale."""
+    out = dict(base or {})
+    for key, val in patch.items():
+        if isinstance(val, dict) and isinstance(out.get(key), dict):
+            out[key] = _deep_merge(out[key], val)
+        else:
+            out[key] = val
+    return out
+
+
+def discover_global_styles_id():
+    """Return the editable user global-styles post id for the active theme.
+
+    Read from the active theme's `wp:user-global-styles` REST link, never guessed
+    (the id is install-specific). Requires context=edit auth.
+    """
+    themes = _request("GET", "themes?status=active&context=edit")
+    theme = themes[0] if isinstance(themes, list) else themes
+    link = (theme.get("_links") or {}).get("wp:user-global-styles")
+    if not link:
+        raise RuntimeError("active theme exposes no wp:user-global-styles link")
+    return link[0]["href"].rstrip("/").split("/")[-1]
+
+
+def get_global_styles(gid=None):
+    """Fetch the user global-styles record (settings + styles). Discovers the id
+    when not given. Note: WordPress nests *user* palette/font values under a
+    `custom` origin key on read (e.g. settings.color.palette.custom)."""
+    gid = gid or discover_global_styles_id()
+    return _request("GET", f"global-styles/{gid}?context=edit")
+
+
+def apply_global_styles(settings_patch=None, styles_patch=None, *, gid=None, confirm):
+    """Deep-merge a theme.json-shaped patch into the user global-styles record.
+
+    Site-wide write, so it is gated like save_structural: requires confirm=True
+    and writes a full JSON backup of the current record first. Roll back by
+    POSTing that backup file's {settings, styles} back to the same id.
+
+    settings_patch / styles_patch mirror theme.json, e.g.
+        settings={"layout": {"contentSize": "80rem", "wideSize": "90rem"},
+                  "color": {"palette": [{"slug": "primary", "color": "#E2001A",
+                                          "name": "Primary"}]}}
+        styles={"typography": {"fontFamily": "var:preset|font-family|inter"}}
+    """
+    if not confirm:
+        raise ValueError("global-styles writes require confirm=True after human review")
+    gid = gid or discover_global_styles_id()
+    current = _request("GET", f"global-styles/{gid}?context=edit")
+
+    out_dir = backup_dir()
+    os.makedirs(out_dir, exist_ok=True)
+    backup_path = os.path.join(out_dir, f"global-styles__{gid}_original.json")
+    with open(backup_path, "w", encoding="utf-8") as fh:
+        json.dump(current, fh, indent=2)
+
+    payload = json.dumps(
+        {
+            "settings": _deep_merge(current.get("settings") or {}, settings_patch or {}),
+            "styles": _deep_merge(current.get("styles") or {}, styles_patch or {}),
+        }
+    ).encode()
+    return _request("POST", f"global-styles/{gid}", data=payload)

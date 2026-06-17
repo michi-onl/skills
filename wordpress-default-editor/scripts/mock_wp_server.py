@@ -46,6 +46,17 @@ TEMPLATE_PARTS = {
 BLOCKS = {}
 _next_block_id = [100]
 
+ACTIVE_THEME = "twentytwentyfive"
+# Editable user global-styles record for the active theme (wp_global_styles post).
+GLOBAL_STYLES = {
+    1: {
+        "id": 1,
+        "title": {"raw": "Custom Styles", "rendered": "Custom Styles"},
+        "settings": {},
+        "styles": {},
+    },
+}
+
 
 def _check_auth():
     auth_header = request.headers.get("Authorization", "")
@@ -200,6 +211,46 @@ def single_block(bid):
             BLOCKS[bid]["status"] = payload["status"]
     fields = request.args.get("_fields")
     return jsonify(_fields_filter(BLOCKS[bid], fields))
+
+
+@app.route("/wp-json/wp/v2/themes", methods=["GET"])
+def list_themes():
+    _log_request()
+    if not _check_auth():
+        return jsonify({"code": "rest_not_logged_in"}), 401
+    base = request.host_url.rstrip("/")
+    gid = next(iter(GLOBAL_STYLES))
+    theme = {
+        "stylesheet": ACTIVE_THEME,
+        "status": "active",
+        "_links": {
+            "wp:user-global-styles": [
+                {"href": f"{base}/wp-json/wp/v2/global-styles/{gid}"}
+            ]
+        },
+    }
+    return jsonify([theme])
+
+
+@app.route(
+    "/wp-json/wp/v2/global-styles/<int:gid>",
+    methods=["GET", "POST", "PUT", "PATCH"],
+)
+def single_global_styles(gid):
+    _log_request()
+    if not _check_auth():
+        return jsonify({"code": "rest_not_logged_in"}), 401
+    if gid not in GLOBAL_STYLES:
+        return jsonify({"code": "rest_post_invalid_id"}), 404
+    if request.method in ("POST", "PUT", "PATCH"):
+        payload = request.get_json(force=True, silent=True) or {}
+        # The client deep-merges then sends the full subtree; store it verbatim.
+        if "settings" in payload:
+            GLOBAL_STYLES[gid]["settings"] = payload["settings"]
+        if "styles" in payload:
+            GLOBAL_STYLES[gid]["styles"] = payload["styles"]
+    fields = request.args.get("_fields")
+    return jsonify(_fields_filter(GLOBAL_STYLES[gid], fields))
 
 
 if __name__ == "__main__":
