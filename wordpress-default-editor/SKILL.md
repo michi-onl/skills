@@ -1,6 +1,6 @@
 ---
 name: wordpress-default-editor
-description: Use when editing WordPress sites that use the default block editor (Gutenberg) via the REST API. Symptoms include updating headings, paragraphs, buttons, or images; fixing placeholder text; auditing content; bulk text changes; or full page/template-part rebuilds where sections render too narrow or backgrounds aren't full-width. Requires a WordPress Application Password.
+description: Use when editing WordPress sites that use the default block editor (Gutenberg) via the REST API. Symptoms include updating headings, paragraphs, buttons, or images; fixing placeholder text; auditing content; bulk text changes; full page/template-part rebuilds where sections render too narrow or backgrounds aren't full-width; or blocks flagged "Dieser Block enthält unerwarteten oder ungültigen Inhalt" / "Attempt Block Recovery" / invalid content in the editor. Requires a WordPress Application Password.
 ---
 
 # WordPress Default Editor
@@ -39,6 +39,7 @@ Edit WordPress sites running the default block editor through `https://<site>/wp
 | Template part | endpoint `template-parts`, id `theme//slug` (e.g. `twentytwentyfive//header`) |
 | Global styles | `scripts/wp_block_api.py apply_global_styles(settings_patch, styles_patch, confirm=True)` (design tokens / layout widths; JSON-backup gated). See `references/block-theme-layout.md` |
 | Rollback | `python3 scripts/rollback.py <id> [--endpoint pages]` (id may be `theme//slug`) |
+| Validate blocks | `node scripts/blockcheck/validate_blocks.cjs <raw-markup-file>` → lists invalid blocks + exact `save()` mismatch (auto-installs deps). See "Block validation errors" |
 
 ## Authentication
 
@@ -136,6 +137,33 @@ if existing is None:
     })
 ```
 
+## Block validation errors ("ungültiger Inhalt")
+
+The editor flags **"Dieser Block enthält unerwarteten oder ungültigen Inhalt / Wiederherstellung versuchen"** ("…unexpected or invalid content / Attempt Block Recovery") when a block's stored HTML doesn't match what its `save()` regenerates from its JSON attributes. Hand-authored or migrated markup triggers this in bulk. The page still renders fine on the front end — it's an editor-only problem — but recovery rewrites the block.
+
+**Get ground truth — don't guess.** You cannot reliably eyeball which blocks are invalid or why; reasoning about it ships wrong fixes. Save the raw markup (`?context=edit`) to a file and run the bundled validator, which runs the *actual* Gutenberg parser:
+
+```bash
+node scripts/blockcheck/validate_blocks.cjs /tmp/page.html   # auto-installs deps on first run
+```
+
+It prints each invalid block's type, the exact `Expected …, saw …` reason, its parsed `style` attributes, and its markup. Match the validator's `@wordpress` version to the site's WordPress version (front-end `<meta name="generator">`) — `save()` details drift between majors.
+
+**Fix losslessly — make the attributes (or a wrapper) capture the visual, then re-save.** The invalidity is always "the HTML carries something the attributes don't." Resolve each by ADDING it to the block model, never by dropping it:
+
+| Validator says… | Cause | Lossless fix |
+|---|---|---|
+| `Expected tag h2, saw h3` + undeclared inline style on the heading | `level`/`style` missing from the comment JSON | Add `level` to match the tag; lift inline `font-size`/`font-weight`/`margin` into `style.typography`/`style.spacing` |
+| `style` has extra `text-align:center` | core/group has no `style.typography.textAlign` support (dead attribute) | Drop it; add the `has-text-align-center` class via `className` (core CSS centers it) |
+| `style` has extra `overflow:hidden` | no core support | Drop it; add a utility class (e.g. `stuv-clip`) via `className`, and add `.stuv-clip{overflow:hidden}` to the theme/header CSS |
+| `class` missing `has-background`/`has-border-color`; border is `1px solid …` shorthand | shorthand can't be expressed by `border.{color,width}`; without `border-style` the border defaults to none → it vanishes | Let `save()` emit the class + longhand; set `style.border.style:"solid"` |
+| `color` absent from attributes but the HTML has the background | `color` was written as a SIBLING of `style` in the JSON | Move it inside `style.color` |
+| group contains raw `<a>`/`<div>` (not a block) | `save()` renders InnerBlocks, not raw HTML | Wrap the raw inner HTML in a `core/html` block |
+
+After repairing attributes, regenerate canonical markup with `@wordpress/blocks` `serialize()`, then **gate the write**: re-run the validator (**0 invalid**) AND confirm no style declaration, class token, or visible text was lost.
+
+**Red flag — STOP:** *"Just click Wiederherstellung / Attempt Block Recovery"* or *"`serialize()` will clean it up."* Both regenerate blocks from attributes and **silently drop anything the attributes don't carry** (`overflow`, undeclared inline styles, raw inner HTML) → visual regression. Repair the attributes FIRST, then regenerate, then re-validate.
+
 ## Safety Rules
 
 No exceptions. Mandatory for every write.
@@ -176,6 +204,8 @@ python3 scripts/rollback.py "twentytwentyfive//header" --endpoint template-parts
 | `old_text matches N blocks` error | Same snippet appears in several blocks | Pass a longer, unique `old_text` |
 | Auth returns 401 | SSO plugin blocks normal passwords | Create an Application Password |
 | Changes not visible | Browser/CDN cache | Hard-refresh or clear cache |
+| "Ungültiger Inhalt" / Attempt Block Recovery on many blocks | Stored HTML ≠ what the block's `save()` regenerates (hand-authored/migrated markup) | Get ground truth with `validate_blocks.cjs`; fix losslessly per "Block validation errors". Don't click recovery — it drops undeclared styling |
+| Front-end page URL 404s after editing | Site uses plain permalinks — pretty URLs (`/page/`) don't resolve | View via `/?pagename=<slug>` (or `?p=<id>`) |
 | Page too narrow / section background not full-width | Top-level section set `contentSize` but no `align` → clamped to theme content width (~645px) | `align:full` (or `wide`) on the section; set `contentSize` on a nested constrained group. See `references/block-theme-layout.md` |
 | Background/border colour silently missing | Guessed a theme palette slug (`base-2`, `contrast-2`) that doesn't exist | Verify slugs against the theme, or inline the colour via `style.color` |
 | Broken placeholder images | `via.placeholder.com` is defunct (dead DNS) | Use `placehold.co` |
