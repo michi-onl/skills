@@ -5,6 +5,7 @@ Reads credentials from environment: WP_USER, WP_APP_PASS, WP_SITE.
 """
 import base64
 import json
+import mimetypes
 import os
 import re
 import time
@@ -229,6 +230,69 @@ def delete_resource(endpoint, pid, force=True):
     """Delete a resource. Used to undo a create_resource()."""
     suffix = "?force=true" if force else ""
     return _request("DELETE", f"{endpoint}/{pid}{suffix}")
+
+
+# --- Media library uploads ---
+
+
+def find_media_by_filename(filename):
+    """Return the first media item whose source_url ends in filename, or None.
+
+    Used to make upload_media() idempotent across re-runs: WordPress dedupes
+    nothing on its own, it just appends '-1', '-2', ... to the filename.
+    """
+    stem = os.path.splitext(filename)[0]
+    items = _request("GET", f"media?search={urllib.parse.quote(stem)}&per_page=100&context=edit")
+    for item in items:
+        if item.get("source_url", "").rsplit("/", 1)[-1] == filename:
+            return item
+    return None
+
+
+def upload_media(file_path, *, filename=None, alt_text=None, reuse_existing=True, retries=3):
+    """Upload a local file to the WP media library. Returns the attachment record.
+
+    Unlike _request(), POST /media takes the raw file body (not JSON): the file
+    bytes go straight in the request body with Content-Type set to the file's
+    mime type and the filename passed via Content-Disposition, per the REST
+    media-endpoint contract.
+
+    When reuse_existing (default), an existing attachment with the same
+    filename is returned as-is instead of re-uploading, so re-running a deploy
+    step is a no-op rather than accumulating duplicate uploads.
+    """
+    filename = filename or os.path.basename(file_path)
+    if reuse_existing:
+        existing = find_media_by_filename(filename)
+        if existing:
+            return existing
+
+    content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+    with open(file_path, "rb") as fh:
+        data = fh.read()
+
+    url = f"{_site()}/{_rest_base()}/wp/v2/media"
+    headers = _headers()
+    headers["Content-Type"] = content_type
+    headers["Content-Disposition"] = f'attachment; filename="{filename}"'
+
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=60) as response:
+                result = json.loads(response.read())
+            break
+        except urllib.error.HTTPError as exc:
+            if exc.code in (429, 500, 502, 503, 504) and attempt < retries - 1:
+                time.sleep(2**attempt)
+                continue
+            raise
+
+    if alt_text:
+        result = _request(
+            "POST", f"media/{result['id']}", data=json.dumps({"alt_text": alt_text}).encode()
+        )
+    return result
 
 
 # --- Structural writes (full template part / page rebuilds) ---
