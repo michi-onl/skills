@@ -40,6 +40,10 @@ Edit WordPress sites running the default block editor through `https://<site>/wp
 | Global styles | `scripts/wp_block_api.py apply_global_styles(settings_patch, styles_patch, confirm=True)` (design tokens / layout widths; JSON-backup gated). See `references/block-theme-layout.md` |
 | Rollback | `python3 scripts/rollback.py <id> [--endpoint pages]` (id may be `theme//slug`) |
 | Validate blocks | `node scripts/blockcheck/validate_blocks.cjs <raw-markup-file>` → lists invalid blocks + exact `save()` mismatch (auto-installs deps). See "Block validation errors" |
+| Upload media | `python3 scripts/upload_media.py <file> [--alt "text"] [--force]` (idempotent by filename) |
+| Manifest deploy | `python3 scripts/deploy.py --manifest <path> [--list \| all --dry-run \| <target>]` — see "Manifest-driven site deploys" |
+| Verify custom CSS | `python3 scripts/verify_global_css.py --marker .cls [--icon-marker=--ico-x]` (exit 0/1/2) |
+| Backfill validity classes | `scripts/fix_has_text_color.py` → `add_missing_classes(html)`, gate with `assert_only_additions(old, new)` |
 
 ## Authentication
 
@@ -136,6 +140,46 @@ if existing is None:
         "meta": {"wp_pattern_sync_status": "fully"},
     })
 ```
+
+## Manifest-driven site deploys
+
+For a site whose content lives in a repo as block-HTML files, drive all writes
+from a manifest instead of hand-written per-page scripts:
+
+```bash
+python3 scripts/deploy.py --manifest /path/to/data/manifest.json --list
+python3 scripts/deploy.py --manifest /path/to/data/manifest.json all --dry-run
+python3 scripts/deploy.py --manifest /path/to/data/manifest.json homepage
+```
+
+The manifest maps target names to resources. **Source paths are relative to
+the manifest's directory:**
+
+```json
+{
+  "global-styles": {"type": "global-styles", "tokens": "global-styles.json",
+                    "css": "styles/component.css"},
+  "header": {"type": "structural", "endpoint": "template-parts",
+             "id": "twentytwentyfive//header", "source": "header_blocks.html",
+             "status": "publish"},
+  "homepage": {"type": "structural", "endpoint": "pages", "id": 10,
+               "source": "sections", "status": "publish"}
+}
+```
+
+- A `structural` source is one `.html` file or a directory whose `*.html`
+  files are joined in filename order. Writes go through `save_structural`
+  (backup + `confirm=True` + balanced-markup check). An omitted `status` is
+  fetched from the live resource.
+- A `global-styles` target sends `tokens` (theme.json-shaped settings/styles)
+  through `apply_global_styles`; an optional `css` file is injected into the
+  custom-CSS field (`styles.css`).
+- Run `all --dry-run` before every real deploy: it reads and validates every
+  source (balanced block delimiters) without writing.
+- After a global-styles deploy, confirm REST sanitization kept your CSS:
+  `python3 scripts/verify_global_css.py --marker .my-component-class --icon-marker=--ico-name`
+  — exit 1 = component rules stripped (restore from backup); exit 2 = data-URI
+  icon vars stripped (keep them in a header `core/html` block instead).
 
 ## Block validation errors ("ungültiger Inhalt")
 
