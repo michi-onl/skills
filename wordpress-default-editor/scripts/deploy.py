@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Manifest-driven deployer for WordPress block-theme sites.
 
-One entry point for every target (pages, template parts, global styles)
+One entry point for every target (pages, template parts, global styles, media)
 instead of a hand-written script per resource. Targets are declared in a
 manifest JSON file; source paths are relative to the MANIFEST'S DIRECTORY.
 See SKILL.md "Manifest-driven site deploys" for the manifest format.
@@ -14,6 +14,8 @@ Usage:
 
 Structural targets are backed up and gated by save_structural (confirm +
 balanced markup). Global-styles targets are JSON-backed-up by apply_global_styles.
+Media targets upload a directory of files, reusing existing attachments by
+filename; a failed file is reported and the batch continues, but the run raises.
 """
 import argparse
 import json
@@ -52,6 +54,35 @@ def _deploy_structural(name, t, base, dry_run):
     return result
 
 
+def _deploy_media(name, t, base, dry_run):
+    source_dir = base / t["source"]
+    if not source_dir.is_dir():
+        raise FileNotFoundError(f"media source {t['source']} is not a directory")
+    files = sorted(f for f in source_dir.iterdir() if f.is_file() and not f.name.startswith("."))
+    if not files:
+        print(f"  no media files in {t['source']}")
+        return None
+    if dry_run:
+        for f in files:
+            print(f"  [dry-run] upload {f.name} ({f.stat().st_size} bytes)")
+        return None
+    results, failed = [], []
+    for f in files:
+        try:
+            result = wp.upload_media(str(f), reuse_existing=True)
+            results.append(result)
+            print(f"  {f.name} -> {result['source_url']} (id {result['id']})")
+        except Exception as exc:
+            # One unuploadable file shouldn't abort the rest of the batch, but the
+            # run must still exit non-zero rather than look like a clean deploy.
+            failed.append(f"{f.name}: {exc}")
+            print(f"  SKIP {f.name}: {exc}")
+    if failed:
+        raise RuntimeError(f"{len(failed)} of {len(files)} media uploads failed — "
+                           + "; ".join(failed))
+    return results
+
+
 def _deploy_global_styles(name, t, base, dry_run):
     tokens = json.loads((base / t["tokens"]).read_text())
     styles = tokens.get("styles") or {}
@@ -74,6 +105,8 @@ def deploy_one(name, manifest, base, dry_run=False):
     print(f"[{name}]")
     if t["type"] == "global-styles":
         return _deploy_global_styles(name, t, base, dry_run)
+    if t["type"] == "media":
+        return _deploy_media(name, t, base, dry_run)
     return _deploy_structural(name, t, base, dry_run)
 
 

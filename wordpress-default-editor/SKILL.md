@@ -163,7 +163,8 @@ the manifest's directory:**
              "id": "twentytwentyfive//header", "source": "header_blocks.html",
              "status": "publish"},
   "homepage": {"type": "structural", "endpoint": "pages", "id": 10,
-               "source": "sections", "status": "publish"}
+               "source": "sections", "status": "publish"},
+  "images": {"type": "media", "source": "assets/img"}
 }
 ```
 
@@ -174,6 +175,12 @@ the manifest's directory:**
 - A `global-styles` target sends `tokens` (theme.json-shaped settings/styles)
   through `apply_global_styles`; an optional `css` file is injected into the
   custom-CSS field (`styles.css`).
+- A `media` target uploads every file in the `source` **directory** (non-recursive,
+  dotfiles skipped) via `upload_media`, which reuses an existing attachment with
+  the same filename — so re-running is a no-op, not a duplicate upload. Put media
+  targets before the structural targets that reference the URLs. A file that fails
+  to upload is printed as `SKIP` and the batch continues, but the run then exits
+  non-zero: a partial media deploy never looks like a clean one.
 - Run `all --dry-run` before every real deploy: it reads and validates every
   source (balanced block delimiters) without writing.
 - After a global-styles deploy, confirm REST sanitization kept your CSS:
