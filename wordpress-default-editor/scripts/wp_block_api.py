@@ -4,15 +4,109 @@ WordPress default block editor REST API helpers.
 Reads credentials from environment: WP_USER, WP_APP_PASS, WP_SITE.
 """
 import base64
+import http.client
 import json
 import mimetypes
 import os
 import re
+import socket
+import sys
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
+
+
+# --- Connection: fast fallback between address families ---
+#
+# socket.create_connection() gives *every* candidate address the full timeout,
+# so a host that publishes an unroutable AAAA record stalls each request for
+# the whole read timeout before urllib falls back to IPv4. That turns a normal
+# `deploy.py all` into a run of many minutes that gets killed before it
+# finishes -- and it looks like a slow server rather than a broken route,
+# because curl and browsers hide the same misconfiguration behind Happy
+# Eyeballs. urllib has no equivalent, so cap each connect attempt instead.
+
+# Seconds to spend on any single address before moving to the next.
+_CONNECT_TIMEOUT = float(os.environ.get("WP_CONNECT_TIMEOUT", "5"))
+
+# (host, port) -> sockaddr that last answered, so the dead address costs one
+# attempt per run rather than one per request.
+_preferred_addr = {}
+
+
+def _connect_any(address, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address=None):
+    """Drop-in for socket.create_connection with a per-address connect budget.
+
+    Signature matches HTTPConnection._create_connection so it can replace it
+    wholesale; the returned socket carries the caller's timeout, not the short
+    connect budget, so reads are unaffected.
+    """
+    host, port = address[0], address[1]
+    read_timeout = (
+        socket.getdefaulttimeout()
+        if timeout is socket._GLOBAL_DEFAULT_TIMEOUT
+        else timeout
+    )
+    attempt_timeout = _CONNECT_TIMEOUT
+    if read_timeout is not None:
+        attempt_timeout = min(attempt_timeout, read_timeout)
+
+    infos = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)
+    preferred = _preferred_addr.get((host, port))
+    if preferred is not None:  # stable sort: the known-good address goes first
+        infos = sorted(infos, key=lambda info: info[4] != preferred)
+
+    last_error = None
+    for family, socktype, proto, _canonname, sockaddr in infos:
+        sock = None
+        try:
+            sock = socket.socket(family, socktype, proto)
+            sock.settimeout(attempt_timeout)
+            if source_address:
+                sock.bind(source_address)
+            sock.connect(sockaddr)
+            sock.settimeout(read_timeout)
+            _preferred_addr[(host, port)] = sockaddr
+            return sock
+        except OSError as exc:
+            last_error = exc
+            if sock is not None:
+                sock.close()
+    raise last_error or OSError(f"no address for {host}:{port} could be reached")
+
+
+class _FallbackHTTPConnection(http.client.HTTPConnection):
+    # HTTPConnection.connect() calls self._create_connection(), so swapping the
+    # factory keeps proxy tunnelling -- and, for the HTTPS subclass, the TLS
+    # wrap -- exactly as the stdlib does them. Python 3.14 assigns
+    # _create_connection as an *instance* attribute in __init__, which shadows
+    # a class-level override, so it has to be set after super().__init__().
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._create_connection = _connect_any
+
+
+class _FallbackHTTPSConnection(http.client.HTTPSConnection):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._create_connection = _connect_any
+
+
+class _FallbackHTTPHandler(urllib.request.HTTPHandler):
+    def http_open(self, req):
+        return self.do_open(_FallbackHTTPConnection, req)
+
+
+class _FallbackHTTPSHandler(urllib.request.HTTPSHandler):
+    def https_open(self, req):
+        return self.do_open(_FallbackHTTPSConnection, req, context=self._context)
+
+
+# build_opener drops the default handlers these subclass, so every request made
+# through _opener gets the capped connect.
+_opener = urllib.request.build_opener(_FallbackHTTPHandler, _FallbackHTTPSHandler)
 
 
 def _site():
@@ -45,7 +139,7 @@ def _request(method, path, data=None, retries=3):
                 headers=_headers(for_write=data is not None),
                 method=method,
             )
-            with urllib.request.urlopen(req, timeout=30) as response:
+            with _opener.open(req, timeout=30) as response:
                 return json.loads(response.read())
         except urllib.error.HTTPError as exc:
             if exc.code in (429, 500, 502, 503, 504) and attempt < retries - 1:
@@ -236,17 +330,39 @@ def delete_resource(endpoint, pid, force=True):
 
 
 def find_media_by_filename(filename):
-    """Return the first media item whose source_url ends in filename, or None.
+    """Return the newest media item whose source_url ends in filename, or None.
 
     Used to make upload_media() idempotent across re-runs: WordPress dedupes
     nothing on its own, it just appends '-1', '-2', ... to the filename.
+
+    One filename can match several attachments -- uploading the same name while
+    "organize uploads into month/year folders" is toggled leaves both
+    uploads/2026/07/x.jpg and uploads/x.jpg -- and the caller usually goes on to
+    delete what it finds, so the choice must not depend on whatever order the
+    endpoint felt like returning. Pin the order, take the newest, and say so
+    when the library is ambiguous.
     """
     stem = os.path.splitext(filename)[0]
-    items = _request("GET", f"media?search={urllib.parse.quote(stem)}&per_page=100&context=edit")
-    for item in items:
-        if item.get("source_url", "").rsplit("/", 1)[-1] == filename:
-            return item
-    return None
+    items = _request(
+        "GET",
+        f"media?search={urllib.parse.quote(stem)}&per_page=100"
+        "&orderby=id&order=desc&context=edit",
+    )
+    matches = [
+        i for i in items if i.get("source_url", "").rsplit("/", 1)[-1] == filename
+    ]
+    if not matches:
+        return None
+    matches.sort(key=lambda i: i["id"], reverse=True)  # newest first, regardless of API order
+    if len(matches) > 1:
+        ids = ", ".join(str(i["id"]) for i in matches)
+        print(
+            f"warning: {len(matches)} attachments are named {filename} (ids {ids}); "
+            f"using {matches[0]['id']}. Delete the stale ones -- content referencing "
+            "the others will not be updated.",
+            file=sys.stderr,
+        )
+    return matches[0]
 
 
 def upload_media(file_path, *, filename=None, alt_text=None, reuse_existing=True, retries=3):
@@ -279,7 +395,7 @@ def upload_media(file_path, *, filename=None, alt_text=None, reuse_existing=True
     for attempt in range(retries):
         try:
             req = urllib.request.Request(url, data=data, headers=headers, method="POST")
-            with urllib.request.urlopen(req, timeout=60) as response:
+            with _opener.open(req, timeout=60) as response:
                 result = json.loads(response.read())
             break
         except urllib.error.HTTPError as exc:

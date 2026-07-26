@@ -42,6 +42,7 @@ Edit WordPress sites running the default block editor through `https://<site>/wp
 | Validate blocks | `node scripts/blockcheck/validate_blocks.cjs <raw-markup-file>` → lists invalid blocks + exact `save()` mismatch (auto-installs deps). See "Block validation errors" |
 | Upload media | `python3 scripts/upload_media.py <file> [--alt "text"] [--force]` (idempotent by filename) |
 | Manifest deploy | `python3 scripts/deploy.py --manifest <path> [--list \| all --dry-run \| <target>]` — see "Manifest-driven site deploys" |
+| Verify a deploy | `python3 scripts/verify_deploy.py --manifest <path> [<target>] [--diff]` — diffs live content against sources (exit 0 match / 1 differ / 2 unfetchable) |
 | Verify custom CSS | `python3 scripts/verify_global_css.py --marker .cls [--icon-marker=--ico-x]` (exit 0/1/2) |
 | Backfill validity classes | `scripts/fix_has_text_color.py` → `add_missing_classes(html)`, gate with `assert_only_additions(old, new)` |
 
@@ -65,6 +66,28 @@ export WP_REST_ROOT="index.php/wp-json"   # plain-permalink REST root
 ```
 
 Confirm which root works before writing: `curl -s -o /dev/null -w "%{http_code}\n" "$WP_SITE/wp-json/"`.
+
+### A site that is slow only from Python
+
+If REST calls take ~30s each while `curl` against the same URL is instant, the
+host almost certainly publishes an address it does not route — typically an
+AAAA record on a box with no working IPv6. `curl` and browsers paper over this
+with Happy Eyeballs; `socket.create_connection` does not, and hands *every*
+candidate address the full timeout, so each request eats the whole read timeout
+before falling back. A `deploy.py all` then runs for minutes and tends to get
+killed part-way, which looks like a hung deploy rather than a routing bug.
+
+`wp_block_api.py` caps each connect attempt and remembers the address that
+answered, so the cost is one short stall per run. Tune with `WP_CONNECT_TIMEOUT`
+(seconds, default 5). To confirm the diagnosis:
+
+```bash
+HOST="$(printf '%s' "$WP_SITE" | sed -E 's#^https?://##')"
+curl -6 -sS -o /dev/null -m 8 -w 'v6 %{http_code} %{time_total}\n' "https://$HOST/wp-json/"
+curl -4 -sS -o /dev/null -m 8 -w 'v4 %{http_code} %{time_total}\n' "https://$HOST/wp-json/"
+```
+
+The real fix belongs in DNS; the client-side cap only keeps deploys usable.
 
 ## Content Endpoints
 
@@ -150,7 +173,14 @@ from a manifest instead of hand-written per-page scripts:
 python3 scripts/deploy.py --manifest /path/to/data/manifest.json --list
 python3 scripts/deploy.py --manifest /path/to/data/manifest.json all --dry-run
 python3 scripts/deploy.py --manifest /path/to/data/manifest.json homepage
+python3 scripts/verify_deploy.py --manifest /path/to/data/manifest.json   # after
 ```
+
+**`--dry-run` is not verification.** It validates sources locally and prints
+byte counts without contacting the server, so it cannot tell you a target was
+skipped, half-written, or is serving an empty page. Always finish a deploy with
+`verify_deploy.py`, which fetches each target and diffs it against its source
+(exit 0 match / 1 differ / 2 unfetchable); add `--diff` to see what changed.
 
 The manifest maps target names to resources. **Source paths are relative to
 the manifest's directory:**

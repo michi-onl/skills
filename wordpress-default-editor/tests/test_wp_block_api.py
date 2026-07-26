@@ -1,4 +1,5 @@
 import os
+import socket
 import subprocess
 import sys
 import time
@@ -360,3 +361,151 @@ def test_apply_global_styles_deep_merges_existing(mock_server):
     layout = api.get_global_styles()["settings"]["layout"]
     assert layout["contentSize"] == "80rem"  # preserved, not clobbered
     assert layout["wideSize"] == "90rem"      # added alongside
+
+
+# --- connect-time address-family fallback ---------------------------------
+#
+# A host whose AAAA record is unroutable (staging behind a provider that
+# publishes IPv6 it does not actually route) made every REST call stall for the
+# full read timeout before urllib fell back to IPv4, which turned a normal
+# `deploy.py all` into a multi-minute run that never finished.
+
+BLACKHOLE = ("192.0.2.1", 443)  # TEST-NET-1: routed nowhere, so connects hang
+
+
+def _addrinfo(host, port, family=socket.AF_INET):
+    return (family, socket.SOCK_STREAM, socket.IPPROTO_TCP, "", (host, port))
+
+
+@pytest.fixture
+def listening_socket():
+    srv = socket.socket()
+    srv.bind(("127.0.0.1", 0))
+    srv.listen(16)  # several tests connect repeatedly without ever accept()ing
+    yield srv.getsockname()
+    srv.close()
+
+
+def test_connect_any_falls_back_past_a_blackholed_address(monkeypatch, listening_socket):
+    """A hanging first address must not consume the caller's whole read timeout."""
+    monkeypatch.setattr(api, "_CONNECT_TIMEOUT", 0.5)
+    monkeypatch.setattr(
+        socket,
+        "getaddrinfo",
+        lambda *a, **k: [_addrinfo(*BLACKHOLE), _addrinfo(*listening_socket)],
+    )
+    start = time.monotonic()
+    sock = api._connect_any(listening_socket, timeout=30)
+    elapsed = time.monotonic() - start
+    try:
+        assert sock.getpeername() == listening_socket
+    finally:
+        sock.close()
+    # Old behaviour: one 30s attempt on the blackhole, then the fallback.
+    assert elapsed < 5, f"fallback took {elapsed:.1f}s; per-attempt cap not applied"
+
+
+def test_connect_any_restores_the_caller_timeout_for_reads(monkeypatch, listening_socket):
+    """The short connect budget must not leak into the socket's read timeout."""
+    monkeypatch.setattr(api, "_CONNECT_TIMEOUT", 0.5)
+    monkeypatch.setattr(
+        socket, "getaddrinfo", lambda *a, **k: [_addrinfo(*listening_socket)]
+    )
+    sock = api._connect_any(listening_socket, timeout=30)
+    try:
+        assert sock.gettimeout() == 30
+    finally:
+        sock.close()
+
+
+def test_connect_any_remembers_the_address_that_answered(monkeypatch, listening_socket):
+    """The dead address is tried once per run, not once per request."""
+    monkeypatch.setattr(api, "_CONNECT_TIMEOUT", 0.5)
+    api._preferred_addr.clear()
+    calls = []
+
+    def fake_getaddrinfo(*a, **k):
+        calls.append(a)
+        return [_addrinfo(*BLACKHOLE), _addrinfo(*listening_socket)]
+
+    monkeypatch.setattr(socket, "getaddrinfo", fake_getaddrinfo)
+    api._connect_any(listening_socket, timeout=30).close()
+    start = time.monotonic()
+    api._connect_any(listening_socket, timeout=30).close()
+    elapsed = time.monotonic() - start
+    assert elapsed < 0.4, f"second connect re-tried the blackhole ({elapsed:.1f}s)"
+
+
+def test_connect_any_raises_when_every_address_fails(monkeypatch):
+    monkeypatch.setattr(api, "_CONNECT_TIMEOUT", 0.3)
+    closed = socket.socket()
+    closed.bind(("127.0.0.1", 0))
+    dead = closed.getsockname()
+    closed.close()  # nothing listening -> connection refused
+    monkeypatch.setattr(socket, "getaddrinfo", lambda *a, **k: [_addrinfo(*dead)])
+    with pytest.raises(OSError):
+        api._connect_any(dead, timeout=5)
+
+
+def test_requests_go_through_the_fallback_opener(mock_server):
+    """_request must use the patched opener, not bare urlopen."""
+    api._preferred_addr.clear()
+    api.fetch_raw("pages", 1)
+    assert api._preferred_addr, "request bypassed _connect_any"
+
+
+# --- media lookup with duplicate filenames ---------------------------------
+#
+# Toggling "organize uploads into month- and year-based folders" mid-migration
+# left two attachments per filename (2026/07/x.jpg and x.jpg). Whichever one
+# find_media_by_filename returns decides what the replace-an-image procedure
+# deletes, so "first row the API happened to return" is not good enough.
+
+
+def _media_rows():
+    return [
+        {"id": 20, "source_url": "https://example.test/wp-content/uploads/2026/07/jan.jpg"},
+        {"id": 42, "source_url": "https://example.test/wp-content/uploads/jan.jpg"},
+        {"id": 19, "source_url": "https://example.test/wp-content/uploads/jan-klein.jpg"},
+    ]
+
+
+def test_find_media_by_filename_is_deterministic_across_api_order(monkeypatch):
+    """Result must not depend on the order the REST API returns rows in."""
+    seen = {}
+
+    def fake(method, path, data=None, retries=3):
+        seen["path"] = path
+        return list(reversed(_media_rows())) if seen.get("flip") else _media_rows()
+
+    monkeypatch.setattr(api, "_request", fake)
+    first = api.find_media_by_filename("jan.jpg")
+    seen["flip"] = True
+    second = api.find_media_by_filename("jan.jpg")
+    assert first["id"] == second["id"] == 42  # newest upload wins, both times
+
+
+def test_find_media_by_filename_requests_a_stable_order(monkeypatch):
+    """Ordering is pinned in the query, not left to the endpoint default."""
+    seen = {}
+
+    def fake(method, path, data=None, retries=3):
+        seen["path"] = path
+        return _media_rows()
+
+    monkeypatch.setattr(api, "_request", fake)
+    api.find_media_by_filename("jan.jpg")
+    assert "orderby=id" in seen["path"] and "order=desc" in seen["path"]
+
+
+def test_find_media_by_filename_warns_about_duplicates(monkeypatch, capsys):
+    monkeypatch.setattr(api, "_request", lambda *a, **k: _media_rows())
+    api.find_media_by_filename("jan.jpg")
+    err = capsys.readouterr().err
+    assert "jan.jpg" in err and "20" in err and "42" in err
+
+
+def test_find_media_by_filename_ignores_partial_name_matches(monkeypatch):
+    monkeypatch.setattr(api, "_request", lambda *a, **k: _media_rows())
+    assert api.find_media_by_filename("jan-klein.jpg")["id"] == 19
+    assert api.find_media_by_filename("nope.jpg") is None
