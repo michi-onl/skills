@@ -125,12 +125,22 @@ def _headers(for_write=False):
 
 def _rest_base():
     """REST namespace prefix. Default assumes pretty permalinks; set WP_REST_ROOT
-    to "index.php/wp-json" (or similar) for plain-permalink or route-restricted sites."""
+    to "index.php/wp-json" (or similar) for plain-permalink or route-restricted sites.
+    When wp-json rewriting is broken (e.g. caching plugin), use "?rest_route="."""
     return os.environ.get("WP_REST_ROOT", "wp-json").strip("/")
 
 
 def _request(method, path, data=None, retries=3):
-    url = f"{_site()}/{_rest_base()}/wp/v2/{path}"
+    rest_base = _rest_base()
+    if rest_base.startswith("?"):
+        if "?" in path:
+            route, qs = path.split("?", 1)
+        else:
+            route, qs = path, ""
+        base_url = f"{_site()}/{rest_base}/wp/v2/{route}"
+        url = f"{base_url}&{qs}" if qs else base_url
+    else:
+        url = f"{_site()}/{rest_base}/wp/v2/{path}"
     for attempt in range(retries):
         try:
             req = urllib.request.Request(
