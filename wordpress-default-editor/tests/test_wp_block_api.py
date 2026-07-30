@@ -447,6 +447,63 @@ def test_connect_any_raises_when_every_address_fails(monkeypatch):
         api._connect_any(dead, timeout=5)
 
 
+# --- pinning the address family ------------------------------------------
+#
+# Capping the per-address budget still pays that cap once per process, and every
+# script is its own process. A host with a permanently unroutable AAAA can skip
+# IPv6 outright.
+
+
+def test_address_family_skips_ipv6_when_pinned_to_v4(monkeypatch, listening_socket):
+    monkeypatch.setenv("WP_ADDRESS_FAMILY", "ipv4")
+    monkeypatch.setattr(api, "_CONNECT_TIMEOUT", 0.5)
+    api._preferred_addr.clear()
+    v6 = _addrinfo("2001:db8::1", 443, socket.AF_INET6)
+    monkeypatch.setattr(
+        socket, "getaddrinfo", lambda *a, **k: [v6, _addrinfo(*listening_socket)]
+    )
+    start = time.monotonic()
+    sock = api._connect_any(listening_socket, timeout=30)
+    elapsed = time.monotonic() - start
+    try:
+        assert sock.getpeername() == listening_socket
+    finally:
+        sock.close()
+    assert elapsed < 0.4, f"IPv6 address was still tried ({elapsed:.1f}s)"
+
+
+def test_address_family_pinned_to_v6_skips_ipv4(monkeypatch, listening_socket):
+    monkeypatch.setenv("WP_ADDRESS_FAMILY", "ipv6")
+    monkeypatch.setattr(api, "_CONNECT_TIMEOUT", 0.3)
+    api._preferred_addr.clear()
+    monkeypatch.setattr(
+        socket, "getaddrinfo", lambda *a, **k: [_addrinfo(*listening_socket)]
+    )
+    with pytest.raises(OSError, match="ipv6"):
+        api._connect_any(listening_socket, timeout=5)
+
+
+def test_address_family_defaults_to_trying_both(monkeypatch, listening_socket):
+    monkeypatch.delenv("WP_ADDRESS_FAMILY", raising=False)
+    monkeypatch.setattr(api, "_CONNECT_TIMEOUT", 0.5)
+    api._preferred_addr.clear()
+    v6 = _addrinfo(*BLACKHOLE)  # stands in for a hanging first candidate
+    monkeypatch.setattr(
+        socket, "getaddrinfo", lambda *a, **k: [v6, _addrinfo(*listening_socket)]
+    )
+    sock = api._connect_any(listening_socket, timeout=30)
+    try:
+        assert sock.getpeername() == listening_socket
+    finally:
+        sock.close()
+
+
+def test_address_family_rejects_an_unknown_value(monkeypatch, listening_socket):
+    monkeypatch.setenv("WP_ADDRESS_FAMILY", "ipv5")
+    with pytest.raises(ValueError, match="WP_ADDRESS_FAMILY"):
+        api._connect_any(listening_socket, timeout=5)
+
+
 def test_requests_go_through_the_fallback_opener(mock_server):
     """_request must use the patched opener, not bare urlopen."""
     api._preferred_addr.clear()

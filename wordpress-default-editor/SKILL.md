@@ -79,7 +79,17 @@ killed part-way, which looks like a hung deploy rather than a routing bug.
 
 `wp_block_api.py` caps each connect attempt and remembers the address that
 answered, so the cost is one short stall per run. Tune with `WP_CONNECT_TIMEOUT`
-(seconds, default 5). To confirm the diagnosis:
+(seconds, default 5). That cap is still paid once per *process*, and every
+script here is its own process — so on a host whose AAAA is permanently
+unroutable, pin the family and skip IPv6 before connecting at all:
+
+```bash
+export WP_ADDRESS_FAMILY="ipv4"   # or ipv6; unset/auto tries every address
+```
+
+Pinning raises `OSError` if the host publishes no address in that family rather
+than falling back silently — a pin that stops matching reality should be loud.
+To confirm the diagnosis:
 
 ```bash
 HOST="$(printf '%s' "$WP_SITE" | sed -E 's#^https?://##')"

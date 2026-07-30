@@ -35,6 +35,38 @@ _CONNECT_TIMEOUT = float(os.environ.get("WP_CONNECT_TIMEOUT", "5"))
 # attempt per run rather than one per request.
 _preferred_addr = {}
 
+# Capping the per-address budget still pays that cap once per process, and each
+# script (deploy, verify, upload) is its own process -- so a host whose AAAA is
+# permanently unroutable costs a stall on every command. Set
+# WP_ADDRESS_FAMILY=ipv4 to drop IPv6 candidates before connecting at all.
+# Unset (the default) tries every address, which is what a healthy dual-stack
+# host wants.
+_ADDRESS_FAMILIES = {
+    "": None,
+    "auto": None,
+    "any": None,
+    "ipv4": socket.AF_INET,
+    "v4": socket.AF_INET,
+    "4": socket.AF_INET,
+    "inet": socket.AF_INET,
+    "ipv6": socket.AF_INET6,
+    "v6": socket.AF_INET6,
+    "6": socket.AF_INET6,
+    "inet6": socket.AF_INET6,
+}
+
+
+def _address_family():
+    """Family to pin connections to, or None to try every candidate."""
+    raw = os.environ.get("WP_ADDRESS_FAMILY", "").strip().lower()
+    try:
+        return _ADDRESS_FAMILIES[raw]
+    except KeyError:
+        allowed = ", ".join(sorted(k for k in _ADDRESS_FAMILIES if k))
+        raise ValueError(
+            f"WP_ADDRESS_FAMILY={raw!r} is not recognised; use one of: {allowed}"
+        ) from None
+
 
 def _connect_any(address, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address=None):
     """Drop-in for socket.create_connection with a per-address connect budget.
@@ -53,7 +85,15 @@ def _connect_any(address, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address
     if read_timeout is not None:
         attempt_timeout = min(attempt_timeout, read_timeout)
 
+    pinned = _address_family()
     infos = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)
+    if pinned is not None:
+        infos = [info for info in infos if info[0] == pinned]
+        if not infos:
+            raise OSError(
+                f"no {'ipv4' if pinned == socket.AF_INET else 'ipv6'} address for "
+                f"{host}:{port} (WP_ADDRESS_FAMILY pins the family)"
+            )
     preferred = _preferred_addr.get((host, port))
     if preferred is not None:  # stable sort: the known-good address goes first
         infos = sorted(infos, key=lambda info: info[4] != preferred)
