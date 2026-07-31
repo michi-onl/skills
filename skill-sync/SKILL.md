@@ -1,12 +1,6 @@
 ---
 name: skill-sync
-description: >
-  Sync local Claude skills with the GitHub repo at https://github.com/michi-onl/skills/.
-  Use this skill whenever the user asks to check, sync, update, or compare their skills
-  with the repo. Also trigger when the user mentions "skills out of date", "pull skills",
-  "update skills", "sync skills", "are my skills current", "skill versions",
-  "Skill-Sync", "skills abgleichen", or "Skills aktualisieren". Use this skill even
-  for casual questions like "are my skills up to date?" or "did I push my latest skills?".
+description: "Sync local skills with github.com/michi-onl/skills - check, compare, pull, or push. Trigger: \"sync skills\", \"are my skills up to date?\", \"Skills aktualisieren\"."
 ---
 
 # Skill Sync

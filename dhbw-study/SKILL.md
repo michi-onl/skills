@@ -1,14 +1,6 @@
 ---
 name: dhbw-study
-description: >
-  Use when the user wants to prepare for DHBW Wirtschaftsinformatik coursework or exams
-  — lecture prep, reviewing material, practice questions, cheat sheets, summarizing
-  slides, analyzing past exams, or study plans. Triggers: "Klausur vorbereiten",
-  "Vorlesung vorbereiten", "Zusammenfassung", "Übungsaufgaben", "Lernzettel",
-  "Altklausuren", "Probeklausur", "Mock Exam", "Transferaufgaben", "Karteikarten", "Lernkarten", "Flashcards",
-  "Leitner", DHBW course names (Recht, BWL, IT, Programmierung, Mathe, WI-Methoden),
-  "ich muss lernen", "ich schreibe bald Klausur", "Prüfungsphase".
-  Also when the user uploads slides, scripts, or past exams to study from.
+description: "DHBW Wirtschaftsinformatik coursework and exam prep: lecture prep, summaries, Lernzettel, Karteikarten, Übungsaufgaben, Altklausuren, study plans. Triggers on \"Klausur\", \"lernen\", uploaded slides."
 ---
 
 # DHBW Study Companion

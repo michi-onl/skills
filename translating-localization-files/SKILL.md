@@ -1,12 +1,6 @@
 ---
 name: translating-localization-files
-description: >
-  Use when the user wants to translate software localization files from English to
-  German, or to review/improve existing German UI strings for user-friendliness.
-  Supports TOML, XLIFF, JSON, PO/POT (gettext), Properties, Android XML (strings.xml),
-  iOS .strings, YAML, ARB (Flutter), PHP arrays, FTL (Fluent). Triggers: pasted or
-  uploaded localization content, "übersetze", "lokalisiere",
-  "prüfe auf Benutzerfreundlichkeit".
+description: "Translate software localization files EN to DE, or review German UI strings for friendliness. Handles TOML, XLIFF, JSON, PO, Properties, Android XML, .strings, YAML, ARB, PHP, FTL. Trigger: \"übersetze\"."
 ---
 
 # Localization Translator (EN → DE)

@@ -1,6 +1,6 @@
 ---
 name: searching-nextcloud
-description: Use when the user wants to find, search, list, or read files in their Nextcloud — locating documents, notes, photos, backups by filename, path, date, or content. Triggers "search my Nextcloud", "find the file/document about X", "what's in my cloud", "look through my Nextcloud". Read-only.
+description: "Find, list, or read files in Nextcloud by name, path, date, or content. Read-only. Trigger: \"search my Nextcloud\", \"what is in my cloud\"."
 ---
 
 # Searching Nextcloud

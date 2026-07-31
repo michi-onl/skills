@@ -1,12 +1,6 @@
 ---
 name: proxmox
-description: >
-  Use when the user wants to manage their Proxmox VE homelab — VMs or LXC containers
-  (start, stop, create, destroy, resize), snapshots, backups, storage, networking
-  (vmbr0), or server status. Triggers: Proxmox, PVE, QEMU/KVM, LXC, container IDs
-  (e.g. "container 103"), named guests ("home assistant VM"), "check my server",
-  "list my VMs", "my homelab". Do NOT use for Docker/compose, VirtualBox, cloud VPS,
-  or Raspberry Pi.
+description: "Manage the Proxmox VE homelab: VMs and LXC containers, snapshots, backups, storage, vmbr0 networking, server status. Not for Docker, VirtualBox, cloud VPS, or Raspberry Pi."
 ---
 
 # Proxmox VE Management

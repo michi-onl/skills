@@ -1,12 +1,6 @@
 ---
 name: planning-travel
-description: >
-  Plan holidays, short trips, and travel adventures. Use this skill whenever the user mentions
-  travel planning, trip ideas, holiday brainstorming, destination suggestions, itineraries,
-  weekend getaways, vacation planning, or anything related to visiting new places. Also trigger
-  when the user asks about flights, visa requirements, best time to visit, or packing for a trip.
-  Even casual mentions like "I need a break" or "where should I go this summer" should activate
-  this skill.
+description: "Plan holidays, trips, and itineraries - destinations, flights, visas, best time to visit, packing. Also casual cues like \"I need a break\" or \"where should I go this summer\"."
 ---
 
 # Travel Planner

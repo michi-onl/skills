@@ -1,6 +1,6 @@
 ---
 name: managing-divi-sites
-description: "Use when managing, styling, or auditing WordPress sites built with the DIVI theme. Triggers on mentions of DIVI shortcodes, et_pb_button, Theme Builder templates, or REST API content edits. Symptoms: button styles inconsistent, hover states resetting, 401 auth failures with SSO, placeholder text, slow DIVI pages, or CSS cache issues."
+description: "Manage, style, or audit WordPress sites on the DIVI theme. Trigger: DIVI shortcodes, et_pb_button, Theme Builder templates, inconsistent button/hover styles, DIVI CSS cache issues."
 ---
 
 # Managing DIVI Sites

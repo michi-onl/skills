@@ -1,11 +1,6 @@
 ---
 name: gutachtenstil
-description: >
-  Verwende diesen Skill, wenn der Nutzer einen deutschen Rechtsfall, eine Fallaufgabe
-  oder juristische Prüfungsaufgabe vorlegt (BGB, Sachenrecht, Schuldrecht). Trigger:
-  "Wer ist Eigentümer?", "Hat A einen Anspruch?", "Prüfe den Anspruch", "Gutachten",
-  "Gutachtenstil", "Löse den Fall", "Rechtsproblem", oder ein Sachverhalt mit
-  juristischen Fragen.
+description: "Deutsche Rechtsfälle im Gutachtenstil lösen (BGB, Sachenrecht, Schuldrecht). Trigger: \"Hat A einen Anspruch?\", \"Wer ist Eigentümer?\", \"Gutachten\", oder ein Sachverhalt mit juristischen Fragen."
 ---
 
 # Gutachtenstil-Skill

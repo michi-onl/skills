@@ -1,15 +1,6 @@
 ---
 name: wende
-description: >
-  Convert Wikipedia wikitext syntax between English and German. Use whenever the user
-  (1) pastes English or German wikitext and wants the syntax converted, (2) asks to
-  convert templates, citations, or formatting between enwiki and dewiki conventions,
-  (3) wants to add or update conversion rules, or (4) needs prose translated while
-  preserving wikitext markup. Also trigger when the user mentions "Wikitext konvertieren",
-  "enwiki to dewiki", "Vorlagen umwandeln", or pastes raw wikitext with English templates
-  like {{cite web}} or German templates like {{Internetquelle}}. This skill handles
-  syntactic conversion only — for creating complete German Wikipedia articles from
-  English sources, use the wiki-artikel skill instead.
+description: "Convert Wikipedia wikitext syntax between enwiki and dewiki (templates, citations, formatting), or add conversion rules. Syntax only - for writing a full German article use wiki-artikel."
 ---
 
 # Wende – Wikipedia Wikitext Converter

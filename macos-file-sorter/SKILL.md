@@ -1,6 +1,6 @@
 ---
 name: macos-file-sorter
-description: Use when the ~/Documents folder is cluttered with loose, mixed, unsorted files scattered across subfolders and you want them grouped into typed buckets in place. Recursive scan, backup-first, preview-before-move, never deletes. Triggers "sort my documents", "organize Documents folder", "declutter documents", "tidy my files", messy Documents.
+description: "Sorts a cluttered ~/Documents into typed buckets in place - recursive, backup-first, preview before move, never deletes. Trigger: \"organize Documents\", \"tidy my files\"."
 ---
 
 # macOS File Sorter

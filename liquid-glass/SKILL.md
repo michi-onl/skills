@@ -1,11 +1,6 @@
 ---
 name: liquid-glass
-description: >
-  Use when the user asks to build or restyle a website, landing page, portfolio, or
-  homepage with a glassy, translucent, frosted, or Apple-style look, or mentions
-  "Liquid Glass", "glassmorphism", "frosted glass UI", or "glass navbar". Covers plain
-  HTML/CSS/JS, Next.js, Zola, shadcn/ui, and Bootstrap. Apply when the visual intent
-  is glassy/translucent even if no framework is named.
+description: "Build or restyle sites with a glassy/frosted/Apple-style look. Trigger: \"Liquid Glass\", glassmorphism, frosted UI, or glassy visual intent. Plain HTML/CSS, Next.js, Zola, shadcn/ui, Bootstrap."
 ---
 
 # Liquid Glass Web Design

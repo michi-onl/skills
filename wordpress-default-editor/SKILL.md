@@ -1,6 +1,6 @@
 ---
 name: wordpress-default-editor
-description: Use when editing WordPress sites that use the default block editor (Gutenberg) via the REST API. Symptoms include updating headings, paragraphs, buttons, or images; fixing placeholder text; auditing content; bulk text changes; full page/template-part rebuilds where sections render too narrow or backgrounds aren't full-width; or blocks flagged "Dieser Block enthält unerwarteten oder ungültigen Inhalt" / "Attempt Block Recovery" / invalid content in the editor. Requires a WordPress Application Password.
+description: "Edit WordPress block-editor (Gutenberg) sites via REST API: headings, paragraphs, buttons, images, bulk changes, page rebuilds, blocks flagged invalid or \"Attempt Block Recovery\". Needs an App Password."
 ---
 
 # WordPress Default Editor

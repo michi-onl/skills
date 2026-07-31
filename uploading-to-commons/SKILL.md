@@ -1,11 +1,6 @@
 ---
 name: uploading-to-commons
-description: >
-  Use when the user wants to upload photos to Wikimedia Commons, contribute images to
-  Wikipedia, judge whether images are Commons-suitable, write Commons {{Information}}
-  descriptions, or rename/categorize files for Commons, or has a batch of images to
-  filter and prepare. Triggers: "Commons upload", "Wikimedia", "Commons-tauglich",
-  "Bilder hochladen", "Commons-Beschreibung".
+description: "Upload photos to Wikimedia Commons: judge suitability, write {{Information}} descriptions, name and categorize files, filter batches. Trigger: \"Commons\", \"Bilder hochladen\"."
 ---
 
 # Commons Upload — Wikimedia Commons Image Pipeline

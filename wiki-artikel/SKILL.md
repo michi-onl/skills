@@ -1,16 +1,6 @@
 ---
 name: wiki-artikel
-description: >
-  Erstellt hochwertige deutsche Wikipedia-Artikel aus anderssprachigem (meist englischem)
-  Wikitext. Verwende diesen Skill immer, wenn der Nutzer einen Wikipedia-Artikel auf
-  Deutsch erstellen, übersetzen oder aus einer anderssprachigen Vorlage ableiten möchte.
-  Trigger-Phrasen: "Wikipedia-Artikel erstellen", "deutschen Artikel schreiben", "dewiki",
-  "Artikel anlegen", "aus dem Englischen übernehmen", "Wikipedia übersetzen", oder wenn
-  der Nutzer englischen Wikitext einfügt und einen deutschen Artikel daraus haben möchte.
-  Auch bei Begriffen wie "Wikisyntax", "Wikicode", "Wikitext auf Deutsch" diesen Skill
-  verwenden. Dieser Skill geht über reine Syntax-Konvertierung hinaus – er erzeugt einen
-  eigenständigen, enzyklopädisch hochwertigen Artikel nach dewiki-Konventionen. Für reine
-  Syntax-Konvertierung ohne redaktionelle Arbeit den wende-Skill verwenden.
+description: "Erstellt eigenständige, dewiki-konforme deutsche Wikipedia-Artikel aus anderssprachigem Wikitext - redaktionell, nicht nur Syntax. Für reine Syntax-Konvertierung stattdessen wende."
 ---
 
 # Wiki-Artikel – Deutsche Wikipedia-Artikel erstellen

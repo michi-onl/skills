@@ -1,12 +1,6 @@
 ---
 name: wende-spotify-list
-description: >
-  Use when the user wants to update, refresh, or synchronize the German Wikipedia
-  article "Liste der meistgestreamten Künstler auf Spotify" with the English source.
-  Triggers: "Spotify-Liste aktualisieren", "monthly Spotify update", "Spotify artists
-  update", "Liste aktualisieren", "meistgestreamte Künstler aktualisieren", first-of-
-  month Wikipedia update, or pasted Spotify streaming data to integrate into the
-  German article.
+description: "Update the dewiki article \"Liste der meistgestreamten Künstler auf Spotify\" from the English source. Trigger: \"Spotify-Liste aktualisieren\", monthly update, pasted Spotify streaming data."
 ---
 
 # Wende-Spotify-List — Monthly Spotify List Updater
