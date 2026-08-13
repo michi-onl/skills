@@ -23,8 +23,8 @@ Ten steps. Steps 1-7 produce the upload-ready set. Steps 8-10 handle the actual 
 Raw images
   → 1. Resolution check (drop sub-2MP)
   → 2. EXIF extraction (flag technical issues)
-  → 3. Format duplicate pruning (.JPG vs .jpeg)
-  → 4. Gather location context for image clusters
+  → 3. Gather location context for image clusters (before any judging)
+  → 4. Format duplicate pruning (.JPG vs .jpeg)
   → 5. Visual review + tier classification + near-duplicate flagging
   → 6. Resolve near-duplicates (pick best per group)
   → 7. Copy+rename to upload/, strip metadata, generate descriptions
@@ -44,7 +44,8 @@ Use these defaults unless the user explicitly overrides them for a given session
 If the user mentions a different username, license, or copyright situation, use that
 instead. Otherwise, proceed directly with these values.
 
-Location context is gathered in Step 4, after the visual landscape of the image set is known.
+Location context is gathered in Step 3, before visual review — place names change which
+images are worth keeping, not just how they are captioned.
 
 ## Step 1: Resolution Check
 
@@ -62,6 +63,22 @@ Prefer `exiftool -csv` for batch extraction. It handles all fields in one pass a
 outputs structured data. Fall back to sips+mdls or Python PIL only if exiftool is
 unavailable.
 
+Pull GPS in this same pass. Location drives everything downstream, and fetching it now
+means step 3 is a pure analysis step with no second extraction.
+
+```bash
+exiftool -n -csv \
+  -FileName -ImageWidth -ImageHeight -FileSize -ISO -ExposureTime -FNumber \
+  -FocalLength -DateTimeOriginal -OffsetTimeOriginal -Model -LensModel \
+  -GPSLatitude -GPSLongitude -GPSAltitude -GPSImgDirection \
+  *.JPG > exif.csv
+```
+
+> **Use `-n`, never the `#` suffix.** `exiftool -csv -GPSLatitude# -GPSLongitude#`
+> silently emits **empty columns** even when every file is geotagged. The `#` numeric
+> modifier does not work inside `-csv`. The global `-n` flag does the same job and works.
+> This failure is silent and looks exactly like a batch with no GPS.
+
 | Metric                                | How to get it                                              |
 | ------------------------------------- | ---------------------------------------------------------- |
 | Resolution (already have from step 1) | —                                                          |
@@ -73,6 +90,22 @@ unavailable.
 | Date taken                            | EXIF DateTimeOriginal / kMDItemContentCreationDate         |
 | Camera model                          | EXIF Model (used to set ISO threshold: phone vs camera)    |
 | Lens ID                               | EXIF LensModel (used to detect front camera — see step 2b) |
+| GPS lat/lon/altitude                  | EXIF GPSLatitude / GPSLongitude / GPSAltitude (see step 3) |
+| Compass heading                       | EXIF GPSImgDirection — often absent; see step 3            |
+
+### Never declare a batch ungeotagged from a CSV alone
+
+Before telling the user "these images have no GPS," dump one file in full and look:
+
+```bash
+exiftool -a -G1 -s SOMEFILE.JPG | grep -i gps
+```
+
+If you see `GPSLatitudeRef: North` and `GPSLongitudeRef: East` but no `GPSLatitude` /
+`GPSLongitude` values, that is the signature of a **bad query, not missing data** — the
+refs and the values are written together. A genuinely stripped file has no GPS block at
+all. Getting this wrong sends the whole session down a branch of asking the user
+questions that the metadata already answers.
 
 ### Step 2b: Front-camera / selfie pre-filter
 
@@ -114,18 +147,16 @@ Save the full report to `technical_scan_results.md` so it survives context reset
 If the image count is large (100+), suggest the user start a fresh context window
 before step 5.
 
-## Step 3: Format Duplicate Pruning
-
-Identify files with the same base name but different extensions (e.g., `IMG_0302.JPG`
-and `IMG_0302.jpeg`). Keep the higher-resolution version, drop the other. Report which
-pairs were found and which version was kept.
-
-This is deterministic — no user input needed.
-
-## Step 4: Gather Location Context
+## Step 3: Gather Location Context
 
 Use EXIF GPS data to identify location clusters, then reverse-geocode each cluster
 center via the OpenStreetMap Nominatim API to get actual place names automatically.
+
+**This comes before visual review, not after.** Knowing the place changes the verdict,
+not just the caption. "Generic park at sunset" turns out to be a castle's grounds; an
+"unremarkable office block" turns out to be a town hall with its own Commons category; a
+cluster assumed to be the user's home town turns out to be a different city entirely.
+Tier judgments made without locations have to be redone.
 
 ### Clustering
 
@@ -160,15 +191,65 @@ for label, lat, lon in clusters:
 **Rate limit**: Nominatim enforces 1 request per second. Always sleep 1.1s between
 calls. Set a descriptive User-Agent string.
 
+### Second pass: per-image geocoding at zoom 18
+
+Documented here with the rest of the geocoding, but **run it at step 7b** — once step 6
+has settled which files are actually being uploaded, so you geocode 30 files and not 300.
+
+Cluster centres at zoom 16 give you the district. For the final set,
+re-geocode **those files individually at `zoom=18`**. That is what returns building
+names and house numbers, and it routinely identifies the subject outright:
+`Maxmonument, Maximilianstraße`, `Haberkasten, 3, Fragnergasse`, `Schloss Hellenstein`,
+`Trg Republike Hrvatske`. A landmark name from Nominatim is worth more than any amount
+of squinting at the photo.
+
+### Compass heading
+
+`GPSImgDirection` gives the bearing the camera was facing, which is the only reliable way
+to work out *which* peak, tower or building across a valley is in frame. iPhones often
+omit it. If it is absent, say so and do not name a distant summit — describe it and let
+the user supply the name.
+
+### Privacy: GPS is published
+
+Commons displays coordinates on the file page and feeds them into map layers. A photo
+taken in the user's garden publishes their home address to the world.
+
+After geocoding, classify each cluster as **public** (landmark, street, park, venue) or
+**private** (a residence, workplace, school, or any indoor shot at a non-landmark
+address). Show the user the split and ask how to handle it. Default recommendation: keep
+coordinates on public-place photos, strip them from private ones. Never let a residential
+address reach step 9 without the user having explicitly seen and decided it — the skill's
+normal metadata strip in step 7a does **not** remove GPS.
+
+Also keep street addresses out of the `{{Information}}` description for private
+locations. "Mühldorf am Inn" is enough; "Colloredostraße 15" is not.
+
 ### Output
 
 Present a table of clusters with the resolved place names. Ask the user to confirm or
 correct. The goal: when you reach step 7 (descriptions), every image already has its
 location pinned down. No retroactive patching.
 
-If any clusters lack GPS data entirely, ask the user for those locations manually. If
-the Nominatim result is too vague (e.g., just a highway name), note which clusters need
+If any clusters lack GPS data entirely, ask the user for those locations manually — but
+only after the verification in step 2 confirms the data really is absent. If the
+Nominatim result is too vague (e.g., just a highway name), note which clusters need
 refinement and ask during visual review when actual content is visible.
+
+### Asking the user for free text
+
+When you need a place name, venue or spelling that only the user has, **ask in prose**.
+Do not offer it as a multiple-choice option like "I'll type the town" — the selection
+comes back with no text attached and the question has to be asked twice.
+
+## Step 4: Format Duplicate Pruning
+
+Identify files with the same base name but different extensions (e.g., `IMG_0302.JPG`
+and `IMG_0302.jpeg`). Keep the higher-resolution version, drop the other. Report which
+pairs were found and which version was kept.
+
+This is deterministic — no user input needed, and it is order-independent. It sits here
+purely so that step 5 reviews one file per photograph.
 
 ## Step 5: Visual Review + Tier Classification
 
@@ -176,11 +257,40 @@ A single pass. View each surviving image, assess it, and immediately classify it
 not separate "review" and "classification" into distinct steps — they're the same
 cognitive act.
 
+### Triage with contact sheets, not one image at a time
+
+Opening 179 full-size photos individually will exhaust the context window before the
+review is finished. Build **labelled contact sheets** and read those instead. A 3×3 grid
+at ~460 px per tile is enough to judge subject, composition, framing and near-duplicate
+grouping; a 179-image batch collapses to about 30 sheet reads.
+
+```bash
+# 1. downscale once — reuse these previews for every later comparison
+mkdir -p prev
+for f in *.JPG; do sips -Z 700 "$f" --out "prev/$f" >/dev/null; done
+
+# 2. montage into 3x3 sheets, grouped by date/cluster, filename under each tile
+montage prev/IMG_1{649,651,653,655,720,722}.JPG \
+  -label '%t' -font /System/Library/Fonts/Supplemental/Arial.ttf \
+  -tile 3x3 -geometry 460x460+6+6 -background white -pointsize 24 sheet.jpg
+```
+
+> `montage` fails with ``unable to read font `' `` on macOS unless you pass an explicit
+> `-font` path. Use `/System/Library/Fonts/Supplemental/Arial.ttf`.
+
+Keep a JSON manifest mapping each sheet to its ordered filenames — the `-label '%t'`
+captions are small, and you need certainty about which tile is which file.
+
+Then open individual previews only for: candidates you intend to upload, near-duplicate
+groups you must choose between, and anything whose subject you cannot identify from the
+tile. For dedup decisions, build a dedicated comparison montage of just that group at a
+larger tile size.
+
 ### Viewing strategy
 
 - Skip front-camera images already flagged in step 2b (unless user overrides).
 - Start with the top-ranked technical candidates from step 2.
-- View in batches (10–30 depending on context budget).
+- Work cluster by cluster, since each cluster shares a location and a verdict pattern.
 - After the first batch from a cluster, assess whether the cluster is mostly personal
   photos (portraits, group shots, food, etc.). If so, sample 2-3 more from that cluster
   rather than viewing all of them. Report the skip count to the user.
@@ -193,8 +303,49 @@ cognitive act.
 | Focus / sharpness | Is the subject in focus?                                      |
 | Lighting          | Blown highlights, crushed shadows, harsh midday light         |
 | Obstructions      | Cables, poles, fingers, watermarks, logos                     |
-| People            | Recognizable faces → model release concern. Flag for user.    |
+| People            | See "Identifiable people" below — do not over-apply this      |
+| Derivative work   | See "Copyright screening" below — this deletes files          |
 | Redundancy        | Near-duplicate of another image in the batch — mark the group |
+
+### Copyright screening
+
+A photo can be technically perfect and still be undeletable-on-sight because it
+reproduces someone else's copyrighted work. Screen for this during review, not after
+upload. Exclude:
+
+| Situation | Why |
+| --- | --- |
+| Product packaging, book/game/album cover art as the subject | The artwork is the subject; the photo is a derivative work |
+| Framed posters, prints, wall graphics in a museum or shop | Same, and no FOP indoors |
+| A screen showing a broadcast, film, or game | The displayed content is copyrighted |
+| Shop window displays | Window dressing is a protected creative work in many jurisdictions |
+| Interpretive/information signs where the text is the subject | The sign text is a protected work |
+
+**Freedom of panorama is country-specific and matters.** Germany and Croatia both allow
+photographs of works *permanently* installed in *public* spaces — so an outdoor mural, a
+building facade, or a monument on a square is fine. Neither extends FOP to museum
+interiors. Check the FOP rule for the actual country of each cluster before clearing
+architecture or artwork; do not assume the rules travel with you.
+
+Where a room contains a mix, judge by what dominates the frame. Bare hardware or
+utilitarian objects are usually fine; the same room shot from an angle that fills the
+frame with box art is not.
+
+### Identifiable people — do not over-apply
+
+Recognisable faces are *not* an automatic exclusion. In Germany, §23(1) KUG permits
+publishing images of assemblies and public events, and Commons' own guidance accepts
+crowd shots at public events without consent. Photos at a festival, concert, market or
+demonstration are normally fine.
+
+Reserve the people concern for: private settings, children as the clear subject, anything
+embarrassing or defamatory, and images where one identifiable stranger is the subject
+rather than part of a scene.
+
+If you drop a public-event photo, be honest about which reason you are using. "Faces in
+frame" and "spectators clutter the foreground and the subject is small" are different
+verdicts — the first is a rights claim that usually will not survive scrutiny, the second
+is an ordinary composition call. Say the one you mean.
 
 ### Tier classification (assigned during review, not after)
 
@@ -207,7 +358,7 @@ cognitive act.
 Present results as a table per tier: filename, subject description, notes on issues.
 For Tier 2 near-duplicate groups, indicate which images belong to the same group.
 
-If any location clusters from step 4 were unresolved, ask now — you can see the actual
+If any location clusters from step 3 were unresolved, ask now — you can see the actual
 content.
 
 ## Step 6: Resolve Near-Duplicates
@@ -247,25 +398,42 @@ for f in upload/*.JPG upload/*.jpg; do
 done
 ```
 
-**Step B — EXIF/XMP fields via exiftool:**
+**Step B — wipe the XMP and IPTC blocks wholesale:**
 
 ```bash
-exiftool -overwrite_original \
-  -UserComment= \
-  -Description= \
-  -ImageDescription= \
-  -XMP-dc:Description= \
-  upload/*.JPG
+exiftool -overwrite_original -XMP:all= -IPTC:all= \
+  -UserComment= -ImageDescription= upload/*.JPG
 ```
 
-Run both steps before generating descriptions so there's no confusion about what
+Clearing named fields one by one is **not sufficient**. Phone apps write duplicate
+`dc:description/rdf:Alt/rdf:li` entries, and `-XMP-dc:Description=` removes only the
+first; exiftool warns `Duplicate XMP property` and leaves the rest in place. Dropping the
+whole XMP and IPTC blocks is the only reliable fix. Nothing needed downstream lives there
+— date and GPS are in EXIF and survive.
+
+**Step C — strip GPS from private locations only** (per the decision made in step 3):
+
+```bash
+exiftool -overwrite_original -gps:all= "upload/Photo at a home address.JPG"
+```
+
+**Step D — verify, do not assume:**
+
+```bash
+# must print nothing
+exiftool -a -G1 -s upload/*.JPG | grep -iE "MOOD|presetId|STOCK"
+# confirm the intended files, and only those, lost their coordinates
+exiftool -q -if 'not $gpslatitude' -p '$FileName' upload/*.JPG
+```
+
+Run all of this before generating descriptions so there's no confusion about what
 "description" means. This is mandatory, not optional — files uploaded with app metadata
 get flagged on Commons.
 
 ### Filename conventions
 
 - Descriptive English name (not IMG_XXXX)
-- Include location (already known from step 4)
+- Include location (already known from step 3)
 - Include year
 - Keep original extension
 - Use spaces, not underscores (Commons convention)
@@ -289,20 +457,37 @@ exists. Instead, search first and pick from results.
 queries. This returns actual category names with their real capitalization, punctuation,
 and disambiguation patterns.
 
-```bash
-# One loop, all subjects at once. Run this BEFORE writing descriptions.
-for q in "Notre-Dame+Garde+Marseille" "Vieux-Port+Marseille" "Cours+Julien+Marseille" \
-         "Invader+mosaics" "trams+Marseille"; do
-  echo "=== $q ==="
-  curl -s "https://commons.wikimedia.org/w/api.php?action=query&list=search\
-&srsearch=${q}&srnamespace=14&srlimit=5&format=json" \
-    | python3 -c "
-import sys, json
-data = json.load(sys.stdin)
-for r in data['query']['search']:
-    print(r['title'])"
-done
+```python
+# One script, all subjects at once. Run this BEFORE writing descriptions.
+import urllib.request, urllib.parse, json, time
+
+def search(q, n=6):
+    url = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(
+        {"action": "query", "list": "search", "srsearch": q,
+         "srnamespace": 14, "srlimit": n, "format": "json"})
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "uploading-to-commons-pipeline/1.0 (User:Mike is Michi)"})
+    return [r["title"] for r in json.load(urllib.request.urlopen(req))["query"]["search"]]
+
+for q in ["Basilique Notre-Dame de la Garde", "Vieux-Port Marseille",
+          "Umjetnički paviljon Zagreb", "Jubiläumssäule Stuttgart"]:
+    for attempt in range(3):
+        try:
+            hits = search(q); break
+        except Exception as e:
+            hits = [f"ERR {e}"]; time.sleep(6)
+    print(f"=== {q}"); [print("  ", h) for h in hits]
+    time.sleep(2.0)          # see rate limit below
 ```
+
+**Build the URL with `urlencode`, not string interpolation.** Piping a raw `curl` URL
+containing `ü`, `ö`, `č` or `ß` returns a non-JSON error page and the parse dies with
+`Expecting value: line 1 column 1`. Nearly every European place name hits this.
+
+**Rate limit**: the search endpoint returns HTTP 429 under a fast loop. Sleep ~2s between
+queries and retry on failure. Exact-title lookups (`action=query&titles=`) are cheap by
+comparison — they accept up to 50 titles per request, so batch the final validation pass
+instead of looping.
 
 **Why search-first matters**: Commons naming is unpredictable. "Notre-Dame de la Garde"
 does not exist — the real category is "Basilique Notre-Dame de la Garde." "Vieux-Port de
@@ -324,12 +509,45 @@ subject (species, building, artwork), the specific location (neighborhood, park,
 museum), and the broader geographic area (city, arrondissement, canton). One real
 category is better than a guessed one, but most images should hit 3.
 
+### Final validation pass
+
+After the descriptions file is written, batch-check every category it references and
+confirm the file list matches the directory. Both catch real mistakes cheaply:
+
+```python
+# 1. does every block have a file, and every file a block?
+# 2. does every [[Category:...]] exist, and is it a redirect?
+url = ".../w/api.php?action=query&titles=<up to 50 joined by |>&redirects=1&format=json"
+# negative pageid  -> category does not exist
+# "redirects" key  -> you cited a redirect; use the target instead
+```
+
+Normalise Unicode with `unicodedata.normalize('NFC', ...)` before comparing macOS
+filenames against strings from the descriptions file, or names containing umlauts and
+háčeks will appear to mismatch when they are identical.
+
 ### Description generation
 
 Generate `wikimedia_descriptions.txt` following the exact format in
 `references/information-template.txt`. One `{{Information}}` block per image, bilingual
 descriptions (English + German), `{{Taken on}}` date template with location, and
 categories drawn from the verified lookup list above.
+
+**Do not guess species, summits, or building names.** A wrong binomial on Commons
+propagates into Wikipedia articles and other reusers. When you cannot identify something
+with confidence, say so in the description and categorise at the level you are sure of:
+
+| Confidence | Do this |
+| --- | --- |
+| Species certain | `[[Category:Cetonia aurata]]` |
+| Genus certain only | `[[Category:Pieris (Pieridae)]]` |
+| Family/subfamily only | `[[Category:Cetoniinae]]` |
+| Not identifiable | `[[Category:Unidentified moths]]` + "The species is not identified." |
+
+The same applies to a mountain across a valley or an unlabelled building. Describe what
+is visible, name the valley or street from step 3, and tell the user what you left open
+so they can fill it in — they were there. When they do supply a name, update the
+filename, both descriptions and the categories together, and re-run the validation pass.
 
 ## Step 8: Dry-Run Preview
 
@@ -345,6 +563,26 @@ This prints each filename, file size, and a description preview. Present the out
 the user and wait for explicit confirmation before proceeding to step 9.
 
 **This is a hard gate.** Do not proceed to actual upload without user confirmation.
+Uploading is public, irreversible in practice, and attaches the user's real name to every
+file. Treat the user handing over a bot password *in response to a request for it* as
+authorization; treat silence, or a message about something else, as not.
+
+Also check the target names are free before uploading — a collision wastes the upload and
+forces a rename afterwards:
+
+```python
+# batch up to 50 "File:<name>" titles; positive pageid means the name is taken
+url = ".../w/api.php?action=query&titles=File:Name+one|File:Name+two&format=json"
+```
+
+And confirm the credentials actually work before starting a long batch:
+
+```bash
+.venv/bin/python -c "
+import pywikibot
+s = pywikibot.Site('commons','commons'); s.login()
+print(s.user(), 'upload' in s.userinfo.get('rights', []))"
+```
 
 ## Step 9: Upload to Commons
 
@@ -380,18 +618,33 @@ password_file = 'user-password.py'
 **user-password.py:**
 
 ```python
-('Mike is Michi', BotPassword('uploading-to-commons', 'PASTE_BOT_PASSWORD_HERE'))
+('Mike is Michi', BotPassword('BOT_NAME', 'PASTE_BOT_PASSWORD_HERE'))
 ```
+
+`BOT_NAME` is the bot password's own name, not a fixed string — it is the part after the
+`@` in the login the user was given. For `Mike is Michi@claude-rw`, `BOT_NAME` is
+`claude-rw`. Getting this wrong produces a login failure, not a useful error.
 
 For the bot password, check the memory file `reference_commons_credentials.md`. Never
 hardcode credentials into skill files or commit them.
+
+`chmod 600 user-password.py` after writing it. Then tell the user plainly that the file
+holds a live credential in plaintext inside the folder that also holds their photos, and
+that they should delete it or move it out if that folder is ever synced or shared. If the
+user has run `/export` in the session, the transcript will contain the password too —
+say so, and say where the file landed.
 
 ### Running the upload
 
 ```bash
 cd upload/
-.venv/bin/python upload_to_commons.py --delay 5
+.venv/bin/python upload_to_commons.py --delay 5 --no-verify > upload_run.log 2>&1
 ```
+
+Pass `--no-verify` and verify separately in step 10 — the built-in check runs ~10s after
+the last upload and reports every file as missing (see below). Run the batch in the
+background and poll the log: 34 files at `--delay 5` took about 7 minutes, which will
+otherwise hit a foreground command timeout.
 
 The upload script is located at
 `~/.claude/skills/uploading-to-commons/scripts/upload_to_commons.py`. Copy it to the
@@ -416,23 +669,25 @@ The upload script runs verification automatically after uploads complete (unless
 - The file page exists
 - Categories rendered correctly
 
-**Propagation delay**: Commons may take 30-60 seconds to index newly uploaded files.
-The script's built-in verification often runs too early and reports false "MISSING"
-results. If the script reports all files as missing immediately after a successful
-upload batch, don't trust it. Instead, wait 30 seconds and run a manual spot-check
-on 2-3 files via the API:
+**Propagation delay**: Commons takes 30–60 seconds to index newly uploaded files. The
+script's built-in verification waits only ~10s, so it reports **every file** as
+`NOT FOUND on Commons` even when all of them uploaded cleanly. This is the expected
+outcome, not a symptom — it fired on a 34-file batch and again on a single-file upload in
+the same session. Do not report it to the user as a failure.
 
-```bash
-curl -s "https://commons.wikimedia.org/w/api.php?action=query\
-&titles=File:Example+Name.JPG&format=json" | python3 -c "
-import sys, json
-pages = json.load(sys.stdin)['query']['pages']
-for pid, p in pages.items():
-    print('EXISTS' if int(pid) > 0 else 'MISSING', p['title'])"
+The authoritative signals are `upload_log.txt` (one `OK` row with a URL per file) and the
+script's own `Uploaded: N, Failed: 0` summary. Then wait 40s and confirm independently,
+checking categories at the same time so step 10 is a single pass:
+
+```python
+url = ("https://commons.wikimedia.org/w/api.php?action=query"
+       "&titles=" + "|".join("File:" + f for f in batch) +      # up to 50 per call
+       "&prop=categories&cllimit=max&format=json")
+# negative pageid -> genuinely missing
+# count categories excluding the auto-added CC-BY / SDC / "Self-published work" ones
 ```
 
-If spot-checks confirm existence, the batch is fine. Only investigate individual files
-that still show as missing after 60+ seconds.
+Only investigate files still missing after 60+ seconds.
 
 Review `upload_log.txt` and present a summary: total uploaded, skipped, failed, and
 links to the Commons file pages.
@@ -443,22 +698,32 @@ The complete end-to-end flow when the user invokes this skill:
 
 ```
 1. Resolution check          — drop sub-2MP
-2. EXIF extraction            — flag technical issues
+2. EXIF extraction            — one -n pass incl. GPS; flag technical issues
    2b. Front-camera filter    — flag likely selfies, skip in visual review
-3. Format duplicate pruning   — keep best version per base name
-4. Gather location context    — reverse geocode via Nominatim
-5. Visual review + tiers      — classify (skip selfies + sample personal clusters)
+3. Gather location context    — cluster + Nominatim; public/private split; before review
+4. Format duplicate pruning   — keep best version per base name
+5. Visual review + tiers      — contact sheets; copyright + people screening
 6. Resolve near-duplicates    — pick best per group
 7. Copy+rename+describe       — upload/ folder with descriptions
-   7a. Strip metadata         — exiftool + xattr cleanup
-   7b. Generate descriptions  — wikimedia_descriptions.txt (3+ categories each)
-8. Dry-run preview            — user reviews before upload
+   7a. Strip metadata         — xattr + XMP:all/IPTC:all + selective GPS + verify
+   7b. Zoom-18 geocode        — per-image, for the final set only
+   7c. Category discovery     — search first, then batch-validate exact titles
+   7d. Generate descriptions  — wikimedia_descriptions.txt (3+ categories each)
+8. Dry-run preview            — name-collision + login check; user confirms
 9. Upload to Commons          — venv + pywikibot + bot password (config in upload/)
-10. Post-upload verification  — API check (wait for propagation) + log review
+10. Post-upload verification  — independent API check after 40s + log review
 ```
 
 Steps 1-7 produce the upload-ready set. Steps 8-10 handle the actual upload. The user
 must confirm between step 8 and step 9.
+
+### Keep a decision record on disk
+
+Alongside `technical_scan_results.md`, write `visual_review.md` (tier tables, per-file
+verdicts) and `upload_plan.md` (final set, source→upload name mapping, dedup choices with
+reasons, exclusions with reasons, verified categories). These survive context resets, and
+when the user later asks "why did you exclude X?" the answer is recorded rather than
+reconstructed. Record the *actual* reason for each exclusion, not a tidier-sounding one.
 
 ## Edge Cases
 
@@ -469,8 +734,17 @@ must confirm between step 8 and step 9.
 - **Screenshots or digital art mixed in**: Flag and exclude — Commons requires different
   licensing for these.
 - **Images with text overlays / watermarks**: Exclude unconditionally.
-- **Missing EXIF GPS**: Common. Don't treat as an error — location comes from user
-  input in step 4, not EXIF.
+- **Missing EXIF GPS**: Genuinely absent GPS is not an error — location then comes from
+  the user in step 3. But verify it is really absent first (step 2); a bad exiftool query
+  looks identical to a stripped batch and sends the session down the wrong path.
+- **User corrects an identification**: Take it — they were there. Update the filename,
+  both language descriptions and the categories together, re-run the category validation,
+  and if the file is already uploaded, use `--overwrite` or rename on Commons rather than
+  leaving a half-corrected page.
+- **Two near-identical categories both exist** (e.g. `Hurdy-gurdy players`,
+  `Hurdy gurdy players`, `Hurdy-Gurdy players` are all real, none redirects): pick the
+  one with the most members and mention the duplication to the user rather than silently
+  picking one.
 - **Large batches (250+ images)**: Save the step 2 report to disk and suggest a context
   reset before step 5. Reference the saved report in the new context.
 - **Re-uploading after metadata fix**: Use `--overwrite` flag. The script will re-upload
