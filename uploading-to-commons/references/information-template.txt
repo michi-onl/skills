@@ -3,6 +3,10 @@
 This is the exact wikitext structure to generate for each image. One block per image,
 separated by a line of `=` characters with the filename as header.
 
+Use the full 64-character rule shown below. The parser splits on a line of 8 or more `=`
+characters and nothing shorter, so an ordinary wikitext heading rule inside a description
+no longer truncates the block — but keep the separator long and consistent anyway.
+
 ## Template
 
 ```wikitext
@@ -51,7 +55,7 @@ ground."
 
 - Extract from EXIF `DateTimeOriginal` or `ContentCreationDate`.
 - Use the `{{Taken on}}` template: `{{Taken on|YYYY-MM-DD|location=Place name}}`
-- The location parameter should match the location already determined in step 4 (e.g.,
+- The location parameter should match the location already determined in step 3 (e.g.,
   `{{Taken on|2026-03-18|location=Italy}}`).
 - If no EXIF date available, use `{{unknown|date}}` and note this to the user.
 
@@ -70,6 +74,10 @@ ground."
 - `{{self|cc-by-sa-4.0}}` — default recommendation, requires attribution + share-alike
 - `{{self|cc-zero}}` — public domain dedication, no restrictions
 - The user chooses once; apply to all images.
+- Whichever is chosen, the upload script mirrors it into SDC statements (P6216 copyright
+  status, P275 copyright license) after upload. A licence outside `SDC_BY_LICENSE` in
+  `scripts/upload_to_commons.py` uploads fine but stays in the "missing SDC copyright
+  license" maintenance category until a row is added.
 
 ### Categories
 
@@ -83,11 +91,14 @@ Priority order:
 4. Broader geographic (e.g., `[[Category:Italian Riviera]]`, `[[Category:Austrian Alps]]`)
 5. Temporal/seasonal if relevant (e.g., `[[Category:Winter in Tyrol (state)]]`)
 
-Aim for 2–5 categories. More specific is better than more numerous.
+Aim for at least 3 verified categories, up to about 5. More specific is better than more
+numerous.
 
-**Use existing categories.** Do not invent category names. Search Commons to verify a
-category exists before using it. In practice, many images will only have one or two
-matching categories on Commons. That is fine. One real category beats three guessed ones.
+**Use existing categories.** Do not invent category names. Discover them with the
+`list=search` method in SKILL.md step 7c rather than guessing a name and checking it —
+searching is what reaches 3 categories on subjects where guessing stalls at one. If a
+subject genuinely has fewer than 3 matching categories on Commons after several queries,
+that is fine: one real category beats three guessed ones.
 
 ## Example: Complete Entry
 

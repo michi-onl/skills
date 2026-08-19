@@ -1,6 +1,6 @@
 ---
 name: uploading-to-commons
-description: "Upload photos to Wikimedia Commons: judge suitability, write {{Information}} descriptions, name and categorize files, filter batches. Trigger: \"Commons\", \"Bilder hochladen\"."
+description: "Upload photos to Wikimedia Commons: suitability, {{Information}} descriptions, filenames, categories, batch filtering. Trigger: \"Commons\", \"Bilder hochladen\"."
 ---
 
 # Commons Upload — Wikimedia Commons Image Pipeline
@@ -67,17 +67,24 @@ Pull GPS in this same pass. Location drives everything downstream, and fetching 
 means step 3 is a pure analysis step with no second extraction.
 
 ```bash
-exiftool -n -csv \
+exiftool -n -csv -ext jpg -ext jpeg \
   -FileName -ImageWidth -ImageHeight -FileSize -ISO -ExposureTime -FNumber \
   -FocalLength -DateTimeOriginal -OffsetTimeOriginal -Model -LensModel \
   -GPSLatitude -GPSLongitude -GPSAltitude -GPSImgDirection \
-  *.JPG > exif.csv
+  . > exif.csv
 ```
 
-> **Use `-n`, never the `#` suffix.** `exiftool -csv -GPSLatitude# -GPSLongitude#`
-> silently emits **empty columns** even when every file is geotagged. The `#` numeric
-> modifier does not work inside `-csv`. The global `-n` flag does the same job and works.
-> This failure is silent and looks exactly like a batch with no GPS.
+> **Select files with `-ext`, not a shell glob.** `*.JPG` silently misses every `.jpeg`
+> file — and step 4 exists precisely because these batches contain both. Worse, under zsh
+> a glob that matches nothing aborts the whole command (`zsh: no matches found`), so a
+> batch of only `.jpeg` files makes the command fail outright rather than skip. `-ext` is
+> case-insensitive and takes a directory, so `-ext jpg -ext jpeg` covers `.JPG`, `.jpg`,
+> `.jpeg` and `.JPEG` in one pass. Apply the same fix everywhere this skill touches files.
+
+> **Use `-n`, never the `#` suffix.** With `-csv`, `-GPSLatitude#` emits the value under a
+> column literally named `GPSLatitude#`, so any downstream lookup of `GPSLatitude` finds
+> nothing and the batch looks ungeotagged. The global `-n` flag gives the same decimal
+> values under the expected column names.
 
 | Metric                                | How to get it                                              |
 | ------------------------------------- | ---------------------------------------------------------- |
@@ -267,7 +274,8 @@ grouping; a 179-image batch collapses to about 30 sheet reads.
 ```bash
 # 1. downscale once — reuse these previews for every later comparison
 mkdir -p prev
-for f in *.JPG; do sips -Z 700 "$f" --out "prev/$f" >/dev/null; done
+find . -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' \) -print0 |
+while IFS= read -r -d '' f; do sips -Z 700 "$f" --out "prev/$(basename "$f")" >/dev/null; done
 
 # 2. montage into 3x3 sheets, grouped by date/cluster, filename under each tile
 montage prev/IMG_1{649,651,653,655,720,722}.JPG \
@@ -392,7 +400,8 @@ with app labels.
 **Step A — macOS extended attributes:**
 
 ```bash
-for f in upload/*.JPG upload/*.jpg; do
+find upload -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' \) -print0 |
+while IFS= read -r -d '' f; do
   xattr -d com.apple.metadata:kMDItemComment "$f" 2>/dev/null
   xattr -d com.apple.metadata:kMDItemDescription "$f" 2>/dev/null
 done
@@ -401,8 +410,8 @@ done
 **Step B — wipe the XMP and IPTC blocks wholesale:**
 
 ```bash
-exiftool -overwrite_original -XMP:all= -IPTC:all= \
-  -UserComment= -ImageDescription= upload/*.JPG
+exiftool -overwrite_original -ext jpg -ext jpeg -XMP:all= -IPTC:all= \
+  -UserComment= -ImageDescription= upload/
 ```
 
 Clearing named fields one by one is **not sufficient**. Phone apps write duplicate
@@ -421,10 +430,13 @@ exiftool -overwrite_original -gps:all= "upload/Photo at a home address.JPG"
 
 ```bash
 # must print nothing
-exiftool -a -G1 -s upload/*.JPG | grep -iE "MOOD|presetId|STOCK"
+exiftool -a -G1 -s -ext jpg -ext jpeg upload/ | grep -iE "MOOD|presetId|STOCK"
 # confirm the intended files, and only those, lost their coordinates
-exiftool -q -if 'not $gpslatitude' -p '$FileName' upload/*.JPG
+exiftool -q -if 'not $gpslatitude' -p '$FileName' -ext jpg -ext jpeg upload/
 ```
+
+Check the file count exiftool reports against the number of files in `upload/`. If it is
+lower, an extension slipped past the filter and those files still carry app metadata.
 
 Run all of this before generating descriptions so there's no confusion about what
 "description" means. This is mandatory, not optional — files uploaded with app metadata
@@ -554,13 +566,23 @@ filename, both descriptions and the categories together, and re-run the validati
 Before any actual upload, run the upload script in dry-run mode so the user can review
 what will happen.
 
+Copy the script into `upload/` first — step 9 runs it from there too, and the pywikibot
+config it needs must sit in the same directory:
+
 ```bash
+cp ~/.claude/skills/uploading-to-commons/scripts/upload_to_commons.py upload/
 cd upload/
-python upload_to_commons.py --dry-run
+python3 upload_to_commons.py --dry-run
 ```
 
-This prints each filename, file size, and a description preview. Present the output to
-the user and wait for explicit confirmation before proceeding to step 9.
+Dry-run needs no pywikibot — the import is skipped on that path — so plain `python3` is
+fine here. Step 9 uses `.venv/bin/python` because the real upload does need it.
+
+This prints each filename, file size, and the **complete** wikitext block, including the
+license and every category. It warns on any block missing `{{Information}}`, a license
+template, or categories. Read those warnings — they are the cheapest place to catch a
+malformed block. Present the output to the user and wait for explicit confirmation before
+proceeding to step 9.
 
 **This is a hard gate.** Do not proceed to actual upload without user confirmation.
 Uploading is public, irreversible in practice, and attaches the user's real name to every
@@ -571,9 +593,23 @@ Also check the target names are free before uploading — a collision wastes the
 forces a rename afterwards:
 
 ```python
-# batch up to 50 "File:<name>" titles; positive pageid means the name is taken
-url = ".../w/api.php?action=query&titles=File:Name+one|File:Name+two&format=json"
+# batch up to 50 "File:<name>" titles; a page without "missing" means the name is taken
+import urllib.request, urllib.parse, json
+UA = "uploading-to-commons-pipeline/1.0 (User:Mike is Michi)"
+params = {"action": "query", "format": "json",
+          "titles": "|".join("File:" + n for n in batch)}
+req = urllib.request.Request(
+    "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(params),
+    headers={"User-Agent": UA})
+pages = json.load(urllib.request.urlopen(req))["query"]["pages"]
+taken = [p["title"] for p in pages.values() if "missing" not in p]
 ```
+
+**Every Commons API call needs a `User-Agent` header.** Wikimedia answers the default
+`Python-urllib/3.x` with a bare `HTTP 403`, and a `try/except` around the call turns that
+403 into "none of these files exist" — which is indistinguishable from a clean result.
+Test membership with the `"missing"` key, not the page id: missing pages are numbered
+`-1, -2, -3…`, so checking only for `-1` misclassifies every missing page after the first.
 
 And confirm the credentials actually work before starting a long batch:
 
@@ -638,17 +674,15 @@ say so, and say where the file landed.
 
 ```bash
 cd upload/
-.venv/bin/python upload_to_commons.py --delay 5 --no-verify > upload_run.log 2>&1
+.venv/bin/python upload_to_commons.py --delay 5 > upload_run.log 2>&1
 ```
 
-Pass `--no-verify` and verify separately in step 10 — the built-in check runs ~10s after
-the last upload and reports every file as missing (see below). Run the batch in the
-background and poll the log: 34 files at `--delay 5` took about 7 minutes, which will
-otherwise hit a foreground command timeout.
+Run the batch in the background and poll the log: 34 files at `--delay 5` took about
+7 minutes, which will otherwise hit a foreground command timeout.
 
-The upload script is located at
-`~/.claude/skills/uploading-to-commons/scripts/upload_to_commons.py`. Copy it to the
-`upload/` directory before running, or invoke it with its full path.
+The script should already be in `upload/` from step 8; if not, copy it from
+`~/.claude/skills/uploading-to-commons/scripts/upload_to_commons.py` or invoke it with its
+full path.
 
 **Flags:**
 
@@ -658,8 +692,40 @@ The upload script is located at
 - `--overwrite` — re-upload files that already exist on Commons (useful after
   stripping metadata from previously uploaded files)
 - `--no-verify` — skip post-upload verification
+- `--no-sdc` — skip the structured-data statements described below
+- `--sdc-only` — upload nothing; only add missing SDC statements to files already on Commons
 
 The script writes `upload_log.txt` with timestamps, filenames, status, and Commons URLs.
+
+### Structured data (SDC) statements
+
+A Commons file states its licence twice: once as the wikitext template, once as statements on
+the file's MediaInfo entity. Files carrying only the first land in
+`Category:Creative Commons ... missing SDC copyright license` and
+`Category:Self-published work missing SDC copyright license`.
+
+`action=upload` accepts no structured data, so this can never happen *during* the upload. The
+script adds the statements as a follow-up edit immediately after each file lands, mapping the
+`{{self|...}}` key to two claims:
+
+| licence template | P6216 copyright status | P275 copyright license |
+| --- | --- | --- |
+| `{{self\|cc-by-sa-4.0}}` | Q50423863 copyrighted | Q18199165 CC BY-SA 4.0 |
+| `{{self\|cc-by-4.0}}` | Q50423863 copyrighted | Q20007257 CC BY 4.0 |
+| `{{self\|cc-zero}}` | Q88088423 dedicated to the public domain | Q6938433 CC0 |
+
+A licence outside that table is skipped with a message rather than guessed at. Add the row to
+`SDC_BY_LICENSE` in the script instead, and verify the QID against Wikidata before you do —
+`Q6938433` is CC0 but `Q19652` is plain "public domain", and they are not interchangeable.
+
+Two things that otherwise cost time:
+
+- **The categories do not clear when the statements save.** They come from the licence
+  template's parse, so the page needs a `purge(forcelinkupdate=True)` afterwards. The script
+  does this automatically; a manual SDC edit through the API needs it too, and without it
+  verification will keep reporting files as unfixed for no reason.
+- **An SDC failure is not an upload failure.** The file is on Commons either way. The script
+  prints `SDC ERROR`, logs it, and carries on — re-run those files later with `--sdc-only`.
 
 ## Step 10: Post-Upload Verification
 
@@ -668,26 +734,41 @@ The upload script runs verification automatically after uploads complete (unless
 
 - The file page exists
 - Categories rendered correctly
+- No `missing SDC copyright license` category remains (reported as `NO SDC`)
 
-**Propagation delay**: Commons takes 30–60 seconds to index newly uploaded files. The
-script's built-in verification waits only ~10s, so it reports **every file** as
-`NOT FOUND on Commons` even when all of them uploaded cleanly. This is the expected
-outcome, not a symptom — it fired on a 34-file batch and again on a single-file upload in
-the same session. Do not report it to the user as a failure.
+A `MISSING` line now means the file genuinely is not on Commons. If the run reports
+`API ERROR while verifying batch N`, the query itself failed — that is a network or
+User-Agent problem, not an upload problem, and the uploads in that batch are unverified
+rather than lost.
+
+> **Historical note.** Earlier versions of this skill told you to expect *every* file to
+> come back `NOT FOUND on Commons` and to ignore it as a propagation delay. That was a
+> misdiagnosis: the verification helper sent no `User-Agent`, Wikimedia returned HTTP 403,
+> and a bare `except: pass` swallowed it. Both are fixed. Do not dismiss a `MISSING` line
+> as a timing artefact any more — investigate it.
+
+Commons does still take a few tens of seconds to index a new file, so leave the script's
+built-in 10s pause in place and re-check anything still missing after 60 seconds before
+treating it as a real failure.
 
 The authoritative signals are `upload_log.txt` (one `OK` row with a URL per file) and the
-script's own `Uploaded: N, Failed: 0` summary. Then wait 40s and confirm independently,
-checking categories at the same time so step 10 is a single pass:
+script's own `Uploaded: N, Failed: 0` summary. For an independent confirmation:
 
 ```python
-url = ("https://commons.wikimedia.org/w/api.php?action=query"
-       "&titles=" + "|".join("File:" + f for f in batch) +      # up to 50 per call
-       "&prop=categories&cllimit=max&format=json")
-# negative pageid -> genuinely missing
-# count categories excluding the auto-added CC-BY / SDC / "Self-published work" ones
+params = {"action": "query", "format": "json",
+          "titles": "|".join("File:" + f for f in batch),   # up to 50 per call
+          "prop": "categories", "cllimit": "max"}
+req = urllib.request.Request(
+    "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(params),
+    headers={"User-Agent": "uploading-to-commons-pipeline/1.0 (User:Mike is Michi)"})
+# "missing" in page  -> genuinely absent
+# count categories excluding the auto-added CC-BY / "Self-published work" ones
+# a "missing SDC copyright license" category -> statements absent, or added but not re-parsed
 ```
 
-Only investigate files still missing after 60+ seconds.
+`cllimit=max` is not optional. Without it the API returns at most 10 categories per page,
+so a well-categorised file looks capped at 10 and the "excluding auto-added" arithmetic
+comes out wrong.
 
 Review `upload_log.txt` and present a summary: total uploaded, skipped, failed, and
 links to the Commons file pages.
@@ -706,12 +787,14 @@ The complete end-to-end flow when the user invokes this skill:
 6. Resolve near-duplicates    — pick best per group
 7. Copy+rename+describe       — upload/ folder with descriptions
    7a. Strip metadata         — xattr + XMP:all/IPTC:all + selective GPS + verify
+                                (select files with -ext jpg -ext jpeg, never *.JPG)
    7b. Zoom-18 geocode        — per-image, for the final set only
    7c. Category discovery     — search first, then batch-validate exact titles
    7d. Generate descriptions  — wikimedia_descriptions.txt (3+ categories each)
-8. Dry-run preview            — name-collision + login check; user confirms
+8. Dry-run preview            — full wikitext; name-collision + login check; user confirms
 9. Upload to Commons          — venv + pywikibot + bot password (config in upload/)
-10. Post-upload verification  — independent API check after 40s + log review
+   9a. SDC statements         — copyright status + licence per file, then purge
+10. Post-upload verification  — built-in check + log review; MISSING means missing
 ```
 
 Steps 1-7 produce the upload-ready set. Steps 8-10 handle the actual upload. The user
@@ -752,3 +835,12 @@ reconstructed. Record the *actual* reason for each exclusion, not a tidier-sound
 - **Upload failures**: Check `upload_log.txt` for specifics. Common causes: network
   timeout, file too large, bot password expired. Re-run with `--file "failed_name*"` to
   retry specific files.
+- **Files uploaded before this skill handled SDC**: run `--sdc-only` (optionally narrowed with
+  `--file`) from the folder holding the original `wikimedia_descriptions.txt`. It reads each
+  block's licence, adds only the statements that are absent and reports the rest as already
+  present, so it is safe to re-run across a whole batch. The local image files need not still
+  exist — only the description file and the files being on Commons.
+- **Overwriting someone else's file**: Commons abuse filter 290 disallows non-autopatrolled
+  users from uploading a new version over an existing file, returning `abusefilter-disallowed`.
+  `--overwrite` only works on your own uploads until the account has autopatrol. For someone
+  else's file, upload under a new name or request the swap at Commons:Graphic Lab.
