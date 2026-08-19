@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My WidgetStar Widget</title>
+
+<!--
+  SETTINGS SCHEMA — keep this list identical to the dashboard Settings/Appearance tabs.
+    Settings tab
+      title    text     Heading shown at the top
+      body     text     Message under the heading
+      link     text     Optional https:// URL for the footer link
+    Appearance tab
+      accent   color    Accent color
+      theme    select   light | dark | auto
+-->
+
+<!-- MUST be first: without it the widget is invisible on every installing site. -->
+<script src="https://widget.st/js/iframe.js"></script>
+
+<style>
+  /* Never use vw/vh or viewport-derived sizes: the iframe is sized FROM this content. */
+  #ws-root {
+    box-sizing: border-box;
+    /* body is width:max-content, so size intrinsically — not in percentages. */
+    width: max-content;
+    min-width: 220px;
+    max-width: 380px;
+    padding: 14px 16px;
+    border: 1px solid var(--ws-border);
+    border-radius: 12px;
+    background: var(--ws-bg);
+    color: var(--ws-fg);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  /* Fill mode: the installer pinned width/height on <ws-widget>, so iframe.js
+     switched html/body to 100% and percentages become meaningful. */
+  .ws-fill #ws-root { width: 100%; max-width: none; height: 100%; }
+
+  #ws-root {
+    --ws-bg: #ffffff;
+    --ws-fg: #1c1c1f;
+    --ws-muted: #6b6b76;
+    --ws-border: #e2e2ea;
+  }
+  #ws-root.is-dark {
+    --ws-bg: #1b1b20;
+    --ws-fg: #f2f2f5;
+    --ws-muted: #a0a0ad;
+    --ws-border: #33333d;
+  }
+
+  .ws-title {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 650;
+    /* long unbroken settings values must not blow up the measured width */
+    overflow-wrap: anywhere;
+  }
+  .ws-title::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 7px;
+    border-radius: 50%;
+    background: var(--ws-accent, #7c5cff);
+    vertical-align: middle;
+  }
+  .ws-body { margin: 0; color: var(--ws-muted); overflow-wrap: anywhere; }
+  .ws-foot { margin-top: 10px; font-size: 12px; }
+  .ws-foot a { color: var(--ws-accent, #7c5cff); }
+  .ws-hidden { display: none; }
+</style>
+</head>
+
+<body>
+  <!-- Rendered synchronously so the first ResizeObserver tick already has real content. -->
+  <div id="ws-root">
+    <p class="ws-title" id="ws-title"></p>
+    <p class="ws-body" id="ws-body"></p>
+    <p class="ws-foot ws-hidden" id="ws-foot"><a id="ws-link" target="_blank" rel="noopener noreferrer"></a></p>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  // WS.settings is ALWAYS an object, but is {} in the store preview and before
+  // the installer configures anything. Every key needs a default.
+  var S = (window.WS && window.WS.settings) || {};
+
+  // --- validators: settings arrive via a URL parameter the host page can rewrite ---
+  function str(value, fallback, maxLen) {
+    return typeof value === "string" && value.trim()
+      ? value.trim().slice(0, maxLen || 200)
+      : fallback;
+  }
+  function oneOf(value, allowed, fallback) {
+    return allowed.indexOf(value) !== -1 ? value : fallback;
+  }
+  function color(value, fallback) {
+    return typeof value === "string" && /^#[0-9a-f]{3,8}$/i.test(value.trim())
+      ? value.trim()
+      : fallback;
+  }
+  function httpsUrl(value) {
+    try {
+      var u = new URL(String(value));
+      return u.protocol === "https:" ? u.href : "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  var title  = str(S.title, "Hello from WidgetStar", 80);
+  var body   = str(S.body, "Configure this widget in your dashboard.", 400);
+  var link   = httpsUrl(S.link);
+  var accent = color(S.accent, "#7c5cff");
+  var theme  = oneOf(S.theme, ["light", "dark", "auto"], "auto");
+
+  var root = document.getElementById("ws-root");
+  root.style.setProperty("--ws-accent", accent);
+
+  // textContent, never innerHTML — these values are untrusted.
+  document.getElementById("ws-title").textContent = title;
+  document.getElementById("ws-body").textContent = body;
+
+  if (link) {
+    var a = document.getElementById("ws-link");
+    a.href = link;
+    a.textContent = new URL(link).hostname;
+    document.getElementById("ws-foot").classList.remove("ws-hidden");
+  }
+
+  function applyTheme() {
+    var dark = theme === "dark" ||
+      (theme === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    root.classList.toggle("is-dark", dark);
+  }
+  applyTheme();
+  if (theme === "auto" && window.matchMedia) {
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    (mq.addEventListener ? mq.addEventListener.bind(mq, "change") : mq.addListener.bind(mq))(applyTheme);
+  }
+
+  // Fill mode: the parent tells us when the installer pinned a size, and
+  // iframe.js has already stretched html/body to 100%.
+  window.addEventListener("message", function (e) {
+    var d = e.data;
+    if (d && d.type === "ws:resize" && (d.width || d.height)) {
+      document.documentElement.classList.add("ws-fill");
+    }
+  });
+})();
+</script>
+</body>
+</html>

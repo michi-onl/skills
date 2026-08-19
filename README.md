@@ -40,6 +40,13 @@ Compares locally installed Claude skills against the canonical GitHub repo and p
 
 Translates software localization files from English to German. Supports TOML, JSON, XLIFF, PO/POT, Android XML, iOS Strings, YAML, ARB, PHP arrays, and other common formats. Preserves formatting and maintains register consistency.
 
+### translatewiki-wikipedia-apps
+
+Localizes the Wikipedia iOS and Android apps into German on translatewiki.net. Translates new
+strings, updates outdated ones against a diff of the English source, and runs full QA sweeps over
+the existing translations. Read-only without credentials; every edit passes a review gate before
+it is pushed.
+
 ### uploading-to-commons
 
 Evaluates, curates, and uploads images to Wikimedia Commons. A 10-step pipeline covering technical vetting, visual review, deduplication, metadata handling, description generation, and automated upload via Pywikibot.
@@ -52,6 +59,10 @@ Converts Wikipedia wikitext syntax between English and German Wikipedia conventi
 
 Automates the monthly update of the German Wikipedia article "Liste der meistgestreamten Künstler auf Spotify". Fetches current data from the English source article, converts wikitext conventions, and runs quality checks via Python scripts.
 
+### widget-st
+
+Builds widgets for widget.st (WidgetStar) that actually render once installed. Covers the iframe and script embed contracts, autosizing, the `WS.settings` schema, and the dashboard fields, with a local harness and a validator that catch the invisible-widget failure before publishing.
+
 ### wiki-artikel
 
 Creates complete German Wikipedia articles from English wikitext sources. Goes beyond syntax conversion to produce independent, encyclopedic articles following dewiki editorial standards and structure conventions.
@@ -63,6 +74,7 @@ Each skill lives in its own directory and follows a common layout:
 - `SKILL.md` — the skill definition and workflow
 - `references/` — glossaries, templates, rules
 - `scripts/` — automation scripts (where applicable)
+- `assets/` — starter templates and boilerplate (where applicable)
 
 ## Installation
 

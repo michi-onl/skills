@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WidgetStar local harness</title>
+<style>
+  body { margin: 0; padding: 24px; font: 14px/1.5 system-ui, sans-serif; background: #f4f4f7; color: #1c1c1f; }
+  h1 { font-size: 17px; margin: 0 0 4px; }
+  .sub { color: #6b6b76; margin: 0 0 20px; }
+  .panel { background: #fff; border: 1px solid #e2e2ea; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  label { display: block; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: #6b6b76; margin-bottom: 4px; }
+  input, textarea { width: 100%; box-sizing: border-box; font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 7px 9px; border: 1px solid #d5d5de; border-radius: 6px; }
+  textarea { min-height: 76px; resize: vertical; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .row > div { flex: 1 1 160px; }
+  button { font: 600 13px system-ui, sans-serif; padding: 8px 14px; border: 0; border-radius: 6px; background: #7c5cff; color: #fff; cursor: pointer; }
+  button.alt { background: #e8e8ef; color: #1c1c1f; }
+
+  /* Exactly what ar.js injects, so a widget that hides here hides in production. */
+  ws-box { display: inline-block; width: 0; height: 0; }
+  ws-box iframe { border: none; width: 100%; height: 100%; overflow: hidden; visibility: hidden; }
+  ws-box[data-sized] iframe { visibility: visible; }
+
+  .stage { padding: 20px; background: repeating-conic-gradient(#ececf2 0% 25%, #fff 0% 50%) 50%/16px 16px; border: 1px dashed #c9c9d4; border-radius: 8px; }
+  .verdict { margin-top: 12px; padding: 10px 12px; border-radius: 6px; font-weight: 600; font-size: 13px; }
+  .ok   { background: #e6f6ec; color: #14612f; border: 1px solid #b6e2c6; }
+  .bad  { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  .wait { background: #fff8eb; color: #6b4f1d; border: 1px solid #e0c08a; }
+  pre#log { margin: 0; max-height: 220px; overflow: auto; font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; background: #1b1b20; color: #dcdce4; padding: 12px; border-radius: 8px; }
+</style>
+</head>
+<body>
+
+<h1>WidgetStar local harness</h1>
+<p class="sub">Reproduces what <code>ar.js</code> does on an installing site: zero-size hidden container, <code>ws:resize</code> protocol, settings query parameter. Serve this next to your widget page (<code>python3 -m http.server 8000</code>) — <code>file://</code> will not work.</p>
+
+<div class="panel">
+  <div class="row">
+    <div style="flex: 3 1 320px;">
+      <label for="url">Widget page URL</label>
+      <input id="url" value="widget.html">
+    </div>
+    <div>
+      <label for="name">name</label>
+      <input id="name" value="Preview 1">
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <label for="w">width attribute (blank = autosize)</label>
+      <input id="w" placeholder="e.g. 100% or 320px">
+    </div>
+    <div>
+      <label for="h">height attribute (blank = autosize)</label>
+      <input id="h" placeholder="e.g. 300px">
+    </div>
+  </div>
+  <div style="margin-bottom: 12px;">
+    <label for="settings">settings JSON (sent url-encoded as ?settings=)</label>
+    <textarea id="settings">{}</textarea>
+  </div>
+  <button id="load">Load / reload</button>
+  <button class="alt" id="empty">Test with {}</button>
+</div>
+
+<div class="panel">
+  <div class="stage"><ws-box id="box"></ws-box></div>
+  <div class="verdict wait" id="verdict">Waiting for the first ws:resize message…</div>
+</div>
+
+<div class="panel">
+  <label>Message log</label>
+  <pre id="log"></pre>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var box = document.getElementById("box");
+  var verdict = document.getElementById("verdict");
+  var logEl = document.getElementById("log");
+  var iframe = null, timer = null, gotResize = false;
+
+  function log(msg) {
+    var t = new Date().toISOString().slice(11, 23);
+    logEl.textContent += "[" + t + "] " + msg + "\n";
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+  function setVerdict(cls, text) {
+    verdict.className = "verdict " + cls;
+    verdict.textContent = text;
+  }
+
+  function load() {
+    var url = document.getElementById("url").value.trim();
+    var name = document.getElementById("name").value.trim();
+    var w = document.getElementById("w").value.trim();
+    var h = document.getElementById("h").value.trim();
+    var raw = document.getElementById("settings").value.trim() || "{}";
+
+    try { JSON.parse(raw); }
+    catch (e) { setVerdict("bad", "Settings JSON is invalid — widget.st would deliver {} here."); log("INVALID settings JSON: " + e.message); return; }
+
+    gotResize = false;
+    clearTimeout(timer);
+    delete box.dataset.sized;
+    box.style.width = "";
+    box.style.height = "";
+    if (iframe) iframe.remove();
+
+    var qs = [];
+    if (name) qs.push("name=" + encodeURIComponent(name));
+    qs.push("settings=" + encodeURIComponent(raw));
+    var src = url + (url.indexOf("?") === -1 ? "?" : "&") + qs.join("&");
+
+    if (w) box.style.width = w;
+    if (h) box.style.height = h;
+    if (w && h) box.dataset.sized = "";
+
+    iframe = document.createElement("iframe");
+    iframe.title = name + " widget";
+    iframe.src = src;
+    iframe.addEventListener("load", function () {
+      log("iframe loaded: " + src);
+      if (w || h) {
+        iframe.contentWindow.postMessage({ type: "ws:resize", width: w, height: h }, "*");
+        log("→ sent ws:resize {width:" + (w || "-") + ", height:" + (h || "-") + "} (fill mode)");
+      }
+    });
+    box.appendChild(iframe);
+    setVerdict("wait", "Waiting for the first ws:resize message…");
+    log("loading " + src);
+
+    timer = setTimeout(function () {
+      if (!gotResize && !(w && h)) {
+        setVerdict("bad",
+          "No ws:resize after 2s — on a real site this widget would be invisible (0×0, visibility:hidden). " +
+          "Check that <script src=\"https://widget.st/js/iframe.js\"><\/script> is first in <head>, that the page has no JS error, " +
+          "and that <body> is not empty or entirely position:fixed.");
+        log("TIMEOUT: no ws:resize received");
+      }
+    }, 2000);
+  }
+
+  window.addEventListener("message", function (e) {
+    if (!iframe || e.source !== iframe.contentWindow) return;
+    var d = e.data;
+    if (!d || d.type !== "ws:resize") return;
+    log("← ws:resize {w:" + d.w + ", h:" + d.h + "}");
+    if (!gotResize) { gotResize = true; setVerdict("ok", "Sizing works — reported " + d.w + "×" + d.h + " px."); }
+    else { setVerdict("ok", "Resized to " + d.w + "×" + d.h + " px."); }
+    var w = document.getElementById("w").value.trim();
+    var h = document.getElementById("h").value.trim();
+    if (!w) box.style.width = d.w + "px";
+    if (!h) box.style.height = d.h + "px";
+    box.dataset.sized = "";
+  });
+
+  document.getElementById("load").addEventListener("click", load);
+  document.getElementById("empty").addEventListener("click", function () {
+    document.getElementById("settings").value = "{}";
+    load();
+  });
+  load();
+})();
+</script>
+</body>
+</html>
