@@ -1,6 +1,6 @@
 ---
 name: macos-file-sorter
-description: "Sorts a cluttered ~/Documents into typed buckets in place - recursive, backup-first, preview before move, never deletes. Trigger: \"organize Documents\", \"tidy my files\"."
+description: "Sorts a cluttered ~/Documents into typed buckets in place, backup-first. Trigger: \"organize Documents\", \"tidy my files\"."
 ---
 
 # macOS File Sorter

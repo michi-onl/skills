@@ -1,6 +1,6 @@
 ---
 name: wende
-description: "Convert Wikipedia wikitext syntax between enwiki and dewiki (templates, citations, formatting), or add conversion rules. Syntax only - for writing a full German article use wiki-artikel."
+description: "Convert Wikipedia wikitext between enwiki and dewiki (templates, citations, formatting) or add rules. Syntax only — for a full German article use wiki-artikel."
 ---
 
 # Wende – Wikipedia Wikitext Converter

@@ -1,6 +1,6 @@
 ---
 name: wende-spotify-list
-description: "Update the dewiki article \"Liste der meistgestreamten Künstler auf Spotify\" from the English source. Trigger: \"Spotify-Liste aktualisieren\", monthly update, pasted Spotify streaming data."
+description: "Update the dewiki article \"Liste der meistgestreamten Künstler auf Spotify\" from the English source. Trigger: \"Spotify-Liste aktualisieren\", pasted streaming data."
 ---
 
 # Wende-Spotify-List — Monthly Spotify List Updater

@@ -1,6 +1,6 @@
 ---
 name: gutachtenstil
-description: "Deutsche Rechtsfälle im Gutachtenstil lösen (BGB, Sachenrecht, Schuldrecht). Trigger: \"Hat A einen Anspruch?\", \"Wer ist Eigentümer?\", \"Gutachten\", oder ein Sachverhalt mit juristischen Fragen."
+description: "Deutsche Rechtsfälle im Gutachtenstil lösen (BGB, Sachenrecht, Schuldrecht). Trigger: \"Gutachten\", \"Hat A einen Anspruch?\", juristischer Sachverhalt."
 ---
 
 # Gutachtenstil-Skill

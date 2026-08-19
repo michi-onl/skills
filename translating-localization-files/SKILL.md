@@ -1,6 +1,6 @@
 ---
 name: translating-localization-files
-description: "Translate software localization files EN to DE, or review German UI strings for friendliness. Handles TOML, XLIFF, JSON, PO, Properties, Android XML, .strings, YAML, ARB, PHP, FTL. Trigger: \"übersetze\"."
+description: "Translate software localization files EN→DE or review German UI strings: TOML, XLIFF, JSON, PO, Properties, Android XML, .strings, YAML, ARB, PHP, FTL. Trigger: \"übersetze\"."
 ---
 
 # Localization Translator (EN → DE)

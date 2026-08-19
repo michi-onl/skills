@@ -1,6 +1,6 @@
 ---
 name: liquid-glass
-description: "Build or restyle sites with a glassy/frosted/Apple-style look. Trigger: \"Liquid Glass\", glassmorphism, frosted UI, or glassy visual intent. Plain HTML/CSS, Next.js, Zola, shadcn/ui, Bootstrap."
+description: "Glassy/frosted/Apple-style site styling — Liquid Glass, glassmorphism, frosted UI. Plain HTML/CSS, Next.js, Zola, shadcn/ui, Bootstrap."
 ---
 
 # Liquid Glass Web Design

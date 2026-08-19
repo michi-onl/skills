@@ -1,6 +1,6 @@
 ---
 name: wiki-artikel
-description: "Erstellt eigenständige, dewiki-konforme deutsche Wikipedia-Artikel aus anderssprachigem Wikitext - redaktionell, nicht nur Syntax. Für reine Syntax-Konvertierung stattdessen wende."
+description: "Erstellt dewiki-konforme deutsche Wikipedia-Artikel aus anderssprachigem Wikitext — redaktionell. Für reine Syntax-Konvertierung stattdessen wende."
 ---
 
 # Wiki-Artikel – Deutsche Wikipedia-Artikel erstellen

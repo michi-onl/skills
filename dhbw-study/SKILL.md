@@ -1,6 +1,6 @@
 ---
 name: dhbw-study
-description: "DHBW Wirtschaftsinformatik coursework and exam prep: lecture prep, summaries, Lernzettel, Karteikarten, Übungsaufgaben, Altklausuren, study plans. Triggers on \"Klausur\", \"lernen\", uploaded slides."
+description: "DHBW Wirtschaftsinformatik coursework and exam prep: Lernzettel, Karteikarten, Übungsaufgaben, Altklausuren, Lernplan. Trigger: \"Klausur\", \"lernen\", slides."
 ---
 
 # DHBW Study Companion

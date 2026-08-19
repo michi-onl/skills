@@ -1,6 +1,6 @@
 ---
 name: skill-sync
-description: "Sync local skills with github.com/michi-onl/skills - check, compare, pull, or push. Trigger: \"sync skills\", \"are my skills up to date?\", \"Skills aktualisieren\"."
+description: "Sync local skills with github.com/michi-onl/skills — check, compare, pull, push. Trigger: \"sync skills\", \"Skills aktualisieren\"."
 ---
 
 # Skill Sync

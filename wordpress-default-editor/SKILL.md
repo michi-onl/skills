@@ -1,6 +1,6 @@
 ---
 name: wordpress-default-editor
-description: "Edit WordPress block-editor (Gutenberg) sites via REST API: headings, paragraphs, buttons, images, bulk changes, page rebuilds, blocks flagged invalid or \"Attempt Block Recovery\". Needs an App Password."
+description: "Edit WordPress block-editor (Gutenberg) sites via REST API: text, buttons, images, bulk changes, page rebuilds, \"Attempt Block Recovery\". Needs an App Password."
 ---
 
 # WordPress Default Editor

@@ -1,6 +1,6 @@
 ---
 name: searching-nextcloud
-description: "Find, list, or read files in Nextcloud by name, path, date, or content. Read-only. Trigger: \"search my Nextcloud\", \"what is in my cloud\"."
+description: "Find, list, or read files in Nextcloud by name, path, date, or content. Read-only. Also \"my cloud\"."
 ---
 
 # Searching Nextcloud

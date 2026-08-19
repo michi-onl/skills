@@ -1,6 +1,6 @@
 ---
 name: planning-travel
-description: "Plan holidays, trips, and itineraries - destinations, flights, visas, best time to visit, packing. Also casual cues like \"I need a break\" or \"where should I go this summer\"."
+description: "Plan holidays, trips, itineraries — destinations, flights, visas, packing. Also casual cues like \"I need a break\", \"where should I go?\"."
 ---
 
 # Travel Planner

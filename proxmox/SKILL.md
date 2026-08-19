@@ -1,6 +1,6 @@
 ---
 name: proxmox
-description: "Manage the Proxmox VE homelab: VMs and LXC containers, snapshots, backups, storage, vmbr0 networking, server status. Not for Docker, VirtualBox, cloud VPS, or Raspberry Pi."
+description: "Manage the Proxmox VE homelab: VMs, LXC containers, snapshots, backups, storage, vmbr0 networking. Not Docker, VirtualBox, cloud VPS, or Raspberry Pi."
 ---
 
 # Proxmox VE Management
